@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat("MovimientoX", movimientoX);
         animator.SetFloat("MovimientoY", movimientoY);
-        animator.SetBool("Corriendo", corriendo);
+
 
         direccion = new Vector2(movimientoX, movimientoY).normalized;
 
