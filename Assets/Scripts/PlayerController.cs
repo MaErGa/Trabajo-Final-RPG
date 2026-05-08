@@ -5,22 +5,69 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    // ════════════════════════════════════════════════════════════
+    //  MOVIMIENTO
+    // ════════════════════════════════════════════════════════════
+
     [SerializeField] private float velocidadMovimiento;
     [SerializeField] private float velocidadCarrera = 8f;
     [SerializeField] private Vector2 direccion;
+
     private Rigidbody2D rb2d;
     private float movimientoX;
     private float movimientoY;
     private Animator animator;
     private bool corriendo;
 
+    // ════════════════════════════════════════════════════════════
+    //  INTERACCIÓN — ESTILO DRAGON QUEST
+    // ════════════════════════════════════════════════════════════
+
+    [Header("Interacción")]
+    [Tooltip("Distancia a la que el jugador detecta objetos/NPCs con los que interactuar.")]
+    [SerializeField] private float distanciaInteraccion = 1.2f;
+
+    [Tooltip("Capas que contienen NPCs, objetos, cofres, etc.")]
+    [SerializeField] private LayerMask capaInteractuable;
+
+    /// <summary>True mientras el jugador puede moverse (false durante diálogos, menús, etc.).</summary>
+    public bool PuedeMoverse { get; set; } = true;
+
+    // ════════════════════════════════════════════════════════════
+    //  UNITY LIFECYCLE
+    // ════════════════════════════════════════════════════════════
+
     void Start()
     {
         animator = GetComponent<Animator>();
-        rb2d = GetComponent<Rigidbody2D>();
+        rb2d     = GetComponent<Rigidbody2D>();
     }
 
     void Update()
+    {
+        if (PuedeMoverse)
+            LeerMovimiento();
+
+        LeerBotones();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!PuedeMoverse)
+        {
+            rb2d.velocity = Vector2.zero;
+            return;
+        }
+
+        float velocidadActual = corriendo ? velocidadCarrera : velocidadMovimiento;
+        rb2d.MovePosition(rb2d.position + direccion * velocidadActual * Time.fixedDeltaTime);
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  MOVIMIENTO
+    // ════════════════════════════════════════════════════════════
+
+    private void LeerMovimiento()
     {
         movimientoX = Input.GetAxisRaw("Horizontal");
         movimientoY = Input.GetAxisRaw("Vertical");
@@ -29,7 +76,6 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat("MovimientoX", movimientoX);
         animator.SetFloat("MovimientoY", movimientoY);
-
 
         direccion = new Vector2(movimientoX, movimientoY).normalized;
 
@@ -40,9 +86,106 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    // ════════════════════════════════════════════════════════════
+    //  BOTONES ACCIÓN Y CANCELAR — ESTILO DRAGON QUEST
+    // ════════════════════════════════════════════════════════════
+
+    private void LeerBotones()
     {
-        float velocidadActual = corriendo ? velocidadCarrera : velocidadMovimiento;
-        rb2d.MovePosition(rb2d.position + direccion * velocidadActual * Time.fixedDeltaTime);
+        // ── Botón ACCIÓN (Z o Enter o Space o Mando Sur) ─────────────────
+        // En DQ es el botón para hablar, recoger, abrir cofres, confirmar menú
+        if (Input.GetKeyDown(KeyCode.Z)      ||
+            Input.GetKeyDown(KeyCode.Return) ||
+            Input.GetKeyDown(KeyCode.Space)  ||
+            Input.GetButtonDown("Submit"))
+        {
+            PulsarAccion();
+        }
+
+        // ── Botón CANCELAR (X o Escape o Mando Este) ─────────────────────
+        // En DQ es el botón para cerrar menús, cancelar selección, retroceder
+        if (Input.GetKeyDown(KeyCode.X)      ||
+            Input.GetKeyDown(KeyCode.Escape) ||
+            Input.GetButtonDown("Cancel"))
+        {
+            PulsarCancelar();
+        }
     }
+
+    /// <summary>
+    /// Botón Acción — igual que en Dragon Quest.
+    /// Lanza un raycast en la dirección que mira el jugador y busca
+    /// algo interactuable (NPC, cofre, objeto, letrero, etc.).
+    /// </summary>
+    private void PulsarAccion()
+    {
+        // Dirección en la que mira el jugador (usa la última dirección guardada)
+        Vector2 dirMirada = new Vector2(
+            animator.GetFloat("UltimoX"),
+            animator.GetFloat("UltimoY")
+        ).normalized;
+
+        // Si el jugador no tiene dirección guardada aún, mira hacia abajo (igual que DQ)
+        if (dirMirada == Vector2.zero)
+            dirMirada = Vector2.down;
+
+        // Raycast frente al jugador
+        RaycastHit2D hit = Physics2D.Raycast(
+            rb2d.position,
+            dirMirada,
+            distanciaInteraccion,
+            capaInteractuable
+        );
+
+        // Dibuja el rayo en la vista de escena para depuración
+        Debug.DrawRay(rb2d.position, dirMirada * distanciaInteraccion, Color.yellow, 0.5f);
+
+        if (hit.collider != null)
+        {
+            // Busca en el objeto golpeado (o en sus padres) la interfaz IInteractuable
+            IInteractuable interactuable = hit.collider.GetComponentInParent<IInteractuable>();
+
+            if (interactuable != null)
+            {
+                interactuable.Interactuar();
+                Debug.Log($"[PlayerController] Interactuando con: {hit.collider.name}");
+            }
+        }
+        else
+        {
+            Debug.Log("[PlayerController] Acción pulsada — nada delante.");
+        }
+    }
+
+    /// <summary>
+    /// Botón Cancelar — igual que en Dragon Quest.
+    /// Notifica al sistema de UI/menú que se pulsó cancelar.
+    /// </summary>
+    private void PulsarCancelar()
+    {
+        Debug.Log("[PlayerController] Cancelar pulsado.");
+        // Aquí conectas con tu sistema de menú/diálogo:
+        // Ejemplo: MenuManager.Instancia.Cancelar();
+        //          DialogoManager.Instancia.Cancelar();
+    }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  INTERFAZ INTERACTUABLE
+//  Cualquier NPC, cofre, objeto u letrero debe implementar esta
+//  interfaz para ser detectado por el botón de Acción.
+//
+//  Ejemplo de uso en un NPC:
+//
+//    public class NPC : MonoBehaviour, IInteractuable
+//    {
+//        public void Interactuar()
+//        {
+//            DialogoManager.Instancia.MostrarDialogo("¡Hola aventurero!");
+//        }
+//    }
+// ════════════════════════════════════════════════════════════════
+public interface IInteractuable
+{
+    void Interactuar();
 }

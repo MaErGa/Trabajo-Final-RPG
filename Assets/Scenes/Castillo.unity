@@ -62397,7 +62397,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 39
-      m_TileSpriteIndex: 42
+      m_TileSpriteIndex: 44
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -66127,7 +66127,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 28
-      m_TileSpriteIndex: 28
+      m_TileSpriteIndex: 42
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -66137,7 +66137,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 27
-      m_TileSpriteIndex: 27
+      m_TileSpriteIndex: 33
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -66147,7 +66147,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 26
-      m_TileSpriteIndex: 26
+      m_TileSpriteIndex: 28
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -67577,7 +67577,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 25
-      m_TileSpriteIndex: 25
+      m_TileSpriteIndex: 27
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -69007,7 +69007,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 24
-      m_TileSpriteIndex: 24
+      m_TileSpriteIndex: 26
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -143366,16 +143366,16 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: -793670162, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -378103831, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1026437446, guid: 539020b9692b2384f89a63de177fa938, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 2116570510, guid: 539020b9692b2384f89a63de177fa938, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: -344150311, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1136788107, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 37
@@ -143384,8 +143384,8 @@ Tilemap:
     m_Data: {fileID: 1076316829, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1162419749, guid: 539020b9692b2384f89a63de177fa938, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 2116570510, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1470612228, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 1
@@ -143403,11 +143403,11 @@ Tilemap:
   - m_RefCount: 19
     m_Data: {fileID: -669422667, guid: a66d77cb8b9551d4b80e98043193a9fb, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 1571564222, guid: a66d77cb8b9551d4b80e98043193a9fb, type: 3}
+    m_Data: {fileID: -344150311, guid: 539020b9692b2384f89a63de177fa938, type: 3}
   - m_RefCount: 9
     m_Data: {fileID: -1987956264, guid: a66d77cb8b9551d4b80e98043193a9fb, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 1571564222, guid: a66d77cb8b9551d4b80e98043193a9fb, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 452577078, guid: a66d77cb8b9551d4b80e98043193a9fb, type: 3}
   - m_RefCount: 1
@@ -143693,6 +143693,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1020955081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1020955082}
+  - component: {fileID: 1020955083}
+  m_Layer: 0
+  m_Name: _Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1020955082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020955081}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.3006768, y: 12.868067, z: -329.75888}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1020955083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020955081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e3c8def3bf89418cbcd0b160657d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oro: 0
 --- !u!1 &1980689997
 GameObject:
   m_ObjectHideFlags: 0
@@ -143707,6 +143752,7 @@ GameObject:
   - component: {fileID: 1980690000}
   - component: {fileID: 1980689999}
   - component: {fileID: 1980689998}
+  - component: {fileID: 1980690004}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -143822,6 +143868,10 @@ MonoBehaviour:
   velocidadMovimiento: 3.7
   velocidadCarrera: 5.55
   direccion: {x: 0, y: 0}
+  distanciaInteraccion: 1.2
+  capaInteractuable:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!212 &1980690002
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -143889,6 +143939,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1980690004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980689997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c83caf7ead9761489c5ec39a0ee587d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseFuerza: 9
+  baseAgilidad: 8
+  baseResistencia: 8
+  basePericia: 12
+  baseEncanto: 9
+  baseTerapeucidad: 7
+  baseFuerzaMagica: 6
+  baseEstilo: 9
+  nivelActual: 1
+  expActual: 0
+  ranuraArma: {fileID: 0}
+  ranuraEscudo: {fileID: 0}
+  ranuraCabeza: {fileID: 0}
+  ranuraCuerpo: {fileID: 0}
+  ranuraCalzado: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -143897,3 +143974,4 @@ SceneRoots:
   - {fileID: 854053178}
   - {fileID: 844683151}
   - {fileID: 1980690003}
+  - {fileID: 1020955082}
