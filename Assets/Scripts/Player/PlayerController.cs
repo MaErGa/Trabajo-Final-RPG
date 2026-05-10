@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-   // Movimiento personaje
-    [SerializeField] private float velocidadMovimiento;
+    [Header("Ajustes de Movimiento")]
+    [SerializeField] private float velocidadMovimiento = 5f;
     [SerializeField] private float velocidadCarrera = 8f;
     [SerializeField] private Vector2 direccion;
 
@@ -16,28 +15,34 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private bool corriendo;
 
-    //Interaccion del personaje con el entorno
-
     [Header("Interacción")]
-    [Tooltip("Distancia a la que el jugador detecta objetos/NPCs con los que interactuar.")]
     [SerializeField] private float distanciaInteraccion = 1.2f;
-
-    [Tooltip("Capas que contienen NPCs, objetos, cofres, etc.")]
     [SerializeField] private LayerMask capaInteractuable;
 
-      public bool PuedeMoverse { get; set; } = true;
+    [Header("Sistema de Combate")]
+    [SerializeField] private GameObject objetoBattleCanva; 
+    [SerializeField] private LayerMask capaHierba; 
+    [SerializeField] private int probabilidadEncuentro = 5; 
+
+    public bool PuedeMoverse { get; set; } = true;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        rb2d     = GetComponent<Rigidbody2D>();
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
         if (PuedeMoverse)
+        {
             LeerMovimiento();
-
+            
+            if (movimientoX != 0 || movimientoY != 0)
+            {
+                ComprobarEncuentroAleatorio();
+            }
+        }
         LeerBotones();
     }
 
@@ -48,22 +53,18 @@ public class PlayerController : MonoBehaviour
             rb2d.velocity = Vector2.zero;
             return;
         }
-
         float velocidadActual = corriendo ? velocidadCarrera : velocidadMovimiento;
         rb2d.MovePosition(rb2d.position + direccion * velocidadActual * Time.fixedDeltaTime);
     }
 
-    
     private void LeerMovimiento()
     {
         movimientoX = Input.GetAxisRaw("Horizontal");
         movimientoY = Input.GetAxisRaw("Vertical");
-
         corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
         animator.SetFloat("MovimientoX", movimientoX);
         animator.SetFloat("MovimientoY", movimientoY);
-
         direccion = new Vector2(movimientoX, movimientoY).normalized;
 
         if (movimientoX != 0 || movimientoY != 0)
@@ -73,97 +74,49 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Acciones del jugador para accion y cancelar.
+    private void ComprobarEncuentroAleatorio()
+    {
+        // Esto nos dirá en consola si el sensor detecta la capa correcta
+        if (Physics2D.OverlapCircle(rb2d.position, 0.2f, capaHierba))
+        {
+            Debug.Log("PISANDO HIERBA"); 
+            if (Random.Range(1, 1001) <= probabilidadEncuentro)
+            {
+                IniciarCombate();
+            }
+        }
+    }
 
     private void LeerBotones()
     {
-        // Accion (para hablar y aceptar en el menu) con Z, Barra Espaciadora, o Return
-        if (Input.GetKeyDown(KeyCode.Z)      ||
-            Input.GetKeyDown(KeyCode.Return) ||
-            Input.GetKeyDown(KeyCode.Space)  ||
-            Input.GetButtonDown("Submit"))
+        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
         {
-            PulsarAccion();
-        }
-
-        // Boton para cancelar y cerrar menus acciones, X,escape. 
-        
-        if (Input.GetKeyDown(KeyCode.X)      ||
-            Input.GetKeyDown(KeyCode.Escape) ||
-            Input.GetButtonDown("Cancel"))
-        {
-            PulsarCancelar();
+            PulsarAction();
         }
     }
 
-    
-    private void PulsarAccion()
+    private void PulsarAction()
     {
-        
-        Vector2 dirMirada = new Vector2(
-            animator.GetFloat("UltimoX"),
-            animator.GetFloat("UltimoY")
-        ).normalized;
+        Vector2 dirMirada = new Vector2(animator.GetFloat("UltimoX"), animator.GetFloat("UltimoY")).normalized;
+        if (dirMirada == Vector2.zero) dirMirada = Vector2.down;
 
-        
-        if (dirMirada == Vector2.zero)
-            dirMirada = Vector2.down;
-
-        
-        RaycastHit2D hit = Physics2D.Raycast(
-            rb2d.position,
-            dirMirada,
-            distanciaInteraccion,
-            capaInteractuable
-        );
-
-        
-        Debug.DrawRay(rb2d.position, dirMirada * distanciaInteraccion, Color.yellow, 0.5f);
+        RaycastHit2D hit = Physics2D.Raycast(rb2d.position, dirMirada, distanciaInteraccion, capaInteractuable);
 
         if (hit.collider != null)
         {
-            
             IInteractuable interactuable = hit.collider.GetComponentInParent<IInteractuable>();
-
-            if (interactuable != null)
-            {
-                interactuable.Interactuar();
-                Debug.Log($"[PlayerController] Interactuando con: {hit.collider.name}");
-            }
-        }
-        else
-        {
-            Debug.Log("[PlayerController] Acción pulsada — nada delante.");
+            if (interactuable != null) interactuable.Interactuar();
         }
     }
 
-    
-    
-    private void PulsarCancelar()
+    public void IniciarCombate()
     {
-        Debug.Log("[PlayerController] Cancelar pulsado.");
-        // Aquí conectas con tu sistema de menú/diálogo:
-        // Ejemplo: MenuManager.Instancia.Cancelar();
-        //          DialogoManager.Instancia.Cancelar();
+        if (objetoBattleCanva != null)
+        {
+            PuedeMoverse = false;
+            objetoBattleCanva.SetActive(true);
+        }
     }
 }
 
-// ════════════════════════════════════════════════════════════════
-//  INTERFAZ INTERACTUABLE
-//  Cualquier NPC, cofre, objeto u letrero debe implementar esta
-//  interfaz para ser detectado por el botón de Acción.
-
-//  Ejemplo de uso en un NPC:
-//
-//    public class NPC : MonoBehaviour, IInteractuable
-//    {
-//        public void Interactuar()
-//        {
-//            DialogoManager.Instancia.MostrarDialogo("¡Hola aventurero!");
-//        }
-//    }
-
-public interface IInteractuable
-{
-    void Interactuar();
-}
+public interface IInteractuable { void Interactuar(); }
