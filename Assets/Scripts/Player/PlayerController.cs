@@ -15,14 +15,19 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private bool corriendo;
 
+    // Guardamos la última dirección para el idle correcto
+    // Empieza mirando hacia abajo (como la mayoría de juegos RPG)
+    private float ultimoX = 0f;
+    private float ultimoY = -1f;
+
     [Header("Interacción")]
     [SerializeField] private float distanciaInteraccion = 1.2f;
     [SerializeField] private LayerMask capaInteractuable;
 
     [Header("Sistema de Combate")]
-    [SerializeField] private GameObject objetoBattleCanva; 
-    [SerializeField] private LayerMask capaHierba; 
-    [SerializeField] private int probabilidadEncuentro = 5; 
+    [SerializeField] private GameObject objetoBattleCanva;
+    [SerializeField] private LayerMask capaHierba;
+    [SerializeField] private int probabilidadEncuentro = 5;
 
     public bool PuedeMoverse { get; set; } = true;
 
@@ -30,6 +35,10 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();
+
+        // Le decimos al animator la dirección inicial (mirando abajo)
+        animator.SetFloat("UltimoX", ultimoX);
+        animator.SetFloat("UltimoY", ultimoY);
     }
 
     void Update()
@@ -37,12 +46,21 @@ public class PlayerController : MonoBehaviour
         if (PuedeMoverse)
         {
             LeerMovimiento();
-            
+
             if (movimientoX != 0 || movimientoY != 0)
             {
                 ComprobarEncuentroAleatorio();
             }
         }
+        else
+        {
+            // Si no puede moverse, paramos el movimiento
+            movimientoX = 0;
+            movimientoY = 0;
+            animator.SetFloat("MovimientoX", 0);
+            animator.SetFloat("MovimientoY", 0);
+        }
+
         LeerBotones();
     }
 
@@ -53,6 +71,7 @@ public class PlayerController : MonoBehaviour
             rb2d.velocity = Vector2.zero;
             return;
         }
+
         float velocidadActual = corriendo ? velocidadCarrera : velocidadMovimiento;
         rb2d.MovePosition(rb2d.position + direccion * velocidadActual * Time.fixedDeltaTime);
     }
@@ -63,23 +82,40 @@ public class PlayerController : MonoBehaviour
         movimientoY = Input.GetAxisRaw("Vertical");
         corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
+        // Pasamos el movimiento actual al animator para que sepa si caminar o no
         animator.SetFloat("MovimientoX", movimientoX);
         animator.SetFloat("MovimientoY", movimientoY);
+
+        // Calculamos la dirección normalizada para el movimiento físico
         direccion = new Vector2(movimientoX, movimientoY).normalized;
 
+        // Velocidad le dice al animator si estamos moviéndonos o no
+        // 1 = caminando, 0 = parado (esto evita el conflicto entre idle y caminar)
+        animator.SetFloat("Velocidad", direccion.magnitude);
+
+        // --- AQUÍ ESTABA EL BUG ---
+        // Solo guardamos la última dirección cuando hay movimiento real.
+        // Además guardamos los valores en variables propias del script,
+        // no solo en el animator. Así evitamos que el idle de "arriba"
+        // se confunda con caminar hacia arriba.
         if (movimientoX != 0 || movimientoY != 0)
         {
-            animator.SetFloat("UltimoX", movimientoX);
-            animator.SetFloat("UltimoY", movimientoY);
+            ultimoX = movimientoX;
+            ultimoY = movimientoY;
+
+            // Actualizamos el animator con la última dirección conocida
+            animator.SetFloat("UltimoX", ultimoX);
+            animator.SetFloat("UltimoY", ultimoY);
         }
+        // Si no hay movimiento, no tocamos UltimoX/UltimoY para que el
+        // idle se quede en la dirección correcta que venía caminando
     }
 
     private void ComprobarEncuentroAleatorio()
     {
-        // Esto nos dirá en consola si el sensor detecta la capa correcta
         if (Physics2D.OverlapCircle(rb2d.position, 0.2f, capaHierba))
         {
-            Debug.Log("PISANDO HIERBA"); 
+            Debug.Log("PISANDO HIERBA");
             if (Random.Range(1, 1001) <= probabilidadEncuentro)
             {
                 IniciarCombate();
@@ -97,7 +133,9 @@ public class PlayerController : MonoBehaviour
 
     private void PulsarAction()
     {
-        Vector2 dirMirada = new Vector2(animator.GetFloat("UltimoX"), animator.GetFloat("UltimoY")).normalized;
+        // Usamos las variables del script en vez de leer el animator
+        // (más fiable y evita problemas de sincronización)
+        Vector2 dirMirada = new Vector2(ultimoX, ultimoY).normalized;
         if (dirMirada == Vector2.zero) dirMirada = Vector2.down;
 
         RaycastHit2D hit = Physics2D.Raycast(rb2d.position, dirMirada, distanciaInteraccion, capaInteractuable);
@@ -115,6 +153,10 @@ public class PlayerController : MonoBehaviour
         {
             PuedeMoverse = false;
             objetoBattleCanva.SetActive(true);
+
+            // Paramos la animación de caminar al entrar en combate
+            animator.SetFloat("MovimientoX", 0);
+            animator.SetFloat("MovimientoY", 0);
         }
     }
 }

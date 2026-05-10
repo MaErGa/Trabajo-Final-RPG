@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 192955407}
   - component: {fileID: 192955406}
   m_Layer: 6
-  m_Name: GameObject
+  m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143893,7 +143893,7 @@ GameObject:
   - component: {fileID: 844683151}
   - component: {fileID: 844683150}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144886,6 +144886,6 @@ SceneRoots:
   - {fileID: 854053178}
   - {fileID: 844683151}
   - {fileID: 1980690003}
-  - {fileID: 1020955082}
   - {fileID: 1960804522}
   - {fileID: 1000264724}
+  - {fileID: 1020955082}
