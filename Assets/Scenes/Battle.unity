@@ -2428,6 +2428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   misStats: {fileID: 1153091127}
+  textoNombre: {fileID: 1292626240}
   textoVida: {fileID: 2095066726}
   textoNivel: {fileID: 528293720}
   textoMP: {fileID: 97541589}
