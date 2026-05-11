@@ -1,164 +1,77 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Ajustes de Movimiento")]
-    [SerializeField] private float velocidadMovimiento = 5f;
-    [SerializeField] private float velocidadCarrera = 8f;
-    [SerializeField] private Vector2 direccion;
+    // Estas variables aparecen en el Inspector de Unity para que puedas cambiarlas fácilmente
+    [Header("Velocidades")]
+    public float velocidadNormal = 5f;
+    public float velocidadCarrera = 8f;
 
-    private Rigidbody2D rb2d;
-    private float movimientoX;
-    private float movimientoY;
+    // Variables privadas (solo las usa este script)
+    private Rigidbody2D rb;
     private Animator animator;
-    private bool corriendo;
 
-    // Guardamos la última dirección para el idle correcto
-    // Empieza mirando hacia abajo (como la mayoría de juegos RPG)
+    private float moviX;
+    private float moviY;
+
+    // Guardamos hacia donde miraba el personaje por última vez
+    // Empieza mirando hacia abajo (como en los RPG clásicos)
     private float ultimoX = 0f;
     private float ultimoY = -1f;
 
-    [Header("Interacción")]
-    [SerializeField] private float distanciaInteraccion = 1.2f;
-    [SerializeField] private LayerMask capaInteractuable;
-
-    [Header("Sistema de Combate")]
-    [SerializeField] private GameObject objetoBattleCanva;
-    [SerializeField] private LayerMask capaHierba;
-    [SerializeField] private int probabilidadEncuentro = 5;
-
-    public bool PuedeMoverse { get; set; } = true;
-
+    // Start se ejecuta UNA VEZ al arrancar el juego
     void Start()
     {
+        // Buscamos los componentes que están en este mismo objeto
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        rb2d = GetComponent<Rigidbody2D>();
 
-        // Le decimos al animator la dirección inicial (mirando abajo)
+        // Le decimos al Animator que empiece mirando hacia abajo
         animator.SetFloat("UltimoX", ultimoX);
         animator.SetFloat("UltimoY", ultimoY);
     }
 
+    // Update se ejecuta en CADA FOTOGRAMA
     void Update()
     {
-        if (PuedeMoverse)
+        // Leemos las teclas WASD o las flechas del teclado
+        moviX = Input.GetAxisRaw("Horizontal"); // -1 izquierda, 0 nada, 1 derecha
+        moviY = Input.GetAxisRaw("Vertical");   // -1 abajo,     0 nada, 1 arriba
+
+        // Le decimos al Animator si nos estamos moviendo o no
+        // Usamos Mathf.Abs para saber si hay movimiento en cualquier dirección
+        bool seEstaMoviendo = (moviX != 0 || moviY != 0);
+        animator.SetBool("Moviéndose", seEstaMoviendo);
+
+        // Actualizamos el Animator con la dirección actual de movimiento
+        animator.SetFloat("MovimientoX", moviX);
+        animator.SetFloat("MovimientoY", moviY);
+
+        // Solo guardamos la última dirección cuando hay movimiento real
+        // Así el personaje queda mirando hacia donde iba cuando se para
+        if (seEstaMoviendo)
         {
-            LeerMovimiento();
+            ultimoX = moviX;
+            ultimoY = moviY;
 
-            if (movimientoX != 0 || movimientoY != 0)
-            {
-                ComprobarEncuentroAleatorio();
-            }
-        }
-        else
-        {
-            // Si no puede moverse, paramos el movimiento
-            movimientoX = 0;
-            movimientoY = 0;
-            animator.SetFloat("MovimientoX", 0);
-            animator.SetFloat("MovimientoY", 0);
-        }
-
-        LeerBotones();
-    }
-
-    private void FixedUpdate()
-    {
-        if (!PuedeMoverse)
-        {
-            rb2d.velocity = Vector2.zero;
-            return;
-        }
-
-        float velocidadActual = corriendo ? velocidadCarrera : velocidadMovimiento;
-        rb2d.MovePosition(rb2d.position + direccion * velocidadActual * Time.fixedDeltaTime);
-    }
-
-    private void LeerMovimiento()
-    {
-        movimientoX = Input.GetAxisRaw("Horizontal");
-        movimientoY = Input.GetAxisRaw("Vertical");
-        corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-
-        // Pasamos el movimiento actual al animator para que sepa si caminar o no
-        animator.SetFloat("MovimientoX", movimientoX);
-        animator.SetFloat("MovimientoY", movimientoY);
-
-        // Calculamos la dirección normalizada para el movimiento físico
-        direccion = new Vector2(movimientoX, movimientoY).normalized;
-
-        // Velocidad le dice al animator si estamos moviéndonos o no
-        // 1 = caminando, 0 = parado (esto evita el conflicto entre idle y caminar)
-        animator.SetFloat("Velocidad", direccion.magnitude);
-
-        // --- AQUÍ ESTABA EL BUG ---
-        // Solo guardamos la última dirección cuando hay movimiento real.
-        // Además guardamos los valores en variables propias del script,
-        // no solo en el animator. Así evitamos que el idle de "arriba"
-        // se confunda con caminar hacia arriba.
-        if (movimientoX != 0 || movimientoY != 0)
-        {
-            ultimoX = movimientoX;
-            ultimoY = movimientoY;
-
-            // Actualizamos el animator con la última dirección conocida
             animator.SetFloat("UltimoX", ultimoX);
             animator.SetFloat("UltimoY", ultimoY);
         }
-        // Si no hay movimiento, no tocamos UltimoX/UltimoY para que el
-        // idle se quede en la dirección correcta que venía caminando
     }
 
-    private void ComprobarEncuentroAleatorio()
+    // FixedUpdate se usa para físicas (movimiento con Rigidbody)
+    // Se ejecuta a un ritmo fijo, independiente del framerate
+    void FixedUpdate()
     {
-        if (Physics2D.OverlapCircle(rb2d.position, 0.2f, capaHierba))
-        {
-            Debug.Log("PISANDO HIERBA");
-            if (Random.Range(1, 1001) <= probabilidadEncuentro)
-            {
-                IniciarCombate();
-            }
-        }
-    }
+        // Comprobamos si está pulsado Shift para correr
+        bool corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        float velocidad = corriendo ? velocidadCarrera : velocidadNormal;
 
-    private void LeerBotones()
-    {
-        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
-        {
-            PulsarAction();
-        }
-    }
+        // Creamos la dirección y la normalizamos
+        // (normalizar evita que ir en diagonal sea más rápido)
+        Vector2 direccion = new Vector2(moviX, moviY).normalized;
 
-    private void PulsarAction()
-    {
-        // Usamos las variables del script en vez de leer el animator
-        // (más fiable y evita problemas de sincronización)
-        Vector2 dirMirada = new Vector2(ultimoX, ultimoY).normalized;
-        if (dirMirada == Vector2.zero) dirMirada = Vector2.down;
-
-        RaycastHit2D hit = Physics2D.Raycast(rb2d.position, dirMirada, distanciaInteraccion, capaInteractuable);
-
-        if (hit.collider != null)
-        {
-            IInteractuable interactuable = hit.collider.GetComponentInParent<IInteractuable>();
-            if (interactuable != null) interactuable.Interactuar();
-        }
-    }
-
-    public void IniciarCombate()
-    {
-        if (objetoBattleCanva != null)
-        {
-            PuedeMoverse = false;
-            objetoBattleCanva.SetActive(true);
-
-            // Paramos la animación de caminar al entrar en combate
-            animator.SetFloat("MovimientoX", 0);
-            animator.SetFloat("MovimientoY", 0);
-        }
+        // Movemos el personaje
+        rb.MovePosition(rb.position + direccion * velocidad * Time.fixedDeltaTime);
     }
 }
-
-public interface IInteractuable { void Interactuar(); }
