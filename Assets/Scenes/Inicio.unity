@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 210705089}
   - component: {fileID: 210705088}
   m_Layer: 3
-  m_Name: GameObject (4)
+  m_Name: Estatua
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2849,7 +2849,7 @@ GameObject:
   - component: {fileID: 266409903}
   - component: {fileID: 266409902}
   m_Layer: 3
-  m_Name: GameObject (6)
+  m_Name: Puerta lado Izquierda
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3042,9 +3042,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 998515ae4b74e5645ba9f0abac38c3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadMovimiento: 3.7
+  velocidadNormal: 5
   velocidadCarrera: 5.55
-  direccion: {x: 0, y: 0}
 --- !u!95 &368097684
 Animator:
   serializedVersion: 5
@@ -3150,7 +3149,7 @@ GameObject:
   - component: {fileID: 385121042}
   - component: {fileID: 385121041}
   m_Layer: 3
-  m_Name: GameObject (13)
+  m_Name: Pared Frontal Derecha
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3596,7 +3595,7 @@ GameObject:
   - component: {fileID: 508773062}
   - component: {fileID: 508773064}
   m_Layer: 0
-  m_Name: Pasar Puerta
+  m_Name: Pasar Nivel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3671,9 +3670,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 508773061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0db1f7a1dfdc113468d23f7ae42bcc58, type: 3}
+  m_Script: {fileID: 11500000, guid: 336b0a7f9b2f1994ea1b1c88ebebf1e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nombreEscenaDestino: Underworld
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -4173,7 +4173,7 @@ GameObject:
   - component: {fileID: 695851575}
   - component: {fileID: 695851574}
   m_Layer: 3
-  m_Name: GameObject (9)
+  m_Name: Pared de Abajo
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4278,7 +4278,7 @@ GameObject:
   - component: {fileID: 729885031}
   - component: {fileID: 729885030}
   m_Layer: 3
-  m_Name: GameObject (8)
+  m_Name: Puerta lado Arriba
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4428,7 +4428,7 @@ GameObject:
   - component: {fileID: 910677680}
   - component: {fileID: 910677679}
   m_Layer: 3
-  m_Name: GameObject (5)
+  m_Name: Estatua 2
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4533,7 +4533,7 @@ GameObject:
   - component: {fileID: 1131423671}
   - component: {fileID: 1131423670}
   m_Layer: 3
-  m_Name: GameObject (7)
+  m_Name: Puerta lado Derecho
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4722,7 +4722,7 @@ GameObject:
   - component: {fileID: 1230762776}
   - component: {fileID: 1230762775}
   m_Layer: 3
-  m_Name: GameObject (2)
+  m_Name: Ruby
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4827,7 +4827,7 @@ GameObject:
   - component: {fileID: 1317067030}
   - component: {fileID: 1317067029}
   m_Layer: 3
-  m_Name: GameObject (3)
+  m_Name: Ruby 2
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5097,7 +5097,7 @@ GameObject:
   - component: {fileID: 1384668574}
   - component: {fileID: 1384668573}
   m_Layer: 3
-  m_Name: GameObject (10)
+  m_Name: Pared lado Izquierdo
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5286,7 +5286,7 @@ GameObject:
   - component: {fileID: 1720564393}
   - component: {fileID: 1720564396}
   m_Layer: 3
-  m_Name: GameObject
+  m_Name: Fuente de Agua
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5391,7 +5391,7 @@ GameObject:
   - component: {fileID: 1988236809}
   - component: {fileID: 1988236808}
   m_Layer: 3
-  m_Name: GameObject (1)
+  m_Name: Fuente de Agua 2
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5496,7 +5496,7 @@ GameObject:
   - component: {fileID: 2009148859}
   - component: {fileID: 2009148858}
   m_Layer: 3
-  m_Name: GameObject (12)
+  m_Name: Pared Frontal Izquierda
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5731,7 +5731,7 @@ GameObject:
   - component: {fileID: 2090051817}
   - component: {fileID: 2090051816}
   m_Layer: 3
-  m_Name: GameObject (11)
+  m_Name: Pared lado Derecho
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
