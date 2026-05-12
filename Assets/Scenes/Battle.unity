@@ -207,7 +207,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2128480715}
         m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
-        m_MethodName: AccionDefensa
+        m_MethodName: AccionDefender
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

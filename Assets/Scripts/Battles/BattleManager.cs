@@ -17,16 +17,17 @@ public class BattleManager : MonoBehaviour
 
     [Header("Estadísticas de Ryo (Nivel 1)")]
     private string nombrePlayer = "Ryo"; 
-    private int hpJugador = 20;  
-    private int mpJugador = 5;  
+    private int hpJugador = 20;    // PV: 20
+    private int mpJugador = 5;     // PM: 5
     private int lvJugador = 1;   
-    private int ataqueJugador = 8;
+    private int ataqueJugador = 8; // Fuerza: 8
 
     private int vidaEnemigo;
     private string nombreEnemigo;
 
     void Start()
     {
+        // Asignamos el nombre al empezar
         if(textoNombreJugador != null) textoNombreJugador.text = nombrePlayer;
 
         if (MovimientoMapa.enemigoSeleccionado != null)
@@ -39,8 +40,8 @@ public class BattleManager : MonoBehaviour
             {
                 sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
                 objetoImagenEnemigo.SetActive(true);
-                sr.sortingOrder = 20; // Para que se vea delante del fondo
-                objetoImagenEnemigo.transform.localScale = new Vector3(3f, 3f, 1f); // Tamaño corregido
+                sr.sortingOrder = 20; 
+                objetoImagenEnemigo.transform.localScale = new Vector3(3f, 3f, 1f); 
             }
             textoMensajes.text = "¡Un " + nombreEnemigo + " aparece!";
         }
@@ -50,15 +51,39 @@ public class BattleManager : MonoBehaviour
     public void AccionAtacar()
     {
         if (vidaEnemigo <= 0) return;
+        
         vidaEnemigo -= ataqueJugador; 
-        if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
-        else textoMensajes.text = "¡" + nombrePlayer + " ataca al " + nombreEnemigo + "!";
+        
+        if (vidaEnemigo <= 0) 
+        {
+            StartCoroutine(VictoriaAutomatica());
+        }
+        else 
+        {
+            textoMensajes.text = "¡" + nombrePlayer + " ataca al " + nombreEnemigo + "!";
+        }
+        
+        ActualizarInterfaz();
+    }
+
+    public void AccionDefender()
+    {
+        if (vidaEnemigo <= 0) return;
+
+        // Ryo recupera 1 PM al defenderse, hasta un máximo de 5
+        textoMensajes.text = "¡" + nombrePlayer + " se pone en guardia y recupera 1 PM!";
+        
+        if(mpJugador < 5) 
+        {
+            mpJugador += 1;
+        }
+        
         ActualizarInterfaz();
     }
 
     public void AccionEscapar()
     {
-        // Al volver, MovimientoMapa usará la posición guardada
+        // Volvemos al mapa (MovimientoMapa se encarga de la posición)
         SceneManager.LoadScene("Underworld"); 
     }
 
@@ -66,11 +91,13 @@ public class BattleManager : MonoBehaviour
     {
         vidaEnemigo = 0;
         if(objetoImagenEnemigo != null) objetoImagenEnemigo.SetActive(false);
+        
         int exp = (MovimientoMapa.enemigoSeleccionado != null) ? MovimientoMapa.enemigoSeleccionado.expAlMorir : 10;
         int oro = (MovimientoMapa.enemigoSeleccionado != null) ? MovimientoMapa.enemigoSeleccionado.oroAlMorir : 5;
+        
         textoMensajes.text = "¡" + nombreEnemigo + " derrotado!\nGanas " + exp + " EXP y " + oro + " monedas.";
         
-        yield return new WaitForSeconds(3f); // Espera antes de volver solo
+        yield return new WaitForSeconds(3f); 
         SceneManager.LoadScene("Underworld"); 
     }
 
