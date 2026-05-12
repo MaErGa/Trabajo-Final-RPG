@@ -144785,6 +144785,7 @@ GameObject:
   - component: {fileID: 1980689999}
   - component: {fileID: 1980689998}
   - component: {fileID: 1980690004}
+  - component: {fileID: 1980690005}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -144988,6 +144989,23 @@ MonoBehaviour:
   mpMaximo: 10
   ataque: 5
   defensa: 3
+--- !u!114 &1980690005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980689997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fecc995b3d6a9469c94062ee992d5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocidad: 5
+  probabilidadCombate: 0.1
+  posiblesEnemigos:
+  - {fileID: 11400000, guid: 79baa7529a7f15246b8a945a98fdc7b3, type: 2}
+  - {fileID: 11400000, guid: be6f9f01eee3e534e90968af24d6006a, type: 2}
 --- !u!1 &2017471614
 GameObject:
   m_ObjectHideFlags: 0

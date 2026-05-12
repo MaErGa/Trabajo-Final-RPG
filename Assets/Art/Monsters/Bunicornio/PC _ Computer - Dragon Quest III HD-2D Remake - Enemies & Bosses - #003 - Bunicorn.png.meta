@@ -1,0 +1,886 @@
+fileFormatVersion: 2
+guid: 3abaa61e3c7a24c47b60d8617cca5e28
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 112
+        width: 57
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb2ba648539abbb4186b312d90769c9d
+      internalID: 1550180362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_1
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 112
+        width: 57
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4898a227382ad7b4ebb8280a81915300
+      internalID: 664535017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_2
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 113
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a7b8f187b93c9340bfbff32bab9c577
+      internalID: -820926549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_3
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 113
+        width: 57
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 800b6c21a136a4e43bbc883c6f370973
+      internalID: 301650003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_4
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 113
+        width: 57
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0239ce1177ea8e842a8d05cab13039c9
+      internalID: -1063805522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_5
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 112
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 826d227cbf1cc58479c4996c5c87e9a4
+      internalID: 344409221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_6
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 111
+        width: 59
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61b7f215f779f6144a79331d5a017349
+      internalID: -2068001264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_7
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 108
+        width: 57
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac2451c9da445aa44b5175d615293761
+      internalID: 464902650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_8
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 95
+        width: 67
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4d8fdb5cff211b4cb7b81a30a539f46
+      internalID: 223523049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_9
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 74
+        width: 57
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 910317875c452b745a3e3fa982f97489
+      internalID: -613876791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_10
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 72
+        width: 65
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5bb4ba02e3484e4a8ff096113c1736d
+      internalID: -740461833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_11
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 98
+        width: 58
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c53b7f089150984bb01207bbfa00e2f
+      internalID: -368837863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_12
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 109
+        width: 55
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f85666d84a501b24581f5b2847680de9
+      internalID: -1470937774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_13
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 114
+        width: 60
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faa6b1ce80a63d4438d6040ff0413194
+      internalID: -1960187789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_14
+      rect:
+        serializedVersion: 2
+        x: 878
+        y: 109
+        width: 62
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a30bd2193c8c6543915b059d477bfb8
+      internalID: -822362539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_15
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 105
+        width: 64
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b58845c0812b5242b5c36ccbf33b542
+      internalID: -1117541377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_16
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 10
+        width: 57
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b73b7540797a90146b9ce9705ac530d1
+      internalID: -818827517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_17
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 17
+        width: 60
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cb8067605824024980984cbdc540f42
+      internalID: 110907920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_18
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 20
+        width: 58
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d2aa8524fb9eb74aa0aa596cb99cb0e
+      internalID: 1677202516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_19
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 17
+        width: 57
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b4bb63088999b14fb7d9535443344b6
+      internalID: -1700701354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_20
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 13
+        width: 57
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d0c3ed8c83b69f4eab6b4bcb9453a7a
+      internalID: -1302608063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_21
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 7
+        width: 57
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34068aa57c3bb3646ba4a4167b8a063c
+      internalID: -848077399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_22
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 17
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34de9099a307e7049ba23dc628f99f87
+      internalID: 2133939074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_23
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 19
+        width: 53
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bccc2fcb61ce47242b6e64639aadc17c
+      internalID: -2083605534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_24
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 7
+        width: 47
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fda0d7b7c851ed40842f83f8ce85f12
+      internalID: 273854958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_25
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 18
+        width: 47
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e82df7d763b5f443a8061919610e40f
+      internalID: 1571234812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_26
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 25
+        width: 57
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46db3649945018c4aa0f322dda555641
+      internalID: -761697958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_27
+      rect:
+        serializedVersion: 2
+        x: 651
+        y: 25
+        width: 57
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e254e86aa5693334d9872f1450c9ce93
+      internalID: -1236451960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_28
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 20
+        width: 54
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a09646110374bed4b860c5fbcd10daaf
+      internalID: 68452561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_29
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 15
+        width: 51
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac57027c7ba1fef4ba9204e1af8cb720
+      internalID: 357182824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_30
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 19
+        width: 57
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e78849cad235ae74c92b2d22b20b47d2
+      internalID: 1018912028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_31
+      rect:
+        serializedVersion: 2
+        x: 886
+        y: 16
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38e70185cd046334b8ad3db2339239a1
+      internalID: -1810340329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003
+        - Bunicorn_32
+      rect:
+        serializedVersion: 2
+        x: 949
+        y: 15
+        width: 57
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb4e337082da5ab45b5647b5ad1d1dc9
+      internalID: 1318807964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_0: 1550180362
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_1: 664535017
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_10: -740461833
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_11: -368837863
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_12: -1470937774
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_13: -1960187789
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_14: -822362539
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_15: -1117541377
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_16: -818827517
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_17: 110907920
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_18: 1677202516
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_19: -1700701354
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_2: -820926549
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_20: -1302608063
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_21: -848077399
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_22: 2133939074
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_23: -2083605534
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_24: 273854958
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_25: 1571234812
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_26: -761697958
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_27: -1236451960
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_28: 68452561
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_29: 357182824
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_3: 301650003
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_30: 1018912028
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_31: -1810340329
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_32: 1318807964
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_4: -1063805522
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_5: 344409221
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_6: -2068001264
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_7: 464902650
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_8: 223523049
+      PC _ Computer - Dragon Quest III HD-2D Remake - Enemies & Bosses - #003 - Bunicorn_9: -613876791
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

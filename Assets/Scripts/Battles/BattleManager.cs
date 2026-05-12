@@ -1,129 +1,83 @@
 using UnityEngine;
-using TMPro; 
-using UnityEngine.SceneManagement; 
+using TMPro;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class BattleManager : MonoBehaviour
 {
-    [Header("Referencias Jugador")]
-    public PlayerStats misStats;      
-    public TextMeshProUGUI textoNombre; // NUEVO: Hueco para el nombre
-    public TextMeshProUGUI textoVida; 
-    public TextMeshProUGUI textoNivel; 
-    public TextMeshProUGUI textoMP;    
+    [Header("UI Jugador")]
+    public TextMeshProUGUI textoNombreJugador; 
+    public TextMeshProUGUI textoMensajes;
+    public TextMeshProUGUI textoHPJugador;
+    public TextMeshProUGUI textoMPJugador;
+    public TextMeshProUGUI textoLVJugador;
+    
+    [Header("El Hueco del Enemigo")]
+    public GameObject objetoImagenEnemigo; 
 
-    [Header("Referencias Enemigo")]
-    public GameObject elSlime;        
-    public int vidaEnemigo = 20; 
+    [Header("Estadísticas de Ryo (Nivel 1)")]
+    private string nombrePlayer = "Ryo"; 
+    private int hpJugador = 20;  
+    private int mpJugador = 5;  
+    private int lvJugador = 1;   
+    private int ataqueJugador = 8;
 
-    [Header("Interfaz")]
-    public TextMeshProUGUI textoMensajes; 
-
-    private bool esTurnoDelJugador = true;
-    private bool estaDefendiendo = false; // Añadido para que funcionen los botones de antes
+    private int vidaEnemigo;
+    private string nombreEnemigo;
 
     void Start()
     {
+        if(textoNombreJugador != null) textoNombreJugador.text = nombrePlayer;
+
+        if (MovimientoMapa.enemigoSeleccionado != null)
+        {
+            nombreEnemigo = MovimientoMapa.enemigoSeleccionado.nombreEnemigo;
+            vidaEnemigo = MovimientoMapa.enemigoSeleccionado.vidaMaxima;
+            
+            SpriteRenderer sr = objetoImagenEnemigo.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
+                objetoImagenEnemigo.SetActive(true);
+                sr.sortingOrder = 20; // Para que se vea delante del fondo
+                objetoImagenEnemigo.transform.localScale = new Vector3(3f, 3f, 1f); // Tamaño corregido
+            }
+            textoMensajes.text = "¡Un " + nombreEnemigo + " aparece!";
+        }
         ActualizarInterfaz();
-        // Usamos el nombre dinámico en el mensaje inicial
-        textoMensajes.text = "¡Un Slime salvaje aparece ante " + misStats.nombreJugador + "!";
     }
 
     public void AccionAtacar()
     {
-        if (!esTurnoDelJugador || vidaEnemigo <= 0) return;
-
-        vidaEnemigo -= misStats.ataque; 
-        textoMensajes.text = "¡Atacas al Slime!";
-        
-        elSlime.transform.position += new Vector3(0.2f, 0, 0);
-        Invoke("ResetearPosicionSlime", 0.1f);
-
-        if (vidaEnemigo <= 0)
-        {
-            GanarCombate();
-        }
-        else
-        {
-            esTurnoDelJugador = false;
-            Invoke("TurnoDelEnemigo", 1.2f);
-        }
-    }
-
-    // Funciones de Defensa y Escapar para que no dejen de funcionar
-    public void AccionDefensa()
-    {
-        if (!esTurnoDelJugador || vidaEnemigo <= 0) return;
-        estaDefendiendo = true;
-        textoMensajes.text = misStats.nombreJugador + " se pone en guardia.";
-        esTurnoDelJugador = false;
-        Invoke("TurnoDelEnemigo", 1.2f);
+        if (vidaEnemigo <= 0) return;
+        vidaEnemigo -= ataqueJugador; 
+        if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
+        else textoMensajes.text = "¡" + nombrePlayer + " ataca al " + nombreEnemigo + "!";
+        ActualizarInterfaz();
     }
 
     public void AccionEscapar()
     {
-        if (!esTurnoDelJugador || vidaEnemigo <= 0) return;
-        textoMensajes.text = "¡Has escapado con éxito!";
-        Invoke("VolverAlMapa", 1.2f);
+        // Al volver, MovimientoMapa usará la posición guardada
+        SceneManager.LoadScene("Underworld"); 
     }
 
-    void GanarCombate()
+    IEnumerator VictoriaAutomatica()
     {
         vidaEnemigo = 0;
-        elSlime.SetActive(false); 
-
-        int expGanada = 20;
-        int oroGanado = 10;
-        misStats.experiencia += expGanada;
-        misStats.oro += oroGanado;
-
-        textoMensajes.text = "¡Slime derrotado! Ganas " + expGanada + " EXP y " + oroGanado + " monedas.";
+        if(objetoImagenEnemigo != null) objetoImagenEnemigo.SetActive(false);
+        int exp = (MovimientoMapa.enemigoSeleccionado != null) ? MovimientoMapa.enemigoSeleccionado.expAlMorir : 10;
+        int oro = (MovimientoMapa.enemigoSeleccionado != null) ? MovimientoMapa.enemigoSeleccionado.oroAlMorir : 5;
+        textoMensajes.text = "¡" + nombreEnemigo + " derrotado!\nGanas " + exp + " EXP y " + oro + " monedas.";
         
-        CancelInvoke("TurnoDelEnemigo");
-        Invoke("VolverAlMapa", 2.5f); 
+        yield return new WaitForSeconds(3f); // Espera antes de volver solo
+        SceneManager.LoadScene("Underworld"); 
     }
 
-    void TurnoDelEnemigo()
+    void ActualizarInterfaz()
     {
-        if (vidaEnemigo <= 0) return;
-
-        int dañoFinal = 4;
-        if (estaDefendiendo)
-        {
-            dañoFinal = 1;
-            estaDefendiendo = false;
-            textoMensajes.text = "¡Te defiendes del golpe!";
-        }
-        else
-        {
-            textoMensajes.text = "¡El Slime embiste!";
-        }
-
-        misStats.pvActuales -= dañoFinal;
-        ActualizarInterfaz();
-
-        if (misStats.pvActuales <= 0)
-        {
-            textoMensajes.text = "Has caído...";
-        }
-        else
-        {
-            esTurnoDelJugador = true;
-            Invoke("MensajeTurno", 1f);
-        }
+        if(textoHPJugador != null) textoHPJugador.text = "HP: " + hpJugador;
+        if(textoMPJugador != null) textoMPJugador.text = "MP: " + mpJugador;
+        if(textoLVJugador != null) textoLVJugador.text = "LV: " + lvJugador;
     }
-
-    void MensajeTurno() { textoMensajes.text = "¿Qué harás ahora?"; }
-
-    public void ActualizarInterfaz()
-    {
-        // Actualizamos el nombre en la pantalla
-        if (textoNombre != null) textoNombre.text = misStats.nombreJugador;
-        
-        if (textoVida != null) textoVida.text = "HP " + misStats.pvActuales;
-        if (textoNivel != null) textoNivel.text = "NV " + misStats.nivel;
-        if (textoMP != null) textoMP.text = "MP " + misStats.mpActual;
-    }
-
-    void ResetearPosicionSlime() => elSlime.transform.position -= new Vector3(0.2f, 0, 0);
-    void VolverAlMapa() => SceneManager.LoadScene("Underworld");
 }
