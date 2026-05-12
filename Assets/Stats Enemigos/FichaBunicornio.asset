@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FichaBunicornio
   m_EditorClassIdentifier: 
   nombreEnemigo: Bunicornio
-  vidaMaxima: 8
-  "da\xF1oAtaque": 6
+  vidaMaxima: 10
+  "da\xF1oAtaque": 12
   imagenEnemigo: {fileID: 1550180362, guid: 3abaa61e3c7a24c47b60d8617cca5e28, type: 3}
-  expAlMorir: 30
-  oroAlMorir: 12
+  expAlMorir: 10
+  oroAlMorir: 3

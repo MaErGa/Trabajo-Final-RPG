@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FichaSlime
   m_EditorClassIdentifier: 
   nombreEnemigo: Slime
-  vidaMaxima: 20
-  "da\xF1oAtaque": 3
+  vidaMaxima: 9
+  "da\xF1oAtaque": 9
   imagenEnemigo: {fileID: 628478889, guid: 63e7ea76f84b0c648b18758f934de1e5, type: 3}
-  expAlMorir: 15
-  oroAlMorir: 5
+  expAlMorir: 6
+  oroAlMorir: 8
