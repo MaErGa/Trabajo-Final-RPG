@@ -1,0 +1,1007 @@
+fileFormatVersion: 2
+guid: 19cb805327ea42b4094b300c1bfa8faf
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcd9a2a71cfa8284a88ead3109bd719a
+      internalID: 2005918474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56191c469adebf645a1a6ca3d0281aa2
+      internalID: 299677924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cabd5087d30580d45b72bccb2be727c1
+      internalID: 743973354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b4748620f28bf44499053ae9f9a7e93
+      internalID: 918913120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8adb99abd6f6a1d43b471e8c856b2176
+      internalID: 1632784690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dc4f6e418aa89344ae5659c280795ce
+      internalID: 1769175888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c37b1bc8ae69a4841bce240dd9779498
+      internalID: -334190194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 282
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f2f03e67f8527140b3ef255c7994231
+      internalID: 391504300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5f53017a2f144b498f2d2ea4e57e4f7
+      internalID: -1395576583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b92d5cd00d367e943bec58af4593651c
+      internalID: -50515740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_10
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a2d428edf03f0e4b9ad87d913959088
+      internalID: -232344130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_11
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f0eba6ad45a6c940a566ce6ac222a4d
+      internalID: -1736482058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_12
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44cea66af983fac4eb02c9607a20f544
+      internalID: -396851270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_13
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3f89e03c66b81549a16bd7a1f7767d3
+      internalID: -1636543351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_14
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25b6cbcbab01d60438607de251482643
+      internalID: 944482850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_15
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 218
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8049bcd83d161a940a8e08e376ab17b1
+      internalID: -1176573132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d179092bd633ee4f94c75cf99cfd64b
+      internalID: 1455921759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_17
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 648da14e9627be54196407d8bdb9085f
+      internalID: -1229030791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_18
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5081cbabf6325fc448e6601a0fd29661
+      internalID: -1829042214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_19
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 978aaf0925dc8b146adab2611dea4300
+      internalID: -1006507368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_20
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84a7300112a3c8349b12094bbf4be1d5
+      internalID: 346854055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_21
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9caae019ae01f664ba889c77be25fcb7
+      internalID: 2077758067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_22
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed3da2ba2ba599448ae350bdbab4951d
+      internalID: 1017210615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_23
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 154
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac46583ef775182409969483bdc7d26e
+      internalID: -404427218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e24f03d7b1d6cf408c882a4c016645e
+      internalID: 449730967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_25
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 056cb9f360b0368438e42f3a79792888
+      internalID: 1587607534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_26
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e97c450ae41a88a4bbbbca2de3b1de25
+      internalID: -1799122103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_27
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cb12c1fae0739342af80b217655283e
+      internalID: -2002985886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_28
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96e9a85befb946147a1da0371ed34d1c
+      internalID: 1115343241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_29
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 492464b1fac833f4d83adc8dfcccaedd
+      internalID: -1137071499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_30
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16fbd98fd337e7744ab2b0088360d8dd
+      internalID: 1262984732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_31
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 90
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36ecac48da7629045a1b78c58a130e9e
+      internalID: -46819085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7a2b8e8588a10046bc5eb73770c36cb
+      internalID: -1390452769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_33
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae97ddf818a258446b0a1016527f2ce5
+      internalID: -1104532776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_34
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c35d1311657859740806c57665fd68a1
+      internalID: 891782332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_35
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30678f1bab4063d479638eb57c64692d
+      internalID: -1332559791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_36
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f14ec2065af57d47b3f345880cc7d38
+      internalID: 2057585786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_37
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efeacf8e10ac61e498c03da47b59ebc6
+      internalID: 2087143101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_38
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 363eb23762bbb8b4292ad3cf9243557c
+      internalID: 1200727962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_39
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 26
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fce64d9144c53114b83ba29419738759
+      internalID: -1575558463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_0: 2005918474
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_1: 299677924
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_10: -232344130
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_11: -1736482058
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_12: -396851270
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_13: -1636543351
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_14: 944482850
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_15: -1176573132
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_16: 1455921759
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_17: -1229030791
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_18: -1829042214
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_19: -1006507368
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_2: 743973354
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_20: 346854055
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_21: 2077758067
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_22: 1017210615
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_23: -404427218
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_24: 449730967
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_25: 1587607534
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_26: -1799122103
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_27: -2002985886
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_28: 1115343241
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_29: -1137071499
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_3: 918913120
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_30: 1262984732
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_31: -46819085
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_32: -1390452769
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_33: -1104532776
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_34: 891782332
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_35: -1332559791
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_36: 2057585786
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_37: 2087143101
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_38: 1200727962
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_39: -1575558463
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_4: 1632784690
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_5: 1769175888
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_6: -334190194
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_7: 391504300
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_8: -1395576583
+      PlayStation - Lunar_ Silver Star Story Complete - Maps - Burg Buildings_9: -50515740
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
