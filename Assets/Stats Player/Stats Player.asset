@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c351a41e3fd4b48bd6d198ff61a213, type: 3}
+  m_Name: Stats Player
+  m_EditorClassIdentifier: 
+  nombre: 
+  nivel: 2
+  hpMax: 25
+  hpActual: 24
+  mpMax: 8
+  mpActual: 8
+  fuerza: 11
+  agilidad: 8
+  defensa: 13
+  oro: 40
+  experiencia: 30
+  expSiguienteNivel: 42
+  tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000

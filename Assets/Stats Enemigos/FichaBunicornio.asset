@@ -15,6 +15,8 @@ MonoBehaviour:
   nombreEnemigo: Bunicornio
   vidaMaxima: 10
   "da\xF1oAtaque": 12
+  agilidad: 5
+  defensa: 8
   imagenEnemigo: {fileID: 1550180362, guid: 3abaa61e3c7a24c47b60d8617cca5e28, type: 3}
   expAlMorir: 10
   oroAlMorir: 3

@@ -2500,6 +2500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03360da419756504d95a0a4159e2cf5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  datosRyo: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
   textoNombreJugador: {fileID: 1292626240}
   textoMensajes: {fileID: 1068091029}
   textoHPJugador: {fileID: 2095066726}

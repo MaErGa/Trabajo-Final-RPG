@@ -5,6 +5,9 @@ using System.Collections;
 
 public class BattleManager : MonoBehaviour
 {
+    [Header("Asset de Datos")]
+    public DatosJugador datosRyo; 
+
     [Header("UI Jugador")]
     public TextMeshProUGUI textoNombreJugador; 
     public TextMeshProUGUI textoMensajes;
@@ -15,124 +18,131 @@ public class BattleManager : MonoBehaviour
     [Header("El Hueco del Enemigo")]
     public GameObject objetoImagenEnemigo; 
 
-    [Header("Estadísticas de Ryo (Nivel 1)")]
-    private string nombrePlayer = "Ryo"; 
-    private int hpJugador = 20;    
-    private int mpJugador = 5;     
-    private int lvJugador = 1;   
-    private int ataqueJugador = 8; 
-
+    private int hpSesion; 
+    private int mpSesion; 
     private int vidaEnemigo;
-    private string nombreEnemigo;
-    private bool turnoActivo = true; // Para bloquear botones durante el turno enemigo
+    private int mpEnemigo = 10;
+    private bool tieneHierbaBunicornio = true;
+    private bool turnoActivo = false;
+    private bool estaDefendiendoManual = false;
+    private bool enemigoDefendiendoManual = false;
 
     void Start()
     {
-        if(textoNombreJugador != null) textoNombreJugador.text = nombrePlayer;
+        if(datosRyo != null)
+        {
+            if(datosRyo.hpActual <= 0) datosRyo.hpActual = datosRyo.hpMax;
+            hpSesion = datosRyo.hpActual; 
+            mpSesion = datosRyo.mpActual;
+        }
 
         if (MovimientoMapa.enemigoSeleccionado != null)
         {
-            nombreEnemigo = MovimientoMapa.enemigoSeleccionado.nombreEnemigo;
             vidaEnemigo = MovimientoMapa.enemigoSeleccionado.vidaMaxima;
-            
             SpriteRenderer sr = objetoImagenEnemigo.GetComponent<SpriteRenderer>();
-            if (sr != null)
+            if (sr != null) 
             {
-                sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
-                objetoImagenEnemigo.SetActive(true);
+                sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo; 
                 sr.sortingOrder = 20; 
-                objetoImagenEnemigo.transform.localScale = new Vector3(3f, 3f, 1f); 
+                objetoImagenEnemigo.transform.localScale = new Vector3(5f, 5f, 1f); 
             }
-            textoMensajes.text = "¡Un " + nombreEnemigo + " aparece!";
+            objetoImagenEnemigo.SetActive(true); 
         }
         ActualizarInterfaz();
+        DeterminarPrimerTurno();
+    }
+
+    void ActualizarInterfaz()
+    {
+        if(datosRyo != null)
+        {
+            if(textoNombreJugador != null) textoNombreJugador.text = datosRyo.nombre;
+            if(textoHPJugador != null) textoHPJugador.text = "HP: " + hpSesion;
+            if(textoMPJugador != null) textoMPJugador.text = "MP: " + mpSesion;
+            if(textoLVJugador != null) textoLVJugador.text = "LV: " + datosRyo.nivel;
+        }
     }
 
     public void AccionAtacar()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-        
-        vidaEnemigo -= ataqueJugador; 
-        
-        if (vidaEnemigo <= 0) 
-        {
-            StartCoroutine(VictoriaAutomatica());
-        }
-        else 
-        {
-            textoMensajes.text = "¡" + nombrePlayer + " ataca al " + nombreEnemigo + "!";
-            StartCoroutine(TurnoDelEnemigo());
-        }
-        
-        ActualizarInterfaz();
+        int daño = (datosRyo.fuerza + datosRyo.poderArma) - MovimientoMapa.enemigoSeleccionado.defensa;
+        if (daño < 1) daño = 1;
+        if (enemigoDefendiendoManual) { daño /= 2; enemigoDefendiendoManual = false; }
+        vidaEnemigo -= daño;
+        textoMensajes.text = "¡" + datosRyo.nombre + " ataca con " + datosRyo.armaEquipada + " por " + daño + "!";
+        if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
+        else StartCoroutine(TurnoDelEnemigo());
     }
 
     public void AccionDefender()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-
-        textoMensajes.text = "¡" + nombrePlayer + " se pone en guardia y recupera 1 PM!";
-        
-        if(mpJugador < 5) 
-        {
-            mpJugador += 1;
-        }
-        
+        estaDefendiendoManual = true; 
+        // CAMBIO: Ahora usa el nombre del jugador directamente
+        textoMensajes.text = "¡" + datosRyo.nombre + " se defiende!";
+        if(mpSesion < datosRyo.mpMax) mpSesion += 1;
         ActualizarInterfaz();
         StartCoroutine(TurnoDelEnemigo());
-    }
-
-    IEnumerator TurnoDelEnemigo()
-    {
-        turnoActivo = false; // Bloquea la entrada del jugador
-        yield return new WaitForSeconds(1.5f);
-
-        if (vidaEnemigo > 0)
-        {
-            // El daño puede venir de tu ScriptableObject si tienes un campo de ataque
-            int daño = Random.Range(2, 5); 
-            hpJugador -= daño;
-            textoMensajes.text = "¡El " + nombreEnemigo + " ataca y te quita " + daño + " HP!";
-            
-            if (hpJugador <= 0)
-            {
-                hpJugador = 0;
-                ActualizarInterfaz();
-                textoMensajes.text = "Ryo ha caído en combate...";
-                yield return new WaitForSeconds(2f);
-                SceneManager.LoadScene("MenuPrincipal"); // O tu escena de Game Over
-            }
-        }
-
-        ActualizarInterfaz();
-        if (hpJugador > 0) turnoActivo = true; // Devuelve el control al jugador
-    }
-
-    public void AccionEscapar()
-    {
-        if (!turnoActivo) return;
-        SceneManager.LoadScene("Underworld"); 
     }
 
     IEnumerator VictoriaAutomatica()
     {
         turnoActivo = false;
-        vidaEnemigo = 0;
         if(objetoImagenEnemigo != null) objetoImagenEnemigo.SetActive(false);
         
-        int exp = (MovimientoMapa.enemigoSeleccionado != null) ? MovimientoMapa.enemigoSeleccionado.expAlMorir : 10;
-        int oro = (MovimientoMapa.enemigoSeleccionado != null) ? MovimientoMapa.enemigoSeleccionado.oroAlMorir : 5;
+        string itemTexto = "";
+        float dado = Random.value;
+        if (MovimientoMapa.enemigoSeleccionado.nombreEnemigo.Contains("Slime") && dado < 0.20f) itemTexto = "\n¡Obtienes Planta!";
+        else if (MovimientoMapa.enemigoSeleccionado.nombreEnemigo.Contains("Bunicorn") && dado < 0.10f) itemTexto = "\n¡Obtienes Cola!";
+
+        datosRyo.experiencia += MovimientoMapa.enemigoSeleccionado.expAlMorir;
+        datosRyo.oro += MovimientoMapa.enemigoSeleccionado.oroAlMorir;
+
+        // CORRECCIÓN NIVEL 2: Forzamos la comprobación inmediata tras ganar EXP
+        string levelUpTexto = "";
+        while (datosRyo.experiencia >= datosRyo.expSiguienteNivel && datosRyo.nivel < 99)
+        {
+            levelUpTexto += ComprobarLevelUp();
+        }
         
-        textoMensajes.text = "¡" + nombreEnemigo + " derrotado!\nGanas " + exp + " EXP y " + oro + " monedas.";
-        
-        yield return new WaitForSeconds(3f); 
+        GuardarEstadoRyo(); 
+        textoMensajes.text = "¡Enemigo derrotado!\nGanas " + MovimientoMapa.enemigoSeleccionado.expAlMorir + " EXP." + levelUpTexto + itemTexto;
+        yield return new WaitForSeconds(3.5f);
         SceneManager.LoadScene("Underworld"); 
     }
 
-    void ActualizarInterfaz()
+    string ComprobarLevelUp()
     {
-        if(textoHPJugador != null) textoHPJugador.text = "HP: " + hpJugador;
-        if(textoMPJugador != null) textoMPJugador.text = "MP: " + mpJugador;
-        if(textoLVJugador != null) textoLVJugador.text = "LV: " + lvJugador;
+        datosRyo.nivel++;
+        datosRyo.hpMax += 5;
+        datosRyo.fuerza += 2;
+        hpSesion = datosRyo.hpMax; 
+        
+        if (datosRyo.nivel - 1 < datosRyo.tablaExpPilgrim.Length)
+            datosRyo.expSiguienteNivel = datosRyo.tablaExpPilgrim[datosRyo.nivel - 1];
+        else
+            datosRyo.expSiguienteNivel = Mathf.RoundToInt(datosRyo.expSiguienteNivel * 1.25f);
+
+        return "\n¡¡" + datosRyo.nombre + " SUBE AL NIVEL " + datosRyo.nivel + "!!";
+    }
+
+    // El resto de funciones auxiliares se mantienen igual
+    void GuardarEstadoRyo() { datosRyo.hpActual = hpSesion; datosRyo.mpActual = mpSesion; }
+    void DeterminarPrimerTurno() { turnoActivo = true; }
+    public void AccionEscapar() { GuardarEstadoRyo(); SceneManager.LoadScene("Underworld"); }
+    IEnumerator TurnoDelEnemigo() { 
+        turnoActivo = false; yield return new WaitForSeconds(1.5f); 
+        if (vidaEnemigo > 0) AtacarARyo(); 
+        ActualizarInterfaz(); turnoActivo = true; 
+    }
+    void AtacarARyo() {
+        int def = datosRyo.defensa + datosRyo.poderArmadura;
+        int daño = MovimientoMapa.enemigoSeleccionado.dañoAtaque - def;
+        if (daño < 1) daño = 1;
+        if (estaDefendiendoManual) { daño = 1; estaDefendiendoManual = false; }
+        hpSesion -= daño;
+        textoMensajes.text = "¡Recibes " + daño + " de daño!";
+        if (hpSesion <= 0) SceneManager.LoadScene("Underworld");
     }
 }
