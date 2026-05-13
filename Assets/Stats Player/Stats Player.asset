@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: Stats Player
   m_EditorClassIdentifier: 
   nombre: 
-  nivel: 2
-  hpMax: 25
-  hpActual: 24
-  mpMax: 8
-  mpActual: 8
-  fuerza: 11
-  agilidad: 8
-  defensa: 13
-  oro: 40
-  experiencia: 30
-  expSiguienteNivel: 42
+  nivel: 1
+  hpMax: 20
+  hpActual: 20
+  mpMax: 5
+  mpActual: 5
+  fuerza: 8
+  agilidad: 6
+  defensa: 2
+  oro: 50
+  experiencia: 0
+  armaEquipada: Espada de cobre
+  poderArma: 10
+  armaduraEquipada: Vestimenta de viaje
+  poderArmadura: 4
+  expSiguienteNivel: 14
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
