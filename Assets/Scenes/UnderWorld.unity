@@ -145001,7 +145001,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13fecc995b3d6a9469c94062ee992d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidad: 5
+  velocidadCaminar: 5
+  velocidadCorrer: 6
   probabilidadCombate: 0.1
   posiblesEnemigos:
   - {fileID: 11400000, guid: 79baa7529a7f15246b8a945a98fdc7b3, type: 2}
