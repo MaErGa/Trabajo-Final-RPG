@@ -20,14 +20,14 @@ public class BattleManager : MonoBehaviour
 
     [Header("Paneles de Interfaz")]
     public GameObject panelMagia;
-    public GameObject panelObjetos; // <--- Asegúrate de arrastrar tu PanelObjetos aquí
+    public GameObject panelObjetos; 
 
     [Header("Botones de Conjuros")]
     public GameObject botonMinicuracion;
     public GameObject botonMinihelada;
 
     [Header("Botones de Objetos")]
-    public GameObject botonPlanta; 
+    public GameObject botonPlanta; // ARRASTRA AQUÍ SOLO EL BOTÓN FÍSICO DE LA PLANTA
 
     private int hpSesion; 
     private int mpSesion; 
@@ -63,7 +63,6 @@ public class BattleManager : MonoBehaviour
         ActualizarInterfaz();
         turnoActivo = true;
 
-        // Inicializamos los paneles cerrados
         if(panelMagia != null) panelMagia.SetActive(false);
         if(panelObjetos != null) panelObjetos.SetActive(false);
 
@@ -79,18 +78,12 @@ public class BattleManager : MonoBehaviour
         textoLVJugador.text = "LV: " + datosRyo.nivel;
     }
 
-    // --- NUEVO: FUNCIÓN PARA ABRIR EL PANEL ---
     public void AbrirMenuObjetos()
     {
         if (!turnoActivo) return;
-
-        CerrarMenus(); // Cerramos otros paneles abiertos
-        
-        if(panelObjetos != null) 
-        {
-            panelObjetos.SetActive(true); // <--- Esto activa el panel visualmente
-            ActualizarObjetosDisponibles(); // Comprobamos si hay plantas para mostrar el botón
-        }
+        if(panelMagia != null) panelMagia.SetActive(false);
+        if(panelObjetos != null) panelObjetos.SetActive(true);
+        ActualizarObjetosDisponibles();
     }
 
     public void CerrarMenus()
@@ -111,7 +104,9 @@ public class BattleManager : MonoBehaviour
     public void ActualizarObjetosDisponibles()
     {
         if (botonPlanta != null)
+        {
             botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
+        }
     }
 
     public void AccionUsarPlanta()
@@ -124,10 +119,10 @@ public class BattleManager : MonoBehaviour
         
         textoMensajes.text = "¡" + datosRyo.nombre + " usa una Planta Medicinal!";
         
-        CerrarMenus(); // Cerramos el panel tras usar el objeto
+        CerrarMenus();
 
         ActualizarInterfaz();
-        ActualizarObjetosDisponibles(); 
+        ActualizarObjetosDisponibles();
         StartCoroutine(TurnoDelEnemigo());
     }
 
@@ -213,6 +208,9 @@ public class BattleManager : MonoBehaviour
             levelUpTexto += ComprobarLevelUp();
         }
         
+        // Actualizamos botones para el próximo combate si hubo level up
+        ActualizarConjurosAprendidos();
+
         GuardarEstadoRyo();
         textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + levelUpTexto;
         yield return new WaitForSeconds(4f);
@@ -227,12 +225,16 @@ public class BattleManager : MonoBehaviour
         datosRyo.fuerza += 3;
         hpSesion = datosRyo.hpMax;
         
+        string mensajeHechizo = ""; 
+        if (datosRyo.nivel == 3) mensajeHechizo = "\n¡Has aprendido Minicuración!";
+        if (datosRyo.nivel == 8) mensajeHechizo = "\n¡Has aprendido Minihelada!";
+
         if (datosRyo.nivel - 1 < datosRyo.tablaExpPilgrim.Length)
             datosRyo.expSiguienteNivel = datosRyo.tablaExpPilgrim[datosRyo.nivel - 1];
         else
             datosRyo.expSiguienteNivel = Mathf.RoundToInt(datosRyo.expSiguienteNivel * 1.5f);
         
-        return "\n¡" + datosRyo.nombre + " sube al nivel " + datosRyo.nivel + "!";
+        return "\n¡" + datosRyo.nombre + " sube al nivel " + datosRyo.nivel + "!" + mensajeHechizo;
     }
 
     void GuardarEstadoRyo() 

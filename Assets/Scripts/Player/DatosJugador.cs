@@ -33,9 +33,8 @@ public class DatosJugador : ScriptableObject
     public int expSiguienteNivel = 14; 
     public int[] tablaExpPilgrim = { 14, 42, 98, 182, 308, 497, 780, 1205, 1842, 2798 }; 
 
-    // --- NUEVA SECCIÓN DE INVENTARIO ---
     [Header("Inventario")]
-    public int plantasMedicinales; 
+    public int plantasMedicinales; // <--- VARIABLE AÑADIDA PARA CONTROLAR LA PLANTA
 
     [ContextMenu("Reiniciar a Nivel 1")]
     public void ReiniciarPersonaje()
@@ -45,7 +44,7 @@ public class DatosJugador : ScriptableObject
         mpMax = 5; mpActual = 5;
         fuerza = 8; defensa = 2; agilidad = 6;
         fuerzaMagica = 5; terapeucidad = 4;
-        plantasMedicinales = 0; // También reiniciamos los objetos
+        plantasMedicinales = 0; // Se añade el reinicio del objeto
         
         if (tablaExpPilgrim.Length > 0) expSiguienteNivel = tablaExpPilgrim[0];
 
