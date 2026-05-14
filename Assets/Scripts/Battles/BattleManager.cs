@@ -27,7 +27,10 @@ public class BattleManager : MonoBehaviour
     public GameObject botonMinihelada;
 
     [Header("Botones de Objetos")]
-    public GameObject botonPlanta; // ARRASTRA AQUÍ SOLO EL BOTÓN FÍSICO DE LA PLANTA
+    public GameObject botonPlanta; 
+
+    [Header("Transición")]
+    public CanvasGroup panelTransicion; // Arrastra aquí el Canvas Group del panel negro
 
     private int hpSesion; 
     private int mpSesion; 
@@ -37,6 +40,7 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+        if(panelTransicion != null) panelTransicion.alpha = 0;
         if(textoMensajes != null) textoMensajes.text = ""; 
 
         if(datosRyo != null)
@@ -81,9 +85,12 @@ public class BattleManager : MonoBehaviour
     public void AbrirMenuObjetos()
     {
         if (!turnoActivo) return;
-        if(panelMagia != null) panelMagia.SetActive(false);
-        if(panelObjetos != null) panelObjetos.SetActive(true);
-        ActualizarObjetosDisponibles();
+        CerrarMenus(); 
+        if(panelObjetos != null) 
+        {
+            panelObjetos.SetActive(true);
+            ActualizarObjetosDisponibles();
+        }
     }
 
     public void CerrarMenus()
@@ -104,9 +111,7 @@ public class BattleManager : MonoBehaviour
     public void ActualizarObjetosDisponibles()
     {
         if (botonPlanta != null)
-        {
             botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
-        }
     }
 
     public void AccionUsarPlanta()
@@ -116,11 +121,8 @@ public class BattleManager : MonoBehaviour
         datosRyo.plantasMedicinales--;
         int cantidadCura = 30; 
         hpSesion = Mathf.Min(hpSesion + cantidadCura, datosRyo.hpMax);
-        
         textoMensajes.text = "¡" + datosRyo.nombre + " usa una Planta Medicinal!";
-        
         CerrarMenus();
-
         ActualizarInterfaz();
         ActualizarObjetosDisponibles();
         StartCoroutine(TurnoDelEnemigo());
@@ -187,10 +189,21 @@ public class BattleManager : MonoBehaviour
         if (!turnoActivo) return;
         textoMensajes.text = "¡" + datosRyo.nombre + " intenta escapar!";
         GuardarEstadoRyo();
-        Invoke("CargarMapa", 1f);
+        StartCoroutine(CargarMapa());
     }
 
-    void CargarMapa() { SceneManager.LoadScene("Underworld"); }
+    IEnumerator CargarMapa() 
+    { 
+        if (panelTransicion != null)
+        {
+            while (panelTransicion.alpha < 1)
+            {
+                panelTransicion.alpha += Time.deltaTime * 2f;
+                yield return null;
+            }
+        }
+        SceneManager.LoadScene("Underworld");
+    }
 
     IEnumerator VictoriaAutomatica()
     {
@@ -208,13 +221,11 @@ public class BattleManager : MonoBehaviour
             levelUpTexto += ComprobarLevelUp();
         }
         
-        // Actualizamos botones para el próximo combate si hubo level up
         ActualizarConjurosAprendidos();
-
         GuardarEstadoRyo();
         textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + levelUpTexto;
         yield return new WaitForSeconds(4f);
-        CargarMapa();
+        StartCoroutine(CargarMapa());
     }
 
     string ComprobarLevelUp()
@@ -225,7 +236,7 @@ public class BattleManager : MonoBehaviour
         datosRyo.fuerza += 3;
         hpSesion = datosRyo.hpMax;
         
-        string mensajeHechizo = ""; 
+        string mensajeHechizo = "";
         if (datosRyo.nivel == 3) mensajeHechizo = "\n¡Has aprendido Minicuración!";
         if (datosRyo.nivel == 8) mensajeHechizo = "\n¡Has aprendido Minihelada!";
 
@@ -269,7 +280,7 @@ public class BattleManager : MonoBehaviour
         {
             textoMensajes.text = "¡" + datosRyo.nombre + " ha perecido!";
             yield return new WaitForSeconds(2f);
-            SceneManager.LoadScene("Underworld");
+            StartCoroutine(CargarMapa());
         }
         else turnoActivo = true;
     }
