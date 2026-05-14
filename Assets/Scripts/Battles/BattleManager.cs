@@ -215,6 +215,29 @@ public class BattleManager : MonoBehaviour
         datosRyo.oro += oroGanado;
 
         string mensajeVictoria = "¡Has derrotado al " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + "!";
+        string mensajeItem = "";
+
+        // --- LÓGICA DE DROPEO ESPECÍFICO ---
+        string nombreEnemigo = MovimientoMapa.enemigoSeleccionado.nombreEnemigo.ToLower();
+        
+        if (nombreEnemigo.Contains("slime"))
+        {
+            if (Random.Range(0, 100) < 25) 
+            {
+                datosRyo.plantasMedicinales++; 
+                mensajeItem = "\n¡El Slime ha soltado una Planta Medicinal!";
+            }
+        }
+        else if (nombreEnemigo.Contains("bunicornio"))
+        {
+            if (Random.Range(0, 100) < 15) 
+            {
+                // Asegúrate de tener 'colasDeConejo' en tu script DatosJugador
+                datosRyo.colaDeConejo++; 
+                mensajeItem = "\n¡El Bunicornio ha soltado una Cola de Conejo!";
+            }
+        }
+
         string levelUpTexto = "";
         while (datosRyo.experiencia >= datosRyo.expSiguienteNivel)
         {
@@ -223,7 +246,7 @@ public class BattleManager : MonoBehaviour
         
         ActualizarConjurosAprendidos();
         GuardarEstadoRyo();
-        textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + levelUpTexto;
+        textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + mensajeItem + levelUpTexto;
         yield return new WaitForSeconds(4f);
         StartCoroutine(CargarMapa());
     }
