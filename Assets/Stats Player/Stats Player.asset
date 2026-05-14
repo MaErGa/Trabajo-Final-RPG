@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Stats Player
   m_EditorClassIdentifier: 
   nombre: 
-  nivel: 1
-  hpMax: 20
-  hpActual: 20
-  mpMax: 5
+  nivel: 3
+  hpMax: 40
+  hpActual: 40
+  mpMax: 15
   mpActual: 5
-  fuerza: 8
+  fuerza: 14
   agilidad: 6
   defensa: 2
-  oro: 0
-  experiencia: 0
+  oro: 33
+  experiencia: 48
   fuerzaMagica: 5
   terapeucidad: 4
   armaEquipada: Espada de cobre
@@ -33,6 +33,6 @@ MonoBehaviour:
   poderEscudo: 4
   accesorioEquipado: Ninguno
   poderAccesorio: 0
-  expSiguienteNivel: 14
+  expSiguienteNivel: 98
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
-  plantasMedicinales: 2
+  plantasMedicinales: 0

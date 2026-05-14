@@ -1345,7 +1345,7 @@ GameObject:
   - component: {fileID: 648968789}
   - component: {fileID: 648968788}
   m_Layer: 5
-  m_Name: Plante Medicinal
+  m_Name: Planta Medicinal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4511,7 +4511,7 @@ MonoBehaviour:
   panelObjetos: {fileID: 1456187402}
   botonMinicuracion: {fileID: 1923504354}
   botonMinihelada: {fileID: 1508906788}
-  botonPlanta: {fileID: 858087146}
+  botonPlanta: {fileID: 648968786}
 --- !u!4 &2128480716
 Transform:
   m_ObjectHideFlags: 0
