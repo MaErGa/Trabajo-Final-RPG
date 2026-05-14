@@ -21,7 +21,7 @@ MonoBehaviour:
   fuerza: 8
   agilidad: 6
   defensa: 2
-  oro: 50
+  oro: 0
   experiencia: 0
   armaEquipada: Espada de cobre
   poderArma: 10
