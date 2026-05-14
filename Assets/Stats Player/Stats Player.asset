@@ -23,9 +23,15 @@ MonoBehaviour:
   defensa: 2
   oro: 0
   experiencia: 0
+  fuerzaMagica: 5
+  terapeucidad: 4
   armaEquipada: Espada de cobre
   poderArma: 10
   armaduraEquipada: Vestimenta de viaje
   poderArmadura: 4
+  escudoEquipado: Escudo de cuero
+  poderEscudo: 4
+  accesorioEquipado: Ninguno
+  poderAccesorio: 0
   expSiguienteNivel: 14
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
