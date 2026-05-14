@@ -25,12 +25,12 @@ MonoBehaviour:
   experiencia: 0
   fuerzaMagica: 5
   terapeucidad: 4
-  armaEquipada: Espada de cobre
-  poderArma: 10
-  armaduraEquipada: Vestimenta de viaje
-  poderArmadura: 4
-  escudoEquipado: Escudo de cuero
-  poderEscudo: 4
+  armaEquipada: Porra de Cipres
+  poderArma: 2
+  armaduraEquipada: Vestimenta Normal
+  poderArmadura: 2
+  escudoEquipado: Ninguno
+  poderEscudo: 0
   accesorioEquipado: Ninguno
   poderAccesorio: 0
   expSiguienteNivel: 14
