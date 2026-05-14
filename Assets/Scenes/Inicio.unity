@@ -3043,8 +3043,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocidadNormal: 5
   velocidadCarrera: 8
-  probabilidadCombate: 0.1
-  posiblesEnemigos: []
 --- !u!95 &368097684
 Animator:
   serializedVersion: 5
@@ -5080,9 +5078,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineas:
-  - Hola aventurero!
-  - Bienvenido al pueblo.
-  - Ten cuidado en el bosque...
+  - "Tu entrenamiento en las nubes ha terminado, joven guardi\xE1n."
+  - Abajo, en el mundo de los humanos, una sombra antigua ha despertado.
+  - "Desciende a la tierra y convi\xE9rtete en el escudo que la humanidad necesita."
   distancia: 2
 --- !u!1 &1366478354
 GameObject:
