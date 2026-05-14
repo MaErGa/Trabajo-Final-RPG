@@ -18,10 +18,16 @@ public class BattleManager : MonoBehaviour
     [Header("El Hueco del Enemigo")]
     public GameObject objetoImagenEnemigo; 
 
-    // --- AQUÍ TIENES LOS BOTONES DE LOS CONJUROS ---
-    [Header("Botones de Conjuros (Magias)")]
+    [Header("Paneles de Interfaz")]
+    public GameObject panelMagia;
+    public GameObject panelObjetos; // <--- Asegúrate de arrastrar tu PanelObjetos aquí
+
+    [Header("Botones de Conjuros")]
     public GameObject botonMinicuracion;
     public GameObject botonMinihelada;
+
+    [Header("Botones de Objetos")]
+    public GameObject botonPlanta; 
 
     private int hpSesion; 
     private int mpSesion; 
@@ -46,7 +52,7 @@ public class BattleManager : MonoBehaviour
             SpriteRenderer sr = objetoImagenEnemigo.GetComponent<SpriteRenderer>();
             if (sr != null) 
             {
-                sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo; 
+                sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
                 sr.sortingOrder = 20; 
                 objetoImagenEnemigo.transform.localScale = new Vector3(5f, 5f, 1f); 
             }
@@ -57,8 +63,12 @@ public class BattleManager : MonoBehaviour
         ActualizarInterfaz();
         turnoActivo = true;
 
-        // Ocultamos los conjuros al empezar por si acaso
+        // Inicializamos los paneles cerrados
+        if(panelMagia != null) panelMagia.SetActive(false);
+        if(panelObjetos != null) panelObjetos.SetActive(false);
+
         ActualizarConjurosAprendidos();
+        ActualizarObjetosDisponibles();
     }
 
     void ActualizarInterfaz()
@@ -69,7 +79,26 @@ public class BattleManager : MonoBehaviour
         textoLVJugador.text = "LV: " + datosRyo.nivel;
     }
 
-    // --- ESTA FUNCIÓN OCULTA LOS BOTONES SI NO TIENES NIVEL ---
+    // --- NUEVO: FUNCIÓN PARA ABRIR EL PANEL ---
+    public void AbrirMenuObjetos()
+    {
+        if (!turnoActivo) return;
+
+        CerrarMenus(); // Cerramos otros paneles abiertos
+        
+        if(panelObjetos != null) 
+        {
+            panelObjetos.SetActive(true); // <--- Esto activa el panel visualmente
+            ActualizarObjetosDisponibles(); // Comprobamos si hay plantas para mostrar el botón
+        }
+    }
+
+    public void CerrarMenus()
+    {
+        if(panelMagia != null) panelMagia.SetActive(false);
+        if(panelObjetos != null) panelObjetos.SetActive(false);
+    }
+
     public void ActualizarConjurosAprendidos()
     {
         if (botonMinicuracion != null)
@@ -77,6 +106,29 @@ public class BattleManager : MonoBehaviour
 
         if (botonMinihelada != null)
             botonMinihelada.SetActive(datosRyo.nivel >= 8);
+    }
+
+    public void ActualizarObjetosDisponibles()
+    {
+        if (botonPlanta != null)
+            botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
+    }
+
+    public void AccionUsarPlanta()
+    {
+        if (!turnoActivo || datosRyo.plantasMedicinales <= 0) return;
+
+        datosRyo.plantasMedicinales--;
+        int cantidadCura = 30; 
+        hpSesion = Mathf.Min(hpSesion + cantidadCura, datosRyo.hpMax);
+        
+        textoMensajes.text = "¡" + datosRyo.nombre + " usa una Planta Medicinal!";
+        
+        CerrarMenus(); // Cerramos el panel tras usar el objeto
+
+        ActualizarInterfaz();
+        ActualizarObjetosDisponibles(); 
+        StartCoroutine(TurnoDelEnemigo());
     }
 
     public void AccionAtacar()
@@ -128,7 +180,7 @@ public class BattleManager : MonoBehaviour
     public void AccionDefender()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-        estaDefendiendoManual = true; 
+        estaDefendiendoManual = true;
         textoMensajes.text = "¡" + datosRyo.nombre + " se defiende!";
         if(mpSesion < datosRyo.mpMax) mpSesion += 1;
         ActualizarInterfaz();
@@ -139,7 +191,7 @@ public class BattleManager : MonoBehaviour
     { 
         if (!turnoActivo) return;
         textoMensajes.text = "¡" + datosRyo.nombre + " intenta escapar!";
-        GuardarEstadoRyo(); 
+        GuardarEstadoRyo();
         Invoke("CargarMapa", 1f);
     }
 
@@ -161,7 +213,7 @@ public class BattleManager : MonoBehaviour
             levelUpTexto += ComprobarLevelUp();
         }
         
-        GuardarEstadoRyo(); 
+        GuardarEstadoRyo();
         textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + levelUpTexto;
         yield return new WaitForSeconds(4f);
         CargarMapa();
@@ -194,7 +246,7 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator TurnoDelEnemigo() { 
         turnoActivo = false; 
-        yield return new WaitForSeconds(1.2f); 
+        yield return new WaitForSeconds(1.2f);
         int defTotal = datosRyo.defensa + datosRyo.poderArmadura + datosRyo.poderEscudo;
         int daño = Mathf.Max(1, MovimientoMapa.enemigoSeleccionado.dañoAtaque - defTotal);
         
