@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Bosque.unity
     guid: d45fefed28a84574bb8fb929b107f0de
+  - enabled: 1
+    path: Assets/Scenes/Tienda.unity
+    guid: b9f1a439d4ab6c34e8bcdd0ec8da7668
   m_configObjects: {}

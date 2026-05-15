@@ -28,6 +28,7 @@ public class BattleManager : MonoBehaviour
 
     [Header("Botones de Objetos")]
     public GameObject botonPlanta; 
+    public GameObject botonColaDeConejo; // Nuevo botón añadido
 
     [Header("Transición")]
     public CanvasGroup panelTransicion; // Arrastra aquí el Canvas Group del panel negro
@@ -41,7 +42,7 @@ public class BattleManager : MonoBehaviour
     void Start()
     {
         if(panelTransicion != null) panelTransicion.alpha = 0;
-        if(textoMensajes != null) textoMensajes.text = ""; 
+        if(textoMensajes != null) textoMensajes.text = "";
 
         if(datosRyo != null)
         {
@@ -58,7 +59,7 @@ public class BattleManager : MonoBehaviour
             {
                 sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
                 sr.sortingOrder = 20; 
-                objetoImagenEnemigo.transform.localScale = new Vector3(5f, 5f, 1f); 
+                objetoImagenEnemigo.transform.localScale = new Vector3(5f, 5f, 1f);
             }
             objetoImagenEnemigo.SetActive(true);
             textoMensajes.text = "¡Un " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " aparece!";
@@ -85,7 +86,7 @@ public class BattleManager : MonoBehaviour
     public void AbrirMenuObjetos()
     {
         if (!turnoActivo) return;
-        CerrarMenus(); 
+        CerrarMenus();
         if(panelObjetos != null) 
         {
             panelObjetos.SetActive(true);
@@ -112,6 +113,10 @@ public class BattleManager : MonoBehaviour
     {
         if (botonPlanta != null)
             botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
+        
+        // Mostrar botón si hay colas en el inventario
+        if (botonColaDeConejo != null)
+            botonColaDeConejo.SetActive(datosRyo.colaDeConejo > 0);
     }
 
     public void AccionUsarPlanta()
@@ -125,6 +130,20 @@ public class BattleManager : MonoBehaviour
         CerrarMenus();
         ActualizarInterfaz();
         ActualizarObjetosDisponibles();
+        StartCoroutine(TurnoDelEnemigo());
+    }
+
+    // Nueva función para equipar la cola desde el menú de objetos en batalla
+    public void AccionEquiparCola()
+    {
+        if (!turnoActivo || datosRyo.colaDeConejo <= 0) return;
+
+        datosRyo.EquiparColaDeConejo();
+        string estado = (datosRyo.accesorioEquipado == "Cola de Conejo") ? "equipa" : "desequipa";
+        textoMensajes.text = "¡" + datosRyo.nombre + " se " + estado + " la Cola de Conejo! Agilidad +2.";
+        
+        CerrarMenus();
+        ActualizarInterfaz();
         StartCoroutine(TurnoDelEnemigo());
     }
 
@@ -217,23 +236,21 @@ public class BattleManager : MonoBehaviour
         string mensajeVictoria = "¡Has derrotado al " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + "!";
         string mensajeItem = "";
 
-        // --- LÓGICA DE DROPEO ESPECÍFICO ---
         string nombreEnemigo = MovimientoMapa.enemigoSeleccionado.nombreEnemigo.ToLower();
         
         if (nombreEnemigo.Contains("slime"))
         {
-            if (Random.Range(0, 100) < 25) 
+            if (Random.Range(0, 100) < 12) 
             {
-                datosRyo.plantasMedicinales++; 
+                datosRyo.plantasMedicinales++;
                 mensajeItem = "\n¡El Slime ha soltado una Planta Medicinal!";
             }
         }
         else if (nombreEnemigo.Contains("bunicornio"))
         {
-            if (Random.Range(0, 100) < 15) 
+            if (Random.Range(0, 100) < 6) 
             {
-                // Asegúrate de tener 'colasDeConejo' en tu script DatosJugador
-                datosRyo.colaDeConejo++; 
+                datosRyo.colaDeConejo++;
                 mensajeItem = "\n¡El Bunicornio ha soltado una Cola de Conejo!";
             }
         }
@@ -273,7 +290,7 @@ public class BattleManager : MonoBehaviour
 
     void GuardarEstadoRyo() 
     { 
-        datosRyo.hpActual = hpSesion; 
+        datosRyo.hpActual = hpSesion;
         datosRyo.mpActual = mpSesion;
         #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(datosRyo);

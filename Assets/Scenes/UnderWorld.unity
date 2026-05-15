@@ -144887,7 +144887,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidadNormal: 5
-  velocidadCarrera: 5.55
+  velocidadCarrera: 8
 --- !u!212 &1980690002
 SpriteRenderer:
   m_ObjectHideFlags: 0

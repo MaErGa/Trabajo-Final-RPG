@@ -37,6 +37,25 @@ public class DatosJugador : ScriptableObject
     public int plantasMedicinales;
     public int colaDeConejo; // Corregido a singular
 
+    // Nueva función para equipar el objeto y sumar agilidad
+    public void EquiparColaDeConejo()
+    {
+        if (accesorioEquipado == "Cola de Conejo")
+        {
+            accesorioEquipado = "Ninguno";
+            agilidad -= 2;
+        }
+        else 
+        {
+            accesorioEquipado = "Cola de Conejo";
+            agilidad += 2;
+        }
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+    }
+
     [ContextMenu("Reiniciar a Nivel 1")]
     public void ReiniciarPersonaje()
     {
@@ -47,6 +66,7 @@ public class DatosJugador : ScriptableObject
         fuerzaMagica = 5; terapeucidad = 4;
         plantasMedicinales = 0;
         colaDeConejo = 0;
+        accesorioEquipado = "Ninguno";
         
         if (tablaExpPilgrim.Length > 0) expSiguienteNivel = tablaExpPilgrim[0];
 
