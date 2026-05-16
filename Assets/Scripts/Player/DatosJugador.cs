@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "NuevoJugador", menuName = "RPG/Jugador")]
 public class DatosJugador : ScriptableObject
@@ -19,25 +20,42 @@ public class DatosJugador : ScriptableObject
     public int fuerzaMagica = 5;
     public int terapeucidad = 4;
 
-    [Header("Equipación")]
+    [Header("Equipación (Sistema de Assets)")]
+    public EquipoBase armaEquipadaAsset;
+    public EquipoBase armaduraEquipadaAsset;
+    public EquipoBase escudoEquipadoAsset;
+    public EquipoBase cascoEquipadoAsset; 
+    public EquipoBase accesorioEquipadoAsset;
+
+    [Header("Equipación (Nombres Antiguos)")]
     public string armaEquipada = "Espada de cobre";
-    public int poderArma = 10;
     public string armaduraEquipada = "Ropa de viaje";
-    public int poderArmadura = 4;
     public string escudoEquipado = "Escudo de cuero";
-    public int poderEscudo = 2;
+    public string cascoEquipado = "Casco de cuero"; 
     public string accesorioEquipado = "Ninguno";
-    public int poderAccesorio = 0;
 
     [Header("Sistema de Niveles")]
     public int expSiguienteNivel = 14;
     public int[] tablaExpPilgrim = { 14, 42, 98, 182, 308, 497, 780, 1205, 1842, 2798 };
 
-    [Header("Inventario")]
-    public int plantasMedicinales;
-    public int colaDeConejo; // Corregido a singular
+    [Header("Inventario Dinámico")]
+    public List<ItemConsumible> mochilaItems = new List<ItemConsumible>();
+    public List<EquipoBase> armarioEquipo = new List<EquipoBase>();
 
-    // Nueva función para equipar el objeto y sumar agilidad
+    [Header("Inventario Antiguo")]
+    public int plantasMedicinales;
+    public int colaDeConejo;
+
+    // --- PROPIEDADES AUTOMÁTICAS ---
+    public int AtaqueTotal => fuerza + (armaEquipadaAsset != null ? armaEquipadaAsset.bonoAtaque : 0);
+    
+    public int DefensaTotal => defensa + 
+                               (armaduraEquipadaAsset != null ? armaduraEquipadaAsset.bonoDefensa : 0) + 
+                               (escudoEquipadoAsset != null ? escudoEquipadoAsset.bonoDefensa : 0) +
+                               (cascoEquipadoAsset != null ? cascoEquipadoAsset.bonoDefensa : 0);
+
+    public int AgilidadTotal => agilidad + (accesorioEquipadoAsset != null ? accesorioEquipadoAsset.bonoAgilidad : 0);
+
     public void EquiparColaDeConejo()
     {
         if (accesorioEquipado == "Cola de Conejo")
@@ -50,7 +68,18 @@ public class DatosJugador : ScriptableObject
             accesorioEquipado = "Cola de Conejo";
             agilidad += 2;
         }
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+    }
 
+    public void EquiparObjeto(EquipoBase nuevoItem)
+    {
+        // Identifica qué tipo de equipo es y lo pone en su sitio
+        if (nuevoItem.bonoAtaque > 0) armaEquipadaAsset = nuevoItem;
+        else if (nuevoItem.bonoDefensa > 0) armaduraEquipadaAsset = nuevoItem;
+        // Aquí podrías añadir más lógica para cascos o escudos
+        
         #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
         #endif
@@ -67,6 +96,15 @@ public class DatosJugador : ScriptableObject
         plantasMedicinales = 0;
         colaDeConejo = 0;
         accesorioEquipado = "Ninguno";
+        cascoEquipado = "Ninguno";
+        
+        armaEquipadaAsset = null;
+        armaduraEquipadaAsset = null;
+        escudoEquipadoAsset = null;
+        cascoEquipadoAsset = null;
+        accesorioEquipadoAsset = null;
+        mochilaItems.Clear();
+        armarioEquipo.Clear();
         
         if (tablaExpPilgrim.Length > 0) expSiguienteNivel = tablaExpPilgrim[0];
 

@@ -16,8 +16,8 @@ MonoBehaviour:
   nivel: 1
   hpMax: 20
   hpActual: 20
-  mpMax: 5
-  mpActual: 5
+  mpMax: 20
+  mpActual: 20
   fuerza: 8
   agilidad: 6
   defensa: 2
@@ -25,15 +25,19 @@ MonoBehaviour:
   experiencia: 0
   fuerzaMagica: 5
   terapeucidad: 4
+  armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
+  armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
+  escudoEquipadoAsset: {fileID: 0}
+  cascoEquipadoAsset: {fileID: 0}
+  accesorioEquipadoAsset: {fileID: 0}
   armaEquipada: Porra de Cipres
-  poderArma: 2
   armaduraEquipada: Vestimenta Normal
-  poderArmadura: 2
   escudoEquipado: Ninguno
-  poderEscudo: 0
+  cascoEquipado: Ninguno
   accesorioEquipado: Ninguno
-  poderAccesorio: 0
   expSiguienteNivel: 14
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
+  mochilaItems: []
+  armarioEquipo: []
   plantasMedicinales: 0
   colaDeConejo: 0

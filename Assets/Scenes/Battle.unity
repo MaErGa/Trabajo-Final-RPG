@@ -4600,7 +4600,8 @@ MonoBehaviour:
   botonMinicuracion: {fileID: 1923504354}
   botonMinihelada: {fileID: 1508906788}
   botonPlanta: {fileID: 648968786}
-  panelTransicion: {fileID: 0}
+  botonColaDeConejo: {fileID: 0}
+  panelTransicion: {fileID: 995644253}
 --- !u!4 &2128480716
 Transform:
   m_ObjectHideFlags: 0

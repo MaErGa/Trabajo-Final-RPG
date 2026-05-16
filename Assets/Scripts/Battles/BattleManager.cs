@@ -114,7 +114,6 @@ public class BattleManager : MonoBehaviour
         if (botonPlanta != null)
             botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
         
-        // Mostrar botón si hay colas en el inventario
         if (botonColaDeConejo != null)
             botonColaDeConejo.SetActive(datosRyo.colaDeConejo > 0);
     }
@@ -133,7 +132,6 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(TurnoDelEnemigo());
     }
 
-    // Nueva función para equipar la cola desde el menú de objetos en batalla
     public void AccionEquiparCola()
     {
         if (!turnoActivo || datosRyo.colaDeConejo <= 0) return;
@@ -150,7 +148,9 @@ public class BattleManager : MonoBehaviour
     public void AccionAtacar()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-        int dañoBase = (datosRyo.fuerza + datosRyo.poderArma) - MovimientoMapa.enemigoSeleccionado.defensa;
+        
+        // ACTUALIZACIÓN: Ahora usa datosRyo.AtaqueTotal para sumar fuerza + equipo automáticamente
+        int dañoBase = datosRyo.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa;
         dañoBase = Mathf.Max(1, dañoBase);
         
         if (Random.Range(0, 100) < 5) 
@@ -300,7 +300,9 @@ public class BattleManager : MonoBehaviour
     IEnumerator TurnoDelEnemigo() { 
         turnoActivo = false; 
         yield return new WaitForSeconds(1.2f);
-        int defTotal = datosRyo.defensa + datosRyo.poderArmadura + datosRyo.poderEscudo;
+        
+        // ACTUALIZACIÓN: Ahora usa datosRyo.DefensaTotal (Base + Armadura + Escudo + Casco)
+        int defTotal = datosRyo.DefensaTotal;
         int daño = Mathf.Max(1, MovimientoMapa.enemigoSeleccionado.dañoAtaque - defTotal);
         
         if (Random.Range(0, 100) < 5) 
