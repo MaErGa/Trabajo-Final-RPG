@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Ropa de Viaje
   icono: {fileID: 0}
+  tipoSlot: 1
   bonoAtaque: 0
   bonoDefensa: 4
   bonoAgilidad: 0
-  precio: 20
   precioCompra: 20
   precioVenta: 10

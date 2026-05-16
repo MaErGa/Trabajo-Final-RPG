@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a3f8faeb35ce8b4eb8bb6e5ff7acadf, type: 3}
-  m_Name: Armadura de cuero
+  m_Script: {fileID: 11500000, guid: cce8cc71b8e0fb04da556ec45b9ec5f5, type: 3}
+  m_Name: MiniHelada
   m_EditorClassIdentifier: 
-  nombre: Armadura de cuero
+  nombreConjuro: MiniHelada
+  descripcion: "Lanza un car\xE1mbano afilado a un enemigo que inflige entre 25 puntos
+    de da\xF1o de hielo. Cuesta 3 PM."
+  costeMP: 3
+  tipo: 0
+  valorEfecto: 20
+  duracionTurnos: 0
   icono: {fileID: 0}
-  tipoSlot: 1
-  bonoAtaque: 0
-  bonoDefensa: 6
-  bonoAgilidad: 0
-  precioCompra: 60
-  precioVenta: 30

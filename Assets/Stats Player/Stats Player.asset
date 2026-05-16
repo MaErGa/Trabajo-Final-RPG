@@ -16,17 +16,20 @@ MonoBehaviour:
   nivel: 1
   hpMax: 20
   hpActual: 20
-  mpMax: 20
-  mpActual: 20
+  mpMax: 5
+  mpActual: 5
   fuerza: 8
   agilidad: 6
   defensa: 2
-  oro: 0
+  oro: 50
   experiencia: 0
   fuerzaMagica: 5
   terapeucidad: 4
-  armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
-  armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
+  bonoDefensaTemporal: 0
+  bonoAtaqueTemporal: 0
+  bonoAgilidadTemporal: 0
+  armaEquipadaAsset: {fileID: 0}
+  armaduraEquipadaAsset: {fileID: 0}
   escudoEquipadoAsset: {fileID: 0}
   cascoEquipadoAsset: {fileID: 0}
   accesorioEquipadoAsset: {fileID: 0}
@@ -37,6 +40,10 @@ MonoBehaviour:
   accesorioEquipado: Ninguno
   expSiguienteNivel: 14
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
+  conjurosAprendidos: []
+  conjuroNivel3: {fileID: 0}
+  conjuroNivel5: {fileID: 0}
+  conjuroNivel8: {fileID: 0}
   mochilaItems: []
   armarioEquipo: []
   plantasMedicinales: 0

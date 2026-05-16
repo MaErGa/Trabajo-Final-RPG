@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Escudo de cuero
   icono: {fileID: 0}
+  tipoSlot: 2
   bonoAtaque: 0
   bonoDefensa: 2
   bonoAgilidad: 0
-  precio: 15
   precioCompra: 15
   precioVenta: 7

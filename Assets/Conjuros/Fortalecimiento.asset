@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce8cc71b8e0fb04da556ec45b9ec5f5, type: 3}
+  m_Name: Fortalecimiento
+  m_EditorClassIdentifier: 
+  nombreConjuro: Fortalecimiento
+  descripcion: Aumenta la defensa del usuario en un 50% durante todo el combate.
+    Se puede acumular hasta dos veces. Cuesta 2 PM.
+  costeMP: 2
+  tipo: 0
+  valorEfecto: 5
+  duracionTurnos: 99
+  icono: {fileID: 0}

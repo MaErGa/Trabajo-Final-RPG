@@ -1,8 +1,5 @@
 using UnityEngine;
 
-// Esto nos permite elegir en el Inspector si cura Vida o Maná
-public enum TipoEfecto { Vida, Mana, Antidoto }
-
 [CreateAssetMenu(fileName = "NuevoConsumible", menuName = "RPG/Item Consumible")]
 public class ItemConsumible : ScriptableObject
 {
@@ -12,8 +9,8 @@ public class ItemConsumible : ScriptableObject
     [TextArea] public string descripcion;
 
     [Header("Efecto del Item")]
-    public TipoEfecto queCura; 
-    public int potencia; // Ejemplo: 20 para una poción pequeña
+    public TipoEfecto queCura; // Ahora usa el Enum Global sin errores
+    public int potencia;
 
     [Header("Economía")]
     public int precioCompra;

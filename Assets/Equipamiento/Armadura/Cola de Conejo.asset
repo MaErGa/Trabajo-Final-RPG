@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Cola de Conejo
   icono: {fileID: 0}
+  tipoSlot: 4
   bonoAtaque: 0
   bonoDefensa: 0
   bonoAgilidad: 2
-  precio: 0
   precioCompra: 0
   precioVenta: 30

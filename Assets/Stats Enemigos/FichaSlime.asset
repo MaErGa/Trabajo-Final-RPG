@@ -20,3 +20,6 @@ MonoBehaviour:
   imagenEnemigo: {fileID: 628478889, guid: 63e7ea76f84b0c648b18758f934de1e5, type: 3}
   expAlMorir: 6
   oroAlMorir: 8
+  tablaLoot:
+  - item: {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+    probabilidad: 12

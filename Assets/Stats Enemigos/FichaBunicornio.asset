@@ -20,3 +20,9 @@ MonoBehaviour:
   imagenEnemigo: {fileID: 1550180362, guid: 3abaa61e3c7a24c47b60d8617cca5e28, type: 3}
   expAlMorir: 10
   oroAlMorir: 3
+  tablaLoot:
+  - item: {fileID: 0}
+    probabilidad: 0
+  tablaLootEquipo:
+  - equipo: {fileID: 11400000, guid: 17f732891419bab489095c1f3a5e9270, type: 2}
+    probabilidad: 6

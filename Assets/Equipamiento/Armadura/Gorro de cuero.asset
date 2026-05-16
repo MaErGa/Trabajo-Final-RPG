@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Gorro de cuero
   icono: {fileID: 0}
+  tipoSlot: 3
   bonoAtaque: 0
   bonoDefensa: 1
   bonoAgilidad: 0
-  precio: 10
   precioCompra: 10
   precioVenta: 5

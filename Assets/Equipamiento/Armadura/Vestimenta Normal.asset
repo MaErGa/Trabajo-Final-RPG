@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Vestimenta Normal
   icono: {fileID: 0}
+  tipoSlot: 1
   bonoAtaque: 0
   bonoDefensa: 2
   bonoAgilidad: 0
-  precio: 0
   precioCompra: 0
   precioVenta: 1

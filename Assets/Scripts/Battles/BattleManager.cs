@@ -6,48 +6,52 @@ using System.Collections;
 public class BattleManager : MonoBehaviour
 {
     [Header("Asset de Datos")]
-    public DatosJugador datosRyo; 
+    public DatosJugador datosRyo;
 
     [Header("UI Jugador")]
-    public TextMeshProUGUI textoNombreJugador; 
+    public TextMeshProUGUI textoNombreJugador;
     public TextMeshProUGUI textoMensajes;
     public TextMeshProUGUI textoHPJugador;
     public TextMeshProUGUI textoMPJugador;
     public TextMeshProUGUI textoLVJugador;
-    
+
     [Header("El Hueco del Enemigo")]
-    public GameObject objetoImagenEnemigo; 
+    public GameObject objetoImagenEnemigo;
 
     [Header("Paneles de Interfaz")]
     public GameObject panelMagia;
-    public GameObject panelObjetos; 
+    public GameObject panelObjetos;
 
     [Header("Botones de Conjuros")]
     public GameObject botonMinicuracion;
+    public GameObject botonFortalecimiento;
     public GameObject botonMinihelada;
 
     [Header("Botones de Objetos")]
-    public GameObject botonPlanta; 
-    public GameObject botonColaDeConejo; // Nuevo botón añadido
+    public GameObject botonPlanta;
+    public GameObject botonColaDeConejo;
 
     [Header("Transición")]
-    public CanvasGroup panelTransicion; // Arrastra aquí el Canvas Group del panel negro
+    public CanvasGroup panelTransicion;
 
-    private int hpSesion; 
-    private int mpSesion; 
+    private int hpSesion;
+    private int mpSesion;
     private int vidaEnemigo;
     private bool turnoActivo = false;
     private bool estaDefendiendoManual = false;
 
+    // Turnos restantes del Fortalecimiento
+    private int turnosFortalecimiento = 0;
+
     void Start()
     {
-        if(panelTransicion != null) panelTransicion.alpha = 0;
-        if(textoMensajes != null) textoMensajes.text = "";
+        if (panelTransicion != null) panelTransicion.alpha = 0;
+        if (textoMensajes != null) textoMensajes.text = "";
 
-        if(datosRyo != null)
+        if (datosRyo != null)
         {
-            if(datosRyo.hpActual <= 0) datosRyo.hpActual = datosRyo.hpMax;
-            hpSesion = datosRyo.hpActual; 
+            if (datosRyo.hpActual <= 0) datosRyo.hpActual = datosRyo.hpMax;
+            hpSesion = datosRyo.hpActual;
             mpSesion = datosRyo.mpActual;
         }
 
@@ -55,21 +59,21 @@ public class BattleManager : MonoBehaviour
         {
             vidaEnemigo = MovimientoMapa.enemigoSeleccionado.vidaMaxima;
             SpriteRenderer sr = objetoImagenEnemigo.GetComponent<SpriteRenderer>();
-            if (sr != null) 
+            if (sr != null)
             {
                 sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
-                sr.sortingOrder = 20; 
+                sr.sortingOrder = 20;
                 objetoImagenEnemigo.transform.localScale = new Vector3(5f, 5f, 1f);
             }
             objetoImagenEnemigo.SetActive(true);
             textoMensajes.text = "¡Un " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " aparece!";
         }
-        
+
         ActualizarInterfaz();
         turnoActivo = true;
 
-        if(panelMagia != null) panelMagia.SetActive(false);
-        if(panelObjetos != null) panelObjetos.SetActive(false);
+        if (panelMagia != null) panelMagia.SetActive(false);
+        if (panelObjetos != null) panelObjetos.SetActive(false);
 
         ActualizarConjurosAprendidos();
         ActualizarObjetosDisponibles();
@@ -77,7 +81,7 @@ public class BattleManager : MonoBehaviour
 
     void ActualizarInterfaz()
     {
-        if(textoNombreJugador != null) textoNombreJugador.text = datosRyo.nombre;
+        if (textoNombreJugador != null) textoNombreJugador.text = datosRyo.nombre;
         textoHPJugador.text = "HP: " + hpSesion;
         textoMPJugador.text = "MP: " + mpSesion;
         textoLVJugador.text = "LV: " + datosRyo.nivel;
@@ -87,7 +91,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!turnoActivo) return;
         CerrarMenus();
-        if(panelObjetos != null) 
+        if (panelObjetos != null)
         {
             panelObjetos.SetActive(true);
             ActualizarObjetosDisponibles();
@@ -96,24 +100,30 @@ public class BattleManager : MonoBehaviour
 
     public void CerrarMenus()
     {
-        if(panelMagia != null) panelMagia.SetActive(false);
-        if(panelObjetos != null) panelObjetos.SetActive(false);
+        if (panelMagia != null) panelMagia.SetActive(false);
+        if (panelObjetos != null) panelObjetos.SetActive(false);
     }
 
     public void ActualizarConjurosAprendidos()
     {
+        // Usa la lista de conjurosAprendidos del ScriptableObject
         if (botonMinicuracion != null)
-            botonMinicuracion.SetActive(datosRyo.nivel >= 3);
+            botonMinicuracion.SetActive(
+                datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel3) && datosRyo.conjuroNivel3 != null);
+
+        if (botonFortalecimiento != null)
+            botonFortalecimiento.SetActive(
+                datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel5) && datosRyo.conjuroNivel5 != null);
 
         if (botonMinihelada != null)
-            botonMinihelada.SetActive(datosRyo.nivel >= 8);
+            botonMinihelada.SetActive(
+                datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel8) && datosRyo.conjuroNivel8 != null);
     }
 
     public void ActualizarObjetosDisponibles()
     {
         if (botonPlanta != null)
             botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
-        
         if (botonColaDeConejo != null)
             botonColaDeConejo.SetActive(datosRyo.colaDeConejo > 0);
     }
@@ -121,10 +131,8 @@ public class BattleManager : MonoBehaviour
     public void AccionUsarPlanta()
     {
         if (!turnoActivo || datosRyo.plantasMedicinales <= 0) return;
-
         datosRyo.plantasMedicinales--;
-        int cantidadCura = 30; 
-        hpSesion = Mathf.Min(hpSesion + cantidadCura, datosRyo.hpMax);
+        hpSesion = Mathf.Min(hpSesion + 30, datosRyo.hpMax);
         textoMensajes.text = "¡" + datosRyo.nombre + " usa una Planta Medicinal!";
         CerrarMenus();
         ActualizarInterfaz();
@@ -135,11 +143,9 @@ public class BattleManager : MonoBehaviour
     public void AccionEquiparCola()
     {
         if (!turnoActivo || datosRyo.colaDeConejo <= 0) return;
-
         datosRyo.EquiparColaDeConejo();
         string estado = (datosRyo.accesorioEquipado == "Cola de Conejo") ? "equipa" : "desequipa";
-        textoMensajes.text = "¡" + datosRyo.nombre + " se " + estado + " la Cola de Conejo! Agilidad +2.";
-        
+        textoMensajes.text = "¡" + datosRyo.nombre + " se " + estado + " la Cola de Conejo!";
         CerrarMenus();
         ActualizarInterfaz();
         StartCoroutine(TurnoDelEnemigo());
@@ -148,17 +154,15 @@ public class BattleManager : MonoBehaviour
     public void AccionAtacar()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-        
-        // ACTUALIZACIÓN: Ahora usa datosRyo.AtaqueTotal para sumar fuerza + equipo automáticamente
-        int dañoBase = datosRyo.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa;
-        dañoBase = Mathf.Max(1, dañoBase);
-        
-        if (Random.Range(0, 100) < 5) 
+
+        int dañoBase = Mathf.Max(1, datosRyo.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
+
+        if (Random.Range(0, 100) < 5)
         {
-            dañoBase *= 2; 
-            textoMensajes.text = "¡Un golpe excelente! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dañoBase + " puntos de daño.";
+            dañoBase *= 2;
+            textoMensajes.text = "¡Golpe excelente! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dañoBase + " puntos de daño.";
         }
-        else 
+        else
         {
             textoMensajes.text = "¡" + datosRyo.nombre + " ataca! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dañoBase + " puntos de daño.";
         }
@@ -168,24 +172,36 @@ public class BattleManager : MonoBehaviour
         else StartCoroutine(TurnoDelEnemigo());
     }
 
+    // Llamado desde el botón con el nombre del conjuro como parámetro
     public void AccionMagia(string hechizo)
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-        
+
         if (hechizo == "Minicuracion")
         {
-            if (mpSesion < 2) { textoMensajes.text = "¡No tienes PM!"; return; }
-            mpSesion -= 2;
-            hpSesion = Mathf.Min(hpSesion + 20 + datosRyo.terapeucidad, datosRyo.hpMax);
-            textoMensajes.text = "¡" + datosRyo.nombre + " lanza Minicuración!";
+            ConjuroBase conjuro = datosRyo.conjuroNivel3;
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
+            mpSesion -= conjuro.costeMP;
+            hpSesion = Mathf.Min(hpSesion + conjuro.valorEfecto + datosRyo.terapeucidad, datosRyo.hpMax);
+            textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "!";
+        }
+        else if (hechizo == "Fortalecimiento")
+        {
+            ConjuroBase conjuro = datosRyo.conjuroNivel5;
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
+            mpSesion -= conjuro.costeMP;
+            datosRyo.bonoDefensaTemporal += conjuro.valorEfecto;
+            turnosFortalecimiento = conjuro.duracionTurnos;
+            textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Defensa +" + conjuro.valorEfecto + " por " + conjuro.duracionTurnos + " turnos.";
         }
         else if (hechizo == "Minihelada")
         {
-            if (mpSesion < 3) { textoMensajes.text = "¡No tienes PM!"; return; }
-            mpSesion -= 3;
-            int dañoM = 15 + datosRyo.fuerzaMagica;
+            ConjuroBase conjuro = datosRyo.conjuroNivel8;
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
+            mpSesion -= conjuro.costeMP;
+            int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
             vidaEnemigo -= dañoM;
-            textoMensajes.text = "¡" + datosRyo.nombre + " lanza Minihelada!";
+            textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Daño: " + dañoM;
         }
 
         ActualizarInterfaz();
@@ -198,21 +214,45 @@ public class BattleManager : MonoBehaviour
         if (!turnoActivo || vidaEnemigo <= 0) return;
         estaDefendiendoManual = true;
         textoMensajes.text = "¡" + datosRyo.nombre + " se defiende!";
-        if(mpSesion < datosRyo.mpMax) mpSesion += 1;
+        if (mpSesion < datosRyo.mpMax) mpSesion += 1;
         ActualizarInterfaz();
         StartCoroutine(TurnoDelEnemigo());
     }
 
-    public void AccionEscapar() 
-    { 
+    public void AccionEscapar()
+    {
         if (!turnoActivo) return;
-        textoMensajes.text = "¡" + datosRyo.nombre + " intenta escapar!";
-        GuardarEstadoRyo();
-        StartCoroutine(CargarMapa());
+        StartCoroutine(IntentarEscapar());
     }
 
-    IEnumerator CargarMapa() 
-    { 
+    IEnumerator IntentarEscapar()
+    {
+        turnoActivo = false;
+        textoMensajes.text = datosRyo.nombre + " intenta huir...";
+        yield return new WaitForSeconds(1.2f);
+
+        // Fórmula Dragon Quest: probabilidad basada en agilidad
+        int agiJugador = datosRyo.AgilidadTotal;
+        int agiEnemigo = MovimientoMapa.enemigoSeleccionado.agilidad;
+        int probabilidad = Mathf.RoundToInt((float)agiJugador / (agiJugador + agiEnemigo) * 100);
+
+        if (Random.Range(0, 100) < probabilidad)
+        {
+            textoMensajes.text = "¡" + datosRyo.nombre + " ha escapado!";
+            yield return new WaitForSeconds(1.5f);
+            GuardarEstadoRyo();
+            StartCoroutine(CargarMapa());
+        }
+        else
+        {
+            textoMensajes.text = "¡No has podido huir!";
+            yield return new WaitForSeconds(1.2f);
+            StartCoroutine(TurnoDelEnemigo());
+        }
+    }
+
+    IEnumerator CargarMapa()
+    {
         if (panelTransicion != null)
         {
             while (panelTransicion.alpha < 1)
@@ -237,30 +277,21 @@ public class BattleManager : MonoBehaviour
         string mensajeItem = "";
 
         string nombreEnemigo = MovimientoMapa.enemigoSeleccionado.nombreEnemigo.ToLower();
-        
-        if (nombreEnemigo.Contains("slime"))
+        if (nombreEnemigo.Contains("slime") && Random.Range(0, 100) < 12)
         {
-            if (Random.Range(0, 100) < 12) 
-            {
-                datosRyo.plantasMedicinales++;
-                mensajeItem = "\n¡El Slime ha soltado una Planta Medicinal!";
-            }
+            datosRyo.plantasMedicinales++;
+            mensajeItem = "\n¡El Slime ha soltado una Planta Medicinal!";
         }
-        else if (nombreEnemigo.Contains("bunicornio"))
+        else if (nombreEnemigo.Contains("bunicornio") && Random.Range(0, 100) < 6)
         {
-            if (Random.Range(0, 100) < 6) 
-            {
-                datosRyo.colaDeConejo++;
-                mensajeItem = "\n¡El Bunicornio ha soltado una Cola de Conejo!";
-            }
+            datosRyo.colaDeConejo++;
+            mensajeItem = "\n¡El Bunicornio ha soltado una Cola de Conejo!";
         }
 
         string levelUpTexto = "";
         while (datosRyo.experiencia >= datosRyo.expSiguienteNivel)
-        {
             levelUpTexto += ComprobarLevelUp();
-        }
-        
+
         ActualizarConjurosAprendidos();
         GuardarEstadoRyo();
         textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + mensajeItem + levelUpTexto;
@@ -275,21 +306,20 @@ public class BattleManager : MonoBehaviour
         datosRyo.mpMax += 5;
         datosRyo.fuerza += 3;
         hpSesion = datosRyo.hpMax;
-        
-        string mensajeHechizo = "";
-        if (datosRyo.nivel == 3) mensajeHechizo = "\n¡Has aprendido Minicuración!";
-        if (datosRyo.nivel == 8) mensajeHechizo = "\n¡Has aprendido Minihelada!";
+
+        // Aprende conjuros automáticamente según nivel
+        string mensajeConjuro = datosRyo.AprenderConjurosPorNivel();
 
         if (datosRyo.nivel - 1 < datosRyo.tablaExpPilgrim.Length)
             datosRyo.expSiguienteNivel = datosRyo.tablaExpPilgrim[datosRyo.nivel - 1];
         else
             datosRyo.expSiguienteNivel = Mathf.RoundToInt(datosRyo.expSiguienteNivel * 1.5f);
-        
-        return "\n¡" + datosRyo.nombre + " sube al nivel " + datosRyo.nivel + "!" + mensajeHechizo;
+
+        return "\n¡" + datosRyo.nombre + " sube al nivel " + datosRyo.nivel + "!" + mensajeConjuro;
     }
 
-    void GuardarEstadoRyo() 
-    { 
+    void GuardarEstadoRyo()
+    {
         datosRyo.hpActual = hpSesion;
         datosRyo.mpActual = mpSesion;
         #if UNITY_EDITOR
@@ -297,33 +327,54 @@ public class BattleManager : MonoBehaviour
         #endif
     }
 
-    IEnumerator TurnoDelEnemigo() { 
-        turnoActivo = false; 
+    IEnumerator TurnoDelEnemigo()
+    {
+        turnoActivo = false;
         yield return new WaitForSeconds(1.2f);
-        
-        // ACTUALIZACIÓN: Ahora usa datosRyo.DefensaTotal (Base + Armadura + Escudo + Casco)
+
+        // Descontar turno de Fortalecimiento
+        if (turnosFortalecimiento > 0)
+        {
+            turnosFortalecimiento--;
+            if (turnosFortalecimiento <= 0)
+            {
+                datosRyo.bonoDefensaTemporal = 0;
+                textoMensajes.text = "El efecto de Fortalecimiento ha terminado.";
+                yield return new WaitForSeconds(0.8f);
+            }
+        }
+
         int defTotal = datosRyo.DefensaTotal;
         int daño = Mathf.Max(1, MovimientoMapa.enemigoSeleccionado.dañoAtaque - defTotal);
-        
-        if (Random.Range(0, 100) < 5) 
+
+        if (Random.Range(0, 100) < 5)
         {
             daño = Mathf.RoundToInt(MovimientoMapa.enemigoSeleccionado.dañoAtaque * 1.5f);
-            textoMensajes.text = "¡Un golpe excelente! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
+            textoMensajes.text = "¡Golpe excelente! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
         }
-        else 
+        else
         {
             if (estaDefendiendoManual) { daño = 1; estaDefendiendoManual = false; }
             textoMensajes.text = "¡El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " ataca! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
         }
-        
+
         hpSesion -= daño;
         ActualizarInterfaz();
-        if (hpSesion <= 0) 
+
+        if (hpSesion <= 0)
         {
-            textoMensajes.text = "¡" + datosRyo.nombre + " ha perecido!";
+            int oroPerdido = datosRyo.oro / 2;
+            datosRyo.oro -= oroPerdido;
+            GuardarEstadoRyo();
+            textoMensajes.text = "¡" + datosRyo.nombre + " ha perecido! Has perdido " + oroPerdido + " G.";
             yield return new WaitForSeconds(2f);
             StartCoroutine(CargarMapa());
         }
         else turnoActivo = true;
+    }
+
+    private void OnDestroy()
+    {
+        if (datosRyo != null) datosRyo.ResetearBonos();
     }
 }
