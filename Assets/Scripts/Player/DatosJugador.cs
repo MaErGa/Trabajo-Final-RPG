@@ -32,11 +32,15 @@ public class DatosJugador : ScriptableObject
     public EquipoBase cascoEquipadoAsset;
     public EquipoBase accesorioEquipadoAsset;
 
+    [Header("Equipación Inicial (se asigna al reiniciar)")]
+    public EquipoBase armaInicial;      // Porra de Cipres
+    public EquipoBase armaduraInicial;  // Vestimenta de Viaje
+
     [Header("Equipación (Nombres Antiguos)")]
-    public string armaEquipada = "Espada de cobre";
-    public string armaduraEquipada = "Ropa de viaje";
-    public string escudoEquipado = "Escudo de cuero";
-    public string cascoEquipado = "Casco de cuero";
+    public string armaEquipada = "Porra de Cipres";
+    public string armaduraEquipada = "Vestimenta de Viaje";
+    public string escudoEquipado = "Ninguno";
+    public string cascoEquipado = "Ninguno";
     public string accesorioEquipado = "Ninguno";
 
     [Header("Sistema de Niveles")]
@@ -47,9 +51,9 @@ public class DatosJugador : ScriptableObject
     public List<ConjuroBase> conjurosAprendidos = new List<ConjuroBase>();
 
     [Header("Conjuros por Nivel (asigna en el Inspector)")]
-    public ConjuroBase conjuroNivel3;  // Minicuración
-    public ConjuroBase conjuroNivel5;  // Fortalecimiento
-    public ConjuroBase conjuroNivel8;  // Minihelada
+    public ConjuroBase conjuroNivel3;
+    public ConjuroBase conjuroNivel5;
+    public ConjuroBase conjuroNivel8;
 
     [Header("Inventario Dinámico")]
     public List<ItemConsumible> mochilaItems = new List<ItemConsumible>();
@@ -71,7 +75,7 @@ public class DatosJugador : ScriptableObject
     public int AgilidadTotal => agilidad + bonoAgilidadTemporal +
                                 (accesorioEquipadoAsset != null ? accesorioEquipadoAsset.bonoAgilidad : 0);
 
-    // --- CONJUROS: se aprenden automáticamente al subir de nivel ---
+    // --- CONJUROS ---
     public string AprenderConjurosPorNivel()
     {
         string mensaje = "";
@@ -160,11 +164,18 @@ public class DatosJugador : ScriptableObject
         accesorioEquipado = "Ninguno";
         cascoEquipado = "Ninguno";
 
-        armaEquipadaAsset = null;
-        armaduraEquipadaAsset = null;
-        escudoEquipadoAsset = null;
-        cascoEquipadoAsset = null;
+        // Equipar el equipo inicial
+        armaEquipadaAsset      = armaInicial;
+        armaduraEquipadaAsset  = armaduraInicial;
+        escudoEquipadoAsset    = null;
+        cascoEquipadoAsset     = null;
         accesorioEquipadoAsset = null;
+
+        // Nombres antiguos
+        armaEquipada     = armaInicial     != null ? armaInicial.nombre     : "Ninguno";
+        armaduraEquipada = armaduraInicial != null ? armaduraInicial.nombre : "Ninguno";
+        escudoEquipado   = "Ninguno";
+
         mochilaItems.Clear();
         armarioEquipo.Clear();
 
