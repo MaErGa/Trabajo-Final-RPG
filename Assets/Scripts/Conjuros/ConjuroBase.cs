@@ -1,8 +1,5 @@
 using UnityEngine;
 
-// Esto es para el desplegable de los tipos
-public enum TipoEfecto { Daño, Curacion, AumentoDefensa }
-
 [CreateAssetMenu(fileName = "NuevoConjuro", menuName = "RPG/Conjuro")]
 public class ConjuroBase : ScriptableObject
 {
@@ -12,9 +9,9 @@ public class ConjuroBase : ScriptableObject
     public int costeMP;
 
     [Header("Configuración del Efecto")]
-    public TipoEfecto tipo; // El desplegable que te faltaba
-    public int valorEfecto; // El número de daño, cura o defensa
-    public int duracionTurnos; // Para el Fortalecimiento (ej: 3 turnos)
+    public TipoEfectoConjuro tipo;
+    public int valorEfecto;
+    public int duracionTurnos;
 
     [Header("Visual")]
     public Sprite icono;

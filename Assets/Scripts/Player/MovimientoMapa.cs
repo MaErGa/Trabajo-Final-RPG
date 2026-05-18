@@ -1,40 +1,48 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections; // Necesario para las corrutinas
+using System.Collections;
 
 public class MovimientoMapa : MonoBehaviour
 {
     [Header("Ajustes de Velocidad")]
     public float velocidadCaminar = 5f;
-    public float velocidadCorrer = 6f; 
+    public float velocidadCorrer = 6f;
     public float probabilidadCombate = 0.1f;
-    
+
     [Header("Configuración de Enemigos")]
-    public DatosEnemigo[] posiblesEnemigos; 
+    public DatosEnemigo[] posiblesEnemigos;
     public static DatosEnemigo enemigoSeleccionado;
 
     [Header("Transición")]
-    public CanvasGroup panelTransicion; // Arrastra aquí el Canvas Group del panel negro
+    public CanvasGroup panelTransicion;
 
-    public static Vector3 posicionRetorno; 
+    public static Vector3 posicionRetorno;
     public static bool vieneDeCombate = false;
 
     private bool estaCaminando = false;
-    private bool iniciandoCombate = false; // Bloqueo para evitar múltiples cargas
+    private bool iniciandoCombate = false;
 
     void Start()
     {
         if (vieneDeCombate)
         {
             transform.position = posicionRetorno;
-            vieneDeCombate = false; 
+            vieneDeCombate = false;
         }
-        if(panelTransicion != null) panelTransicion.alpha = 0; // Empieza invisible
+        if (panelTransicion != null) panelTransicion.alpha = 0;
+    }
+
+    bool EstaEnPausa()
+    {
+        return MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo();
     }
 
     void Update()
     {
         if (iniciandoCombate) return;
+
+        // --- BLOQUEO DE PAUSA ---
+        if (EstaEnPausa()) return;
 
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
@@ -47,7 +55,7 @@ public class MovimientoMapa : MonoBehaviour
 
             transform.Translate(movimiento * velocidadActual * Time.deltaTime);
 
-            if (!estaCaminando) 
+            if (!estaCaminando)
             {
                 estaCaminando = true;
                 InvokeRepeating("ChequearCombate", 0.5f, 0.5f);
@@ -62,6 +70,8 @@ public class MovimientoMapa : MonoBehaviour
 
     void ChequearCombate()
     {
+        if (EstaEnPausa()) return;
+
         if (Random.value < probabilidadCombate && posiblesEnemigos.Length > 0)
         {
             iniciandoCombate = true;
@@ -80,7 +90,7 @@ public class MovimientoMapa : MonoBehaviour
         {
             while (panelTransicion.alpha < 1)
             {
-                panelTransicion.alpha += Time.deltaTime * 2f; // Velocidad del fundido
+                panelTransicion.alpha += Time.deltaTime * 2f;
                 yield return null;
             }
         }

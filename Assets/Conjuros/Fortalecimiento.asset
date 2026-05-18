@@ -16,7 +16,7 @@ MonoBehaviour:
   descripcion: Aumenta la defensa del usuario en un 50% durante todo el combate.
     Se puede acumular hasta dos veces. Cuesta 2 PM.
   costeMP: 2
-  tipo: 0
+  tipo: 2
   valorEfecto: 5
   duracionTurnos: 99
   icono: {fileID: 0}
