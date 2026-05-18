@@ -491,7 +491,8 @@ Transform:
   m_LocalPosition: {x: 0.1175, y: 0.1357, z: 7}
   m_LocalScale: {x: 1.1823481, y: 0.76635814, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1651193680}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &166971795
@@ -1353,6 +1354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 628072680}
   - component: {fileID: 628072681}
+  - component: {fileID: 628072682}
   m_Layer: 0
   m_Name: salida
   m_TagString: Untagged
@@ -1404,7 +1406,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1420,6 +1422,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &628072682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628072679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6f573611b59f6a428a93e947c7d3e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: Pueblo
+  spawnPositionInTown: {x: -3.1139, y: 21.51422}
 --- !u!1 &648884391
 GameObject:
   m_ObjectHideFlags: 0
@@ -3672,12 +3688,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651193678}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.35, y: 0.1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.9327233, y: -0.046583965, z: -7}
+  m_LocalScale: {x: 0.8457746, y: 1.304873, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 68737501}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1658780417
 GameObject:
@@ -4858,11 +4874,10 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2036036031}
   - {fileID: 68737501}
   - {fileID: 293905058}
-  - {fileID: 604743197}
-  - {fileID: 1651193680}
   - {fileID: 1553583655}
-  - {fileID: 1885242543}
+  - {fileID: 604743197}
   - {fileID: 166971797}
-  - {fileID: 2036036031}
+  - {fileID: 1885242543}
