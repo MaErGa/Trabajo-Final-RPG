@@ -4770,7 +4770,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -7967,6 +7967,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 391987055}
+  - {fileID: 696401382}
   - {fileID: 833690739}
   - {fileID: 1920164176}
   - {fileID: 1349131092}
@@ -7980,7 +7981,6 @@ SceneRoots:
   - {fileID: 1041459695}
   - {fileID: 1399779231}
   - {fileID: 1646804580}
-  - {fileID: 696401382}
   - {fileID: 452113104}
   - {fileID: 1443841086}
   - {fileID: 1062295981}
