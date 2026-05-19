@@ -21,12 +21,22 @@ public class MenuTitulo : MonoBehaviour
 
     void Start()
     {
-        bool hayPartida = SistemaGuardado.instancia != null && SistemaGuardado.instancia.ExistePartida();
+        if (panelNombre != null) panelNombre.SetActive(false);
+        if (panelConfirmar != null) panelConfirmar.SetActive(false);
+        StartCoroutine(ComprobarPartida());
+    }
 
-        if (botonContinuar != null)    botonContinuar.SetActive(hayPartida);
+    System.Collections.IEnumerator ComprobarPartida()
+    {
+        // Espera varios frames para asegurar que SistemaGuardado esté listo
+        yield return null;
+        yield return null;
+        yield return null;
+
+        bool hayPartida = SistemaGuardado.instancia != null && SistemaGuardado.instancia.ExistePartida();
+        Debug.Log("Hay partida: " + hayPartida + " | Instancia: " + (SistemaGuardado.instancia != null));
+        if (botonContinuar != null) botonContinuar.SetActive(hayPartida);
         if (botonBorrarPartida != null) botonBorrarPartida.SetActive(hayPartida);
-        if (panelNombre != null)       panelNombre.SetActive(false);
-        if (panelConfirmar != null)    panelConfirmar.SetActive(false);
     }
 
     // ── Continuar ─────────────────────────────────────────────
