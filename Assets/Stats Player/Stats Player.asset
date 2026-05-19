@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c351a41e3fd4b48bd6d198ff61a213, type: 3}
   m_Name: Stats Player
   m_EditorClassIdentifier: 
-  nombre: aaaa
+  nombre: Retro
   nivel: 1
   hpMax: 20
   hpActual: 20
@@ -28,8 +28,8 @@ MonoBehaviour:
   bonoDefensaTemporal: 0
   bonoAtaqueTemporal: 0
   bonoAgilidadTemporal: 0
-  armaEquipadaAsset: {fileID: 0}
-  armaduraEquipadaAsset: {fileID: 0}
+  armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
+  armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
   escudoEquipadoAsset: {fileID: 0}
   cascoEquipadoAsset: {fileID: 0}
   accesorioEquipadoAsset: {fileID: 0}
