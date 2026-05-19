@@ -18,7 +18,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();        
+        animator = GetComponent<Animator>();
+
+        // Aplicar posición guardada si existe
+        if (SistemaGuardado.instancia != null && SistemaGuardado.instancia.hayPosicionGuardada)
+            SistemaGuardado.instancia.AplicarPosicionJugador();
     }
 
     bool EstaEnPausa()

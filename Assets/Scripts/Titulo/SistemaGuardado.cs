@@ -40,6 +40,10 @@ public class DatosGuardado
     // Inventario dinámico (guardamos los nombres)
     public string[] mochilaItems;
     public string[] armarioEquipo;
+
+    // Posición del jugador
+    public float posX;
+    public float posY;
 }
 
 public class SistemaGuardado : MonoBehaviour
@@ -74,28 +78,28 @@ public class SistemaGuardado : MonoBehaviour
     {
         DatosGuardado datos = new DatosGuardado();
 
-        datos.nombre           = datosRyo.nombre;
-        datos.nivel            = datosRyo.nivel;
-        datos.hpMax            = datosRyo.hpMax;
-        datos.hpActual         = datosRyo.hpActual;
-        datos.mpMax            = datosRyo.mpMax;
-        datos.mpActual         = datosRyo.mpActual;
-        datos.fuerza           = datosRyo.fuerza;
-        datos.agilidad         = datosRyo.agilidad;
-        datos.defensa          = datosRyo.defensa;
-        datos.oro              = datosRyo.oro;
-        datos.experiencia      = datosRyo.experiencia;
-        datos.expSiguienteNivel= datosRyo.expSiguienteNivel;
-        datos.fuerzaMagica     = datosRyo.fuerzaMagica;
-        datos.terapeucidad     = datosRyo.terapeucidad;
+        datos.nombre = datosRyo.nombre;
+        datos.nivel = datosRyo.nivel;
+        datos.hpMax = datosRyo.hpMax;
+        datos.hpActual = datosRyo.hpActual;
+        datos.mpMax = datosRyo.mpMax;
+        datos.mpActual = datosRyo.mpActual;
+        datos.fuerza = datosRyo.fuerza;
+        datos.agilidad = datosRyo.agilidad;
+        datos.defensa = datosRyo.defensa;
+        datos.oro = datosRyo.oro;
+        datos.experiencia = datosRyo.experiencia;
+        datos.expSiguienteNivel = datosRyo.expSiguienteNivel;
+        datos.fuerzaMagica = datosRyo.fuerzaMagica;
+        datos.terapeucidad = datosRyo.terapeucidad;
         datos.plantasMedicinales = datosRyo.plantasMedicinales;
-        datos.colaDeConejo     = datosRyo.colaDeConejo;
+        datos.colaDeConejo = datosRyo.colaDeConejo;
 
         // Equipación
-        datos.armaEquipada      = datosRyo.armaEquipadaAsset      != null ? datosRyo.armaEquipadaAsset.nombre      : "";
-        datos.armaduraEquipada  = datosRyo.armaduraEquipadaAsset  != null ? datosRyo.armaduraEquipadaAsset.nombre  : "";
-        datos.escudoEquipado    = datosRyo.escudoEquipadoAsset    != null ? datosRyo.escudoEquipadoAsset.nombre    : "";
-        datos.cascoEquipado     = datosRyo.cascoEquipadoAsset     != null ? datosRyo.cascoEquipadoAsset.nombre     : "";
+        datos.armaEquipada = datosRyo.armaEquipadaAsset != null ? datosRyo.armaEquipadaAsset.nombre : "";
+        datos.armaduraEquipada = datosRyo.armaduraEquipadaAsset != null ? datosRyo.armaduraEquipadaAsset.nombre : "";
+        datos.escudoEquipado = datosRyo.escudoEquipadoAsset != null ? datosRyo.escudoEquipadoAsset.nombre : "";
+        datos.cascoEquipado = datosRyo.cascoEquipadoAsset != null ? datosRyo.cascoEquipadoAsset.nombre : "";
         datos.accesorioEquipado = datosRyo.accesorioEquipadoAsset != null ? datosRyo.accesorioEquipadoAsset.nombre : "";
 
         // Conjuros aprendidos
@@ -115,6 +119,14 @@ public class SistemaGuardado : MonoBehaviour
         for (int i = 0; i < datosRyo.armarioEquipo.Count; i++)
             armario[i] = datosRyo.armarioEquipo[i] != null ? datosRyo.armarioEquipo[i].nombre : "";
         datos.armarioEquipo = armario;
+
+        // Posición del jugador
+        GameObject jugador = GameObject.FindGameObjectWithTag("Player");
+        if (jugador != null)
+        {
+            datos.posX = jugador.transform.position.x;
+            datos.posY = jugador.transform.position.y;
+        }
 
         string json = JsonUtility.ToJson(datos, true);
         File.WriteAllText(rutaGuardado, json);
@@ -139,28 +151,28 @@ public class SistemaGuardado : MonoBehaviour
         string json = File.ReadAllText(rutaGuardado);
         DatosGuardado datos = JsonUtility.FromJson<DatosGuardado>(json);
 
-        datosRyo.nombre            = datos.nombre;
-        datosRyo.nivel             = datos.nivel;
-        datosRyo.hpMax             = datos.hpMax;
-        datosRyo.hpActual          = datos.hpActual;
-        datosRyo.mpMax             = datos.mpMax;
-        datosRyo.mpActual          = datos.mpActual;
-        datosRyo.fuerza            = datos.fuerza;
-        datosRyo.agilidad          = datos.agilidad;
-        datosRyo.defensa           = datos.defensa;
-        datosRyo.oro               = datos.oro;
-        datosRyo.experiencia       = datos.experiencia;
+        datosRyo.nombre = datos.nombre;
+        datosRyo.nivel = datos.nivel;
+        datosRyo.hpMax = datos.hpMax;
+        datosRyo.hpActual = datos.hpActual;
+        datosRyo.mpMax = datos.mpMax;
+        datosRyo.mpActual = datos.mpActual;
+        datosRyo.fuerza = datos.fuerza;
+        datosRyo.agilidad = datos.agilidad;
+        datosRyo.defensa = datos.defensa;
+        datosRyo.oro = datos.oro;
+        datosRyo.experiencia = datos.experiencia;
         datosRyo.expSiguienteNivel = datos.expSiguienteNivel;
-        datosRyo.fuerzaMagica      = datos.fuerzaMagica;
-        datosRyo.terapeucidad      = datos.terapeucidad;
-        datosRyo.plantasMedicinales= datos.plantasMedicinales;
-        datosRyo.colaDeConejo      = datos.colaDeConejo;
+        datosRyo.fuerzaMagica = datos.fuerzaMagica;
+        datosRyo.terapeucidad = datos.terapeucidad;
+        datosRyo.plantasMedicinales = datos.plantasMedicinales;
+        datosRyo.colaDeConejo = datos.colaDeConejo;
 
         // Equipación
-        datosRyo.armaEquipadaAsset      = BuscarEquipo(datos.armaEquipada);
-        datosRyo.armaduraEquipadaAsset  = BuscarEquipo(datos.armaduraEquipada);
-        datosRyo.escudoEquipadoAsset    = BuscarEquipo(datos.escudoEquipado);
-        datosRyo.cascoEquipadoAsset     = BuscarEquipo(datos.cascoEquipado);
+        datosRyo.armaEquipadaAsset = BuscarEquipo(datos.armaEquipada);
+        datosRyo.armaduraEquipadaAsset = BuscarEquipo(datos.armaduraEquipada);
+        datosRyo.escudoEquipadoAsset = BuscarEquipo(datos.escudoEquipado);
+        datosRyo.cascoEquipadoAsset = BuscarEquipo(datos.cascoEquipado);
         datosRyo.accesorioEquipadoAsset = BuscarEquipo(datos.accesorioEquipado);
 
         // Conjuros aprendidos
@@ -187,6 +199,10 @@ public class SistemaGuardado : MonoBehaviour
             if (equipo != null) datosRyo.armarioEquipo.Add(equipo);
         }
 
+        // Guardar posición para aplicarla al cargar la escena
+        posicionGuardada = new Vector3(datos.posX, datos.posY, 0);
+        hayPosicionGuardada = true;
+
         Debug.Log("Partida cargada correctamente.");
     }
 
@@ -200,6 +216,22 @@ public class SistemaGuardado : MonoBehaviour
             Debug.Log("Partida borrada.");
         }
         datosRyo.ReiniciarPersonaje();
+    }
+
+    // ── Posición guardada ────────────────────────────────────
+
+    [HideInInspector] public Vector3 posicionGuardada;
+    [HideInInspector] public bool hayPosicionGuardada = false;
+
+    public void AplicarPosicionJugador()
+    {
+        if (!hayPosicionGuardada) return;
+        GameObject jugador = GameObject.FindGameObjectWithTag("Player");
+        if (jugador != null)
+        {
+            jugador.transform.position = posicionGuardada;
+            hayPosicionGuardada = false;
+        }
     }
 
     // ── Búsqueda de assets por nombre ────────────────────────
