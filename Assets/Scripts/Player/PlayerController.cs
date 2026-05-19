@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,9 +21,16 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
+        // DEBUG TEMPORAL - borrar cuando se solucione
+        Debug.Log("ESCENA ACTUAL: " + SceneManager.GetActiveScene().name);
+        Debug.Log("POSICION ANTES DE APLICAR: " + transform.position);
+
         // Aplicar posición guardada si existe
         if (SistemaGuardado.instancia != null && SistemaGuardado.instancia.hayPosicionGuardada)
             SistemaGuardado.instancia.AplicarPosicionJugador();
+
+        // DEBUG TEMPORAL - borrar cuando se solucione
+        Debug.Log("POSICION DESPUES DE APLICAR: " + transform.position);
     }
 
     bool EstaEnPausa()

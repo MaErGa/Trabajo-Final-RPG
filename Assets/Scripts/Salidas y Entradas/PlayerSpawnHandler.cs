@@ -4,19 +4,26 @@ public class PlayerSpawnHandler : MonoBehaviour
 {
     private void Start()
     {
-        // Si el manager dice que debemos reposicionar al jugador...
+        // Si hay una partida guardada pendiente de aplicar, tiene prioridad
+        // y dejamos que PlayerController la aplique, ignoramos el SceneLoadManager
+        if (SistemaGuardado.instancia != null && SistemaGuardado.instancia.hayPosicionGuardada)
+        {
+            // Reseteamos el SceneLoadManager para que no sobreescriba la posición guardada
+            if (SceneLoadManager.Instance != null)
+                SceneLoadManager.Instance.ResetSpawnFlag();
+
+            // La posición la aplica PlayerController en su Start()
+            return;
+        }
+
+        // Comportamiento normal: reposicionar por transición de escena
         if (SceneLoadManager.Instance != null && SceneLoadManager.Instance.ShouldRepositionPlayer)
         {
-            // Buscamos al jugador por su Tag
             GameObject player = GameObject.FindWithTag("Player");
 
             if (player != null)
-            {
-                // Movemos al jugador a la posición guardada
                 player.transform.position = SceneLoadManager.Instance.SpawnPosition;
-            }
 
-            // Le decimos al manager que ya posicionamos al jugador
             SceneLoadManager.Instance.ResetSpawnFlag();
         }
     }

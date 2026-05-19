@@ -1467,7 +1467,7 @@ MonoBehaviour:
   panelNombre: {fileID: 1285919075}
   inputNombre: {fileID: 1528499225}
   panelConfirmar: {fileID: 293032018}
-  escenaJuego: Pueblo
+  escenaJuego: Inicio
 --- !u!1 &1139298573
 GameObject:
   m_ObjectHideFlags: 0
@@ -2174,6 +2174,9 @@ MonoBehaviour:
   todosLosEquipos: []
   todosLosItems: []
   todosLosConjuros: []
+  posicionGuardada: {x: 0, y: 0, z: 0}
+  hayPosicionGuardada: 0
+  escenaCargadaAutomatica: 
 --- !u!4 &1456877507
 Transform:
   m_ObjectHideFlags: 0

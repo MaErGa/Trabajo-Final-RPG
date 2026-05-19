@@ -17,7 +17,11 @@ public class MenuTitulo : MonoBehaviour
     public GameObject panelConfirmar;
 
     [Header("Escenas")]
-    public string escenaJuego = "Underworld";
+    [Tooltip("Escena a la que va una nueva partida (Ej: Inicio)")]
+    public string escenaJuego = "Inicio";
+
+    [Tooltip("Escena por defecto al continuar si no hay mapa guardado (Ej: Pueblo)")]
+    public string escenaContinuar = "Pueblo"; // ¡AQUÍ ESTÁ LA NUEVA CASILLA!
 
     void Start()
     {
@@ -44,9 +48,23 @@ public class MenuTitulo : MonoBehaviour
     public void BotonContinuar()
     {
         if (SistemaGuardado.instancia != null)
+        {
+            // Ejecuta la carga de datos del JSON
             SistemaGuardado.instancia.Cargar();
 
-        SceneManager.LoadScene(escenaJuego);
+            // Intenta extraer el nombre de la escena que se grabó físicamente al usar la estatua
+            string escenaGuardadaFisica = SistemaGuardado.instancia.escenaCargadaAutomatica;
+
+            // Si el JSON tiene un mapa válido grabado, viaja directo a él de forma inteligente
+            if (!string.IsNullOrEmpty(escenaGuardadaFisica))
+            {
+                SceneManager.LoadScene(escenaGuardadaFisica);
+                return; // Corta aquí para ignorar las casillas por defecto
+            }
+        }
+
+        // Si es una partida vieja sin mapa guardado, usa la nueva casilla que me pediste
+        SceneManager.LoadScene(escenaContinuar);
     }
 
     // ── Nueva Partida ─────────────────────────────────────────

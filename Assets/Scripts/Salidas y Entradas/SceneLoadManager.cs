@@ -28,7 +28,7 @@ public class SceneLoadManager : MonoBehaviour
     {
         SpawnPosition = targetSpawnPosition;
         ShouldRepositionPlayer = true;
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     // Método para resetear el estado una vez que el jugador ya se posicionó

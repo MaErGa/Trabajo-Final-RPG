@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c351a41e3fd4b48bd6d198ff61a213, type: 3}
   m_Name: Stats Player
   m_EditorClassIdentifier: 
-  nombre: suso
+  nombre: aaaa
   nivel: 1
   hpMax: 20
   hpActual: 20

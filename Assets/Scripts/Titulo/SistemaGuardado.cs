@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement; // Necesario para detectar las escenas en ejecución
 
 // Clase que define qué se guarda en el JSON
 [System.Serializable]
@@ -44,6 +45,9 @@ public class DatosGuardado
     // Posición del jugador
     public float posX;
     public float posY;
+
+    // Guarda el nombre exacto de la escena activa en el JSON
+    public string nombreEscena;
 }
 
 public class SistemaGuardado : MonoBehaviour
@@ -54,13 +58,15 @@ public class SistemaGuardado : MonoBehaviour
     public DatosJugador datosRyo;
 
     // Carpeta donde se guarda: Assets de equipo, items y conjuros
-    // (deben tener nombres únicos en el proyecto)
     [Header("Assets de Referencia (para cargar por nombre)")]
     public EquipoBase[] todosLosEquipos;
     public ItemConsumible[] todosLosItems;
     public ConjuroBase[] todosLosConjuros;
 
     private string rutaGuardado => Application.persistentDataPath + "/partida.json";
+
+    // Variable que recordará temporalmente el mapa extraído del archivo JSON
+    [HideInInspector] public string escenaCargadaAutomatica;
 
     void Awake()
     {
@@ -127,6 +133,9 @@ public class SistemaGuardado : MonoBehaviour
             datos.posX = jugador.transform.position.x;
             datos.posY = jugador.transform.position.y;
         }
+
+        // Registramos el nombre exacto de la escena donde se guardó
+        datos.nombreEscena = SceneManager.GetActiveScene().name;
 
         string json = JsonUtility.ToJson(datos, true);
         File.WriteAllText(rutaGuardado, json);
@@ -202,6 +211,9 @@ public class SistemaGuardado : MonoBehaviour
         // Guardar posición para aplicarla al cargar la escena
         posicionGuardada = new Vector3(datos.posX, datos.posY, 0);
         hayPosicionGuardada = true;
+
+        // Recuperamos la escena leída del archivo .json
+        escenaCargadaAutomatica = datos.nombreEscena;
 
         Debug.Log("Partida cargada correctamente.");
     }

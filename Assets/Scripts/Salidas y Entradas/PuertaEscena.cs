@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,9 +14,14 @@ public class PuertaEscena : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             // Opcional: Si queremos que al entrar por una puerta NO cuente como retorno de combate
-            MovimientoMapa.vieneDeCombate = false; 
+            MovimientoMapa.vieneDeCombate = false;
 
             SceneManager.LoadScene(nombreEscenaDestino);
         }
+
+    }
+    public void MenuPrueba()
+    {
+        SceneManager.LoadScene("Titulo");
     }
 }
