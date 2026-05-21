@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Porra de Cipres
   icono: {fileID: 0}
+  tipoSlot: 0
   bonoAtaque: 2
   bonoDefensa: 0
   bonoAgilidad: 0
-  precio: 0
-  precioCompra: 0
-  precioVenta: 5
+  precioCompra: 5
+  precioVenta: 3

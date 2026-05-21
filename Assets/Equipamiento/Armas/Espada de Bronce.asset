@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3f8faeb35ce8b4eb8bb6e5ff7acadf, type: 3}
   m_Name: Espada de Bronce
   m_EditorClassIdentifier: 
-  nombre: 
+  nombre: Espada de bronce
   icono: {fileID: 0}
-  bonoAtaque: 0
+  tipoSlot: 0
+  bonoAtaque: 10
   bonoDefensa: 0
   bonoAgilidad: 0
-  precio: 120
   precioCompra: 120
   precioVenta: 60

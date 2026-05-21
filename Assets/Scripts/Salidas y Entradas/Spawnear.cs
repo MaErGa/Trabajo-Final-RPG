@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Coloca este script en el Player (o en un GameManager con DontDestroyOnLoad).
 /// Se encarga de guardar y restaurar la posición entre escenas.
 /// </summary>
-public class Spawnear: MonoBehaviour
+public class Spawnear : MonoBehaviour
 {
     // Clave usada en PlayerPrefs para persistir entre sesiones (opcional)
     private const string KeyX = "spawn_x";
@@ -48,5 +49,13 @@ public class Spawnear: MonoBehaviour
             transform.position = new Vector3(x, y, z);
         }
         // Si no hay nada guardado, el player queda donde Unity lo colocó
+    }
+
+    // -------------------------------------------------------
+    // NUEVO — Entrada a la tienda: guarda posición actual
+    // -------------------------------------------------------
+    public static void GuardarPosicionAntesDeTienda(Vector3 posicion)
+    {
+        SaveSpawnPosition(posicion);
     }
 }

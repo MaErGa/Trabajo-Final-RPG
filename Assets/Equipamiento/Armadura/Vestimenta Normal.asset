@@ -16,7 +16,7 @@ MonoBehaviour:
   icono: {fileID: 0}
   tipoSlot: 1
   bonoAtaque: 0
-  bonoDefensa: 2
+  bonoDefensa: 8
   bonoAgilidad: 0
-  precioCompra: 0
-  precioVenta: 1
+  precioCompra: 70
+  precioVenta: 52

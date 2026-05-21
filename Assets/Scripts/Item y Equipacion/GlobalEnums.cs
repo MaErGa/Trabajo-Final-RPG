@@ -1,15 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+// ============================================
+// ENUMS GLOBALES DEL PROYECTO
+// ============================================
 
-public class GlobalEnums : MonoBehaviour
+// --- ITEMS CONSUMIBLES ---
+public enum TipoEfecto
 {
-    // Pon este archivo en tu carpeta de Scripts
-public enum TipoEfecto 
-{ 
-    Vida, Mana, Antidoto,        // Para tus Objetos
-    Daño, Curacion, AumentoDefensa // Para tus Conjuros
+    Vida,
+    Mana,
+    Antidoto
 }
-        
-    }
 
+// --- CONJUROS EN COMBATE ---
+public enum TipoEfectoConjuro
+{
+    Daño,
+    Curacion,
+    AumentoDefensa
+}
+
+// --- EQUIPAMIENTO ---
+public enum TipoSlot
+{
+    Arma,
+    Armadura,
+    Escudo,
+    Casco,
+    Accesorio
+}
