@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c351a41e3fd4b48bd6d198ff61a213, type: 3}
   m_Name: Stats Player
   m_EditorClassIdentifier: 
-  nombre: Retro
-  nivel: 2
-  hpMax: 30
-  hpActual: 30
-  mpMax: 10
+  nombre: el magooo
+  nivel: 1
+  hpMax: 20
+  hpActual: 20
+  mpMax: 5
   mpActual: 5
-  fuerza: 11
+  fuerza: 8
   agilidad: 6
   defensa: 2
-  oro: 74
-  experiencia: 18
+  oro: 50
+  experiencia: 0
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
   bonoAtaqueTemporal: 0
   bonoAgilidadTemporal: 0
-  armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
-  armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
+  armaEquipadaAsset: {fileID: 0}
+  armaduraEquipadaAsset: {fileID: 0}
   escudoEquipadoAsset: {fileID: 0}
   cascoEquipadoAsset: {fileID: 0}
   accesorioEquipadoAsset: {fileID: 0}
@@ -40,7 +40,7 @@ MonoBehaviour:
   escudoEquipado: Ninguno
   cascoEquipado: Ninguno
   accesorioEquipado: Ninguno
-  expSiguienteNivel: 42
+  expSiguienteNivel: 14
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
   conjurosAprendidos: []
   conjuroNivel3: {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
