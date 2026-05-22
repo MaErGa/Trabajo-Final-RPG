@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c351a41e3fd4b48bd6d198ff61a213, type: 3}
   m_Name: Stats Player
   m_EditorClassIdentifier: 
-  nombre: el magooo
+  nombre: Retro
   nivel: 1
   hpMax: 20
-  hpActual: 0
+  hpActual: 20
   mpMax: 5
   mpActual: 5
   fuerza: 8
   agilidad: 6
   defensa: 2
-  oro: 25
+  oro: 50
   experiencia: 0
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
   bonoAtaqueTemporal: 0
   bonoAgilidadTemporal: 0
-  armaEquipadaAsset: {fileID: 0}
-  armaduraEquipadaAsset: {fileID: 0}
+  armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
+  armaduraEquipadaAsset: {fileID: 11400000, guid: 47240456a6d08834fbae7d1b86a031c9, type: 2}
   escudoEquipadoAsset: {fileID: 0}
   cascoEquipadoAsset: {fileID: 0}
   accesorioEquipadoAsset: {fileID: 0}
@@ -46,7 +46,9 @@ MonoBehaviour:
   conjuroNivel3: {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
   conjuroNivel5: {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
-  mochilaItems: []
-  armarioEquipo: []
-  plantasMedicinales: 0
+  mochilaItems:
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+  armarioEquipo:
+  - {fileID: 11400000, guid: 17f732891419bab489095c1f3a5e9270, type: 2}
+  plantasMedicinales: 10
   colaDeConejo: 0
