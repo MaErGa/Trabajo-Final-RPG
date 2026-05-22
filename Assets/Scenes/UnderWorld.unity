@@ -145306,10 +145306,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 372427507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 962712d06d522f249b3876c0bf2f24c0, type: 3}
+  m_Script: {fileID: 11500000, guid: a30bd99d2017f83488ce5926ea70ca39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nombreEscena: Bosque
+  escenaDestino: Bosque
 --- !u!1 &380168125
 GameObject:
   m_ObjectHideFlags: 0

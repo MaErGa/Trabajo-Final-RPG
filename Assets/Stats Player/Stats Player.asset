@@ -15,7 +15,7 @@ MonoBehaviour:
   nombre: Retro
   nivel: 1
   hpMax: 20
-  hpActual: 20
+  hpActual: 15
   mpMax: 5
   mpActual: 5
   fuerza: 8
