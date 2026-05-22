@@ -29,7 +29,7 @@ MonoBehaviour:
   bonoAtaqueTemporal: 0
   bonoAgilidadTemporal: 0
   armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
-  armaduraEquipadaAsset: {fileID: 11400000, guid: 47240456a6d08834fbae7d1b86a031c9, type: 2}
+  armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
   escudoEquipadoAsset: {fileID: 0}
   cascoEquipadoAsset: {fileID: 0}
   accesorioEquipadoAsset: {fileID: 0}
@@ -46,9 +46,7 @@ MonoBehaviour:
   conjuroNivel3: {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
   conjuroNivel5: {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
-  mochilaItems:
-  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
-  armarioEquipo:
-  - {fileID: 11400000, guid: 17f732891419bab489095c1f3a5e9270, type: 2}
-  plantasMedicinales: 10
+  mochilaItems: []
+  armarioEquipo: []
+  plantasMedicinales: 0
   colaDeConejo: 0
