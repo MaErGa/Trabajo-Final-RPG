@@ -10,8 +10,8 @@ public class MenuTitulo : MonoBehaviour
     public GameObject botonBorrarPartida;
 
     [Header("Panel Nombre")]
-    public GameObject panelNombre;        // panel con el input del nombre
-    public TMP_InputField inputNombre;    // campo de texto para escribir el nombre
+    public GameObject panelNombre;
+    public TMP_InputField inputNombre;
 
     [Header("Panel Confirmar Borrar")]
     public GameObject panelConfirmar;
@@ -21,7 +21,13 @@ public class MenuTitulo : MonoBehaviour
     public string escenaJuego = "Inicio";
 
     [Tooltip("Escena por defecto al continuar si no hay mapa guardado (Ej: Pueblo)")]
-    public string escenaContinuar = "Pueblo"; // ¡AQUÍ ESTÁ LA NUEVA CASILLA!
+    public string escenaContinuar = "Pueblo";
+
+    [Tooltip("Escena de opciones")]
+    public string escenaOpciones = "Opciones";
+
+    [Tooltip("Escena de creditos")]
+    public string escenaCreditos = "Creditos";
 
     void Start()
     {
@@ -32,7 +38,6 @@ public class MenuTitulo : MonoBehaviour
 
     System.Collections.IEnumerator ComprobarPartida()
     {
-        // Espera varios frames para asegurar que SistemaGuardado esté listo
         yield return null;
         yield return null;
         yield return null;
@@ -49,21 +54,17 @@ public class MenuTitulo : MonoBehaviour
     {
         if (SistemaGuardado.instancia != null)
         {
-            // Ejecuta la carga de datos del JSON
             SistemaGuardado.instancia.Cargar();
 
-            // Intenta extraer el nombre de la escena que se grabó físicamente al usar la estatua
             string escenaGuardadaFisica = SistemaGuardado.instancia.escenaCargadaAutomatica;
 
-            // Si el JSON tiene un mapa válido grabado, viaja directo a él de forma inteligente
             if (!string.IsNullOrEmpty(escenaGuardadaFisica))
             {
                 SceneManager.LoadScene(escenaGuardadaFisica);
-                return; // Corta aquí para ignorar las casillas por defecto
+                return;
             }
         }
 
-        // Si es una partida vieja sin mapa guardado, usa la nueva casilla que me pediste
         SceneManager.LoadScene(escenaContinuar);
     }
 
@@ -71,7 +72,6 @@ public class MenuTitulo : MonoBehaviour
 
     public void BotonNuevaPartida()
     {
-        // Muestra el panel para escribir el nombre
         if (panelNombre != null)
         {
             panelNombre.SetActive(true);
@@ -89,7 +89,6 @@ public class MenuTitulo : MonoBehaviour
             return;
         }
 
-        // Reinicia el personaje y asigna el nombre
         if (SistemaGuardado.instancia != null)
         {
             SistemaGuardado.instancia.BorrarPartida();
@@ -123,5 +122,19 @@ public class MenuTitulo : MonoBehaviour
     public void CancelarBorrar()
     {
         if (panelConfirmar != null) panelConfirmar.SetActive(false);
+    }
+
+    // ── Opciones ──────────────────────────────────────────────
+
+    public void BotonOpciones()
+    {
+        SceneManager.LoadScene(escenaOpciones);
+    }
+
+    // ── Creditos ──────────────────────────────────────────────
+
+    public void BotonCreditos()
+    {
+        SceneManager.LoadScene(escenaCreditos);
     }
 }
