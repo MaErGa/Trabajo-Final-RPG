@@ -21,7 +21,7 @@ MonoBehaviour:
   fuerza: 8
   agilidad: 6
   defensa: 2
-  oro: 50
+  oro: 35
   experiencia: 0
   fuerzaMagica: 5
   terapeucidad: 4
@@ -30,7 +30,7 @@ MonoBehaviour:
   bonoAgilidadTemporal: 0
   armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
   armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
-  escudoEquipadoAsset: {fileID: 0}
+  escudoEquipadoAsset: {fileID: 11400000, guid: ebea8513bdf6cf94da27f7ad4483596d, type: 2}
   cascoEquipadoAsset: {fileID: 0}
   accesorioEquipadoAsset: {fileID: 0}
   armaInicial: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
