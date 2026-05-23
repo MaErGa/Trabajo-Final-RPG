@@ -182,16 +182,38 @@ public class TiendaManager : MonoBehaviour
             datosRyo.oro -= itemConsumibleSeleccionado.precioCompra;
             datosRyo.mochilaItems.Add(itemConsumibleSeleccionado);
             MostrarInfo(itemConsumibleSeleccionado.nombre, "¡Comprado!", "Oro restante: " + datosRyo.oro + "G");
+            ActualizarOro();
+            if (panelConfirmacion != null) panelConfirmacion.SetActive(false);
         }
         else if (equipoSeleccionado != null)
         {
             datosRyo.oro -= equipoSeleccionado.precioCompra;
-            datosRyo.armarioEquipo.Add(equipoSeleccionado);
-            MostrarInfo(equipoSeleccionado.nombre, "¡Comprado!", "Oro restante: " + datosRyo.oro + "G");
-        }
+            ActualizarOro();
+            if (panelConfirmacion != null) panelConfirmacion.SetActive(false);
 
-        ActualizarOro();
-        if (panelConfirmacion != null) panelConfirmacion.SetActive(false);
+            // Preguntar si quiere equipárselo
+            var equipoComprado = equipoSeleccionado;
+            panelConfirmacion.SetActive(true);
+            if (textoConfirmacion != null)
+                textoConfirmacion.text = "¿Quieres equiparte " + equipoComprado.nombre + " ahora?";
+
+            botonConfirmarSi.onClick.RemoveAllListeners();
+            botonConfirmarNo.onClick.RemoveAllListeners();
+
+            botonConfirmarSi.onClick.AddListener(() =>
+            {
+                datosRyo.EquiparObjeto(equipoComprado);
+                MostrarInfo(equipoComprado.nombre, "¡Equipado!", "Oro restante: " + datosRyo.oro + "G");
+                if (panelConfirmacion != null) panelConfirmacion.SetActive(false);
+            });
+
+            botonConfirmarNo.onClick.AddListener(() =>
+            {
+                datosRyo.armarioEquipo.Add(equipoComprado);
+                MostrarInfo(equipoComprado.nombre, "¡Guardado en el armario!", "Oro restante: " + datosRyo.oro + "G");
+                if (panelConfirmacion != null) panelConfirmacion.SetActive(false);
+            });
+        }
     }
 
     // ── Botón Vender → abre confirmación ──────────────────────
