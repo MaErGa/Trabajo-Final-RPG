@@ -18,6 +18,7 @@ public class MovimientoMapa : MonoBehaviour
 
     public static Vector3 posicionRetorno;
     public static bool vieneDeCombate = false;
+    public static string escenaOrigen = "";
 
     private bool estaCaminando = false;
     private bool iniciandoCombate = false;
@@ -29,6 +30,11 @@ public class MovimientoMapa : MonoBehaviour
             transform.position = posicionRetorno;
             vieneDeCombate = false;
         }
+        else if (SistemaGuardado.instancia != null && SistemaGuardado.instancia.hayPosicionGuardada)
+        {
+            SistemaGuardado.instancia.AplicarPosicionJugador();
+        }
+
         if (panelTransicion != null) panelTransicion.alpha = 0;
     }
 
@@ -79,6 +85,7 @@ public class MovimientoMapa : MonoBehaviour
             enemigoSeleccionado = posiblesEnemigos[indice];
             posicionRetorno = transform.position;
             vieneDeCombate = true;
+            escenaOrigen = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
             StartCoroutine(TransicionBatalla());
         }

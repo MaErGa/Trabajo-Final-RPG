@@ -34,6 +34,12 @@ public class BattleManager : MonoBehaviour
     [Header("Transición")]
     public CanvasGroup panelTransicion;
 
+    [Header("Fondo de Batalla")]
+    public UnityEngine.UI.Image imagenFondo;
+    public Sprite fondoUnderworld;
+    public Sprite fondoBosque;
+    public Sprite fondoDefecto;
+
     [Header("Sonidos de Combate")]
     public AudioClip sonidoAtaqueJugador;       // golpe espada
     public AudioClip sonidoAtaqueEnemigo;       // golpe enemigo
@@ -79,6 +85,25 @@ public class BattleManager : MonoBehaviour
         }
 
         if (panelTransicion != null) panelTransicion.alpha = 0;
+
+        // Asignar fondo según la escena de origen
+        Debug.Log("Escena origen: '" + MovimientoMapa.escenaOrigen + "'");
+        if (imagenFondo != null)
+        {
+            switch (MovimientoMapa.escenaOrigen)
+            {
+                case "Underworld":
+                case "UnderWorld":
+                    if (fondoUnderworld != null) imagenFondo.sprite = fondoUnderworld;
+                    break;
+                case "Bosque":
+                    if (fondoBosque != null) imagenFondo.sprite = fondoBosque;
+                    break;
+                default:
+                    if (fondoDefecto != null) imagenFondo.sprite = fondoDefecto;
+                    break;
+            }
+        }
         if (textoMensajes != null) textoMensajes.text = "";
 
         if (datosRyo != null)
