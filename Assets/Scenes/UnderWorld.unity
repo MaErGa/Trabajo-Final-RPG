@@ -145246,7 +145246,7 @@ Transform:
   m_GameObject: {fileID: 372427507}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.27, y: 0.25, z: 0.51267666}
+  m_LocalPosition: {x: 0.27, y: 0.25, z: 0.051}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -145306,10 +145306,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 372427507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a30bd99d2017f83488ce5926ea70ca39, type: 3}
+  m_Script: {fileID: 11500000, guid: 002a093ac597c1e4495b0ca687d6b05e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   escenaDestino: Bosque
+  panelTransicion: {fileID: 0}
+  velocidadFade: 2
 --- !u!1 &380168125
 GameObject:
   m_ObjectHideFlags: 0
@@ -147127,7 +147129,7 @@ Transform:
   m_GameObject: {fileID: 1481222916}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.5, y: 45.7, z: -0.6}
+  m_LocalPosition: {x: -24.5, y: 45.7, z: 0.746}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -148545,13 +148547,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1980690003}
   - component: {fileID: 1980690002}
-  - component: {fileID: 1980690001}
   - component: {fileID: 1980690000}
   - component: {fileID: 1980689999}
   - component: {fileID: 1980689998}
   - component: {fileID: 1980690005}
-  - component: {fileID: 1980690006}
-  - component: {fileID: 1980690007}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -148652,20 +148651,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1980690001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980689997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 998515ae4b74e5645ba9f0abac38c3ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocidadNormal: 5
-  velocidadCarrera: 8
 --- !u!212 &1980690002
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -148727,7 +148712,7 @@ Transform:
   m_GameObject: {fileID: 1980689997}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: -1.97, z: -2.7}
+  m_LocalPosition: {x: 0.1, y: -0.7, z: 0.381}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -148745,72 +148730,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13fecc995b3d6a9469c94062ee992d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadCaminar: 5
-  velocidadCorrer: 6
+  velocidadNormal: 5
+  velocidadCarrera: 8
   probabilidadCombate: 0.1
   posiblesEnemigos:
   - {fileID: 11400000, guid: 79baa7529a7f15246b8a945a98fdc7b3, type: 2}
   - {fileID: 11400000, guid: be6f9f01eee3e534e90968af24d6006a, type: 2}
   panelTransicion: {fileID: 198708939}
---- !u!61 &1980690006
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980689997}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0625, y: 1.625}
-    newSize: {x: 1.25, y: 1.25}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.0625, y: 1.625}
-  m_EdgeRadius: 0
---- !u!114 &1980690007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980689997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 998515ae4b74e5645ba9f0abac38c3ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocidadNormal: 5
-  velocidadCarrera: 6
 --- !u!1 &1999574005
 GameObject:
   m_ObjectHideFlags: 0

@@ -1668,6 +1668,7 @@ GameObject:
   - component: {fileID: 359994400}
   - component: {fileID: 359994399}
   - component: {fileID: 359994398}
+  - component: {fileID: 359994401}
   m_Layer: 0
   m_Name: "compa\xF1ero prota_0"
   m_TagString: Untagged
@@ -1787,6 +1788,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &359994401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359994397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6925ec890f5ab5b4a89ba99d87805147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distancia: 5
+  estadoActual: 0
 --- !u!1 &361645795
 GameObject:
   m_ObjectHideFlags: 0
@@ -4947,7 +4962,7 @@ GameObject:
   - component: {fileID: 726687520}
   - component: {fileID: 726687522}
   m_Layer: 0
-  m_Name: Salia bosque
+  m_Name: Salida bosque
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5022,10 +5037,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 726687518}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a30bd99d2017f83488ce5926ea70ca39, type: 3}
+  m_Script: {fileID: 11500000, guid: 002a093ac597c1e4495b0ca687d6b05e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   escenaDestino: UnderWorld
+  panelTransicion: {fileID: 0}
+  velocidadFade: 2
 --- !u!1 &738303128
 GameObject:
   m_ObjectHideFlags: 0
@@ -11043,52 +11060,6 @@ PolygonCollider2D:
       - {x: 0.58778536, y: -0.80901694}
       - {x: 0.9510565, y: 0.30901712}
   m_UseDelaunayMesh: 0
---- !u!1 &1665997938
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1665997940}
-  - component: {fileID: 1665997939}
-  m_Layer: 0
-  m_Name: "DialogoScriptCompa\xF1ero"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1665997939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1665997938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6925ec890f5ab5b4a89ba99d87805147, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distancia: 5
-  estadoActual: 0
---- !u!4 &1665997940
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1665997938}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.0420866, y: 1.6783772, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1673386082
 GameObject:
   m_ObjectHideFlags: 0
@@ -13510,5 +13481,4 @@ SceneRoots:
   - {fileID: 1241069262}
   - {fileID: 359994400}
   - {fileID: 215613888}
-  - {fileID: 1665997940}
   - {fileID: 191061016}

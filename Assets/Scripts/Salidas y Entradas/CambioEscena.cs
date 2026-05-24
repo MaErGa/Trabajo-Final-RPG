@@ -1,18 +1,45 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class CambioEscena : MonoBehaviour
 {
-    [Tooltip("Nombre de la escena a la que quieres ir (ej: Underworld)")]
-    public string nombreEscenaDestino = "Tienda";
+    [Header("Escena destino")]
+    public string escenaDestino;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    [Header("Transición")]
+    public CanvasGroup panelTransicion;
+    public float velocidadFade = 2f;
+
+    private bool cargando = false;
+
+    void OnTriggerStay2D(Collider2D otro)
     {
-        // Comprobamos si lo que ha entrado en el trigger es el jugador
-        if (collision.CompareTag("Player"))
+        if (cargando) return;
+        if (!otro.CompareTag("Player")) return;
+
+        cargando = true;
+        MovimientoMapa.escenaOrigen = SceneManager.GetActiveScene().name;
+        StartCoroutine(CargarEscena());
+    }
+
+    IEnumerator CargarEscena()
+    {
+        if (panelTransicion != null)
         {
-            // Cargamos la escena del mapa principal
-            SceneManager.LoadScene(nombreEscenaDestino);
+            while (panelTransicion.alpha < 1f)
+            {
+                panelTransicion.alpha += Time.deltaTime * velocidadFade;
+                yield return null;
+            }
         }
+        SceneManager.LoadScene(escenaDestino);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        if (GetComponent<Collider2D>() != null)
+            Gizmos.DrawWireCube(transform.position, GetComponent<Collider2D>().bounds.size);
     }
 }
