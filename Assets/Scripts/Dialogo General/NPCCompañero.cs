@@ -5,14 +5,11 @@ public class NPCCompañero : MonoBehaviour
     [Header("Distancia para interactuar")]
     public float distancia = 5f;
 
-    // Estados: 
-    // 1. Cuando le encuentras al inicio del bosque furioso
-    // 2. Cuando derriban a Robin Odd
-    // 3. Cuando ya se une a tu grupo y se vuelve tu aliado
     public enum EstadoMision { EncuentroBosque, RobinOddDerrotado, YaEsCompañero }
     public EstadoMision estadoActual = EstadoMision.EncuentroBosque;
 
     private Transform jugador;
+    private bool esperandoUnion = false;
 
     private string[] dialogoEncuentro = new string[]
     {
@@ -20,7 +17,8 @@ public class NPCCompañero : MonoBehaviour
         "Esos malnacidos le han robado las provisiones a mi madre y el Cáliz Sagrado al pueblo.",
         "¡No pienso quedarme de brazos cruzados viendo cómo se salen con la suya!",
         "Sé que están escondidos un poco más adelante en la espesura del bosque...",
-        "Oye, tú tienes pinta de saber defenderte. ¡Acompáñame y recuperemos lo que es nuestro!"
+        "Oye, tú tienes pinta de saber defenderte. ¡Acompáñame y recuperemos lo que es nuestro!",
+        "¡Pippin se une a tu grupo!"
     };
 
     private string[] dialogoVictoria = new string[]
@@ -39,28 +37,44 @@ public class NPCCompañero : MonoBehaviour
 
     void Start()
     {
-        // Busca al jugador por su Tag
         GameObject obj = GameObject.FindGameObjectWithTag("Player");
         if (obj != null) jugador = obj.transform;
+
+        // Si ya se unió antes, ocultar sprite directamente
+        if (MovimientoMapa.pippinUnido)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     void Update()
     {
         if (jugador == null) return;
 
-        // Calcula la distancia idéntica al sistema de la madre y el viejo
         float dist = Vector2.Distance(transform.position, jugador.position);
+
+        // Detectar fin de diálogo para hacer desaparecer a Pippin
+        if (esperandoUnion)
+        {
+            if (DialogoManagerCompañero.instancia != null && !DialogoManagerCompañero.instancia.EstaActivo())
+            {
+                esperandoUnion = false;
+                MovimientoMapa.pippinUnido = true;
+                gameObject.SetActive(false); // Desaparece del escenario
+            }
+            return;
+        }
 
         if (dist <= distancia && Input.GetKeyDown(KeyCode.X))
         {
-            // Evita reiniciar si el cuadro de Pippin ya está activo
             if (DialogoManagerCompañero.instancia != null && DialogoManagerCompañero.instancia.EstaActivo()) return;
 
             switch (estadoActual)
             {
                 case EstadoMision.EncuentroBosque:
                     DialogoManagerCompañero.instancia.MostrarDialogo(dialogoEncuentro);
-                    // Opcional: Aquí puedes activar la misión o cambiar el estado tras hablarle
+                    estadoActual = EstadoMision.YaEsCompañero;
+                    esperandoUnion = true; // Espera a que termine el diálogo
                     break;
 
                 case EstadoMision.RobinOddDerrotado:
@@ -74,7 +88,6 @@ public class NPCCompañero : MonoBehaviour
         }
     }
 
-    // Para cambiar el diálogo de Pippin desde otros scripts (por ejemplo, al vencer al jefe)
     public void CambiarEstado(EstadoMision nuevoEstado)
     {
         estadoActual = nuevoEstado;

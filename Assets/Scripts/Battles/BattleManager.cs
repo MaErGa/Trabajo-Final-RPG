@@ -7,6 +7,7 @@ public class BattleManager : MonoBehaviour
 {
     [Header("Asset de Datos")]
     public DatosJugador datosRyo;
+    public DatosPippin datosPippin;
 
     [Header("UI Jugador")]
     public TextMeshProUGUI textoNombreJugador;
@@ -41,20 +42,20 @@ public class BattleManager : MonoBehaviour
     public Sprite fondoDefecto;
 
     [Header("Sonidos de Combate")]
-    public AudioClip sonidoAtaqueJugador;       // golpe espada
-    public AudioClip sonidoAtaqueEnemigo;       // golpe enemigo
-    public AudioClip sonidoGolpeCritico;        // golpe crítico
-    public AudioClip sonidoFallo;               // fallo de ambos
-    public AudioClip sonidoCuracionObjeto;      // usar planta/poción
-    public AudioClip sonidoCuracionMagia;       // Minicuración
-    public AudioClip sonidoMagiaAtaque;         // Minihelada / magia de daño
-    public AudioClip sonidoMagiaDefensa;        // Fortalecimiento
-    public AudioClip sonidoDefender;            // defenderse
-    public AudioClip sonidoEscapeExito;         // escapar con éxito
-    public AudioClip sonidoEscapeFallo;         // no pudo huir
-    public AudioClip sonidoVictoria;            // derrota enemigo
-    public AudioClip sonidoLevelUp;             // subir de nivel
-    public AudioClip sonidoMuerte;              // jugador muere
+    public AudioClip sonidoAtaqueJugador;
+    public AudioClip sonidoAtaqueEnemigo;
+    public AudioClip sonidoGolpeCritico;
+    public AudioClip sonidoFallo;
+    public AudioClip sonidoCuracionObjeto;
+    public AudioClip sonidoCuracionMagia;
+    public AudioClip sonidoMagiaAtaque;
+    public AudioClip sonidoMagiaDefensa;
+    public AudioClip sonidoDefender;
+    public AudioClip sonidoEscapeExito;
+    public AudioClip sonidoEscapeFallo;
+    public AudioClip sonidoVictoria;
+    public AudioClip sonidoLevelUp;
+    public AudioClip sonidoMuerte;
 
     [Header("Música de Batalla")]
     public AudioClip musicaBatalla;
@@ -68,42 +69,43 @@ public class BattleManager : MonoBehaviour
     private bool estaDefendiendoManual = false;
     private int turnosFortalecimiento = 0;
 
+    // Pippin
+    private bool pippinActivo = false;
+    private int hpPippin;
+    private int mpPippin;
+    private bool pippinCaido = false;
+    private int turnosFortalecimientoPippin = 0;
+
     void Start()
     {
-        // Sonidos de efectos
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
 
-        // Música de batalla en loop
         musicaSource = gameObject.AddComponent<AudioSource>();
         musicaSource.loop = true;
         musicaSource.volume = 0.7f;
-        if (musicaBatalla != null)
-        {
-            musicaSource.clip = musicaBatalla;
-            musicaSource.Play();
-        }
+        if (musicaBatalla != null) { musicaSource.clip = musicaBatalla; musicaSource.Play(); }
 
         if (panelTransicion != null) panelTransicion.alpha = 0;
 
-        // Asignar fondo según la escena de origen
         Debug.Log("Escena origen: '" + MovimientoMapa.escenaOrigen + "'");
         if (imagenFondo != null)
         {
+            Sprite spriteElegido = fondoDefecto;
             switch (MovimientoMapa.escenaOrigen)
             {
-                case "Underworld":
-                case "UnderWorld":
-                    if (fondoUnderworld != null) imagenFondo.sprite = fondoUnderworld;
-                    break;
+                case "Underworld": case "UnderWorld":
+                    if (fondoUnderworld != null) spriteElegido = fondoUnderworld; break;
                 case "Bosque":
-                    if (fondoBosque != null) imagenFondo.sprite = fondoBosque;
-                    break;
+                    if (fondoBosque != null) spriteElegido = fondoBosque; break;
                 default:
-                    if (fondoDefecto != null) imagenFondo.sprite = fondoDefecto;
-                    break;
+                    if (fondoDefecto != null) spriteElegido = fondoDefecto; break;
             }
+            imagenFondo.sprite = spriteElegido;
+            imagenFondo.color = Color.white;
+            imagenFondo.enabled = true;
         }
+
         if (textoMensajes != null) textoMensajes.text = "";
 
         if (datosRyo != null)
@@ -113,51 +115,45 @@ public class BattleManager : MonoBehaviour
             mpSesion = datosRyo.mpActual;
         }
 
+        // Pippin solo activo en el Bosque
+        pippinActivo = MovimientoMapa.pippinUnido &&
+                       MovimientoMapa.escenaOrigen == "Bosque" &&
+                       datosPippin != null;
+
+        if (pippinActivo)
+        {
+            hpPippin = datosPippin.hpActual > 0 ? datosPippin.hpActual : datosPippin.hpMax;
+            mpPippin = datosPippin.mpActual;
+            pippinCaido = false;
+        }
+
         if (MovimientoMapa.enemigoSeleccionado != null)
         {
             vidaEnemigo = MovimientoMapa.enemigoSeleccionado.vidaMaxima;
-
-            // Intentar asignar como UI Image (dentro del Canvas)
             UnityEngine.UI.Image imgEnemigo = objetoImagenEnemigo.GetComponent<UnityEngine.UI.Image>();
-            if (imgEnemigo != null)
-            {
-                imgEnemigo.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
-                imgEnemigo.preserveAspect = true;
-            }
+            if (imgEnemigo != null) { imgEnemigo.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo; imgEnemigo.preserveAspect = true; }
             else
             {
-                // Fallback: SpriteRenderer por si el objeto no tiene Image
                 SpriteRenderer sr = objetoImagenEnemigo.GetComponent<SpriteRenderer>();
-                if (sr != null)
-                {
-                    sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
-                    sr.sortingOrder = 20;
-                }
+                if (sr != null) { sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo; sr.sortingOrder = 20; }
             }
-
             objetoImagenEnemigo.SetActive(true);
             textoMensajes.text = "¡Un " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " aparece!";
+            if (pippinActivo) textoMensajes.text += "\n¡Pippin está listo para combatir!";
         }
 
         ActualizarInterfaz();
         turnoActivo = true;
-
         if (panelMagia != null) panelMagia.SetActive(false);
         if (panelObjetos != null) panelObjetos.SetActive(false);
-
         ActualizarConjurosAprendidos();
         ActualizarObjetosDisponibles();
     }
 
-    // ── Utilidad de sonido ────────────────────────────────────
-
     void ReproducirSonido(AudioClip clip)
     {
-        if (audioSource != null && clip != null)
-            audioSource.PlayOneShot(clip);
+        if (audioSource != null && clip != null) audioSource.PlayOneShot(clip);
     }
-
-    // ── Interfaz ──────────────────────────────────────────────
 
     void ActualizarInterfaz()
     {
@@ -171,11 +167,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!turnoActivo) return;
         CerrarMenus();
-        if (panelObjetos != null)
-        {
-            panelObjetos.SetActive(true);
-            ActualizarObjetosDisponibles();
-        }
+        if (panelObjetos != null) { panelObjetos.SetActive(true); ActualizarObjetosDisponibles(); }
     }
 
     public void CerrarMenus()
@@ -187,27 +179,18 @@ public class BattleManager : MonoBehaviour
     public void ActualizarConjurosAprendidos()
     {
         if (botonMinicuracion != null)
-            botonMinicuracion.SetActive(
-                datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel3) && datosRyo.conjuroNivel3 != null);
-
+            botonMinicuracion.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel3) && datosRyo.conjuroNivel3 != null);
         if (botonFortalecimiento != null)
-            botonFortalecimiento.SetActive(
-                datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel5) && datosRyo.conjuroNivel5 != null);
-
+            botonFortalecimiento.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel5) && datosRyo.conjuroNivel5 != null);
         if (botonMinihelada != null)
-            botonMinihelada.SetActive(
-                datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel8) && datosRyo.conjuroNivel8 != null);
+            botonMinihelada.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel8) && datosRyo.conjuroNivel8 != null);
     }
 
     public void ActualizarObjetosDisponibles()
     {
-        if (botonPlanta != null)
-            botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
-        if (botonColaDeConejo != null)
-            botonColaDeConejo.SetActive(datosRyo.colaDeConejo > 0);
+        if (botonPlanta != null) botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
+        if (botonColaDeConejo != null) botonColaDeConejo.SetActive(datosRyo.colaDeConejo > 0);
     }
-
-    // ── Acciones del jugador ──────────────────────────────────
 
     public void AccionUsarPlanta()
     {
@@ -216,10 +199,8 @@ public class BattleManager : MonoBehaviour
         hpSesion = Mathf.Min(hpSesion + 30, datosRyo.hpMax);
         ReproducirSonido(sonidoCuracionObjeto);
         textoMensajes.text = "¡" + datosRyo.nombre + " usa una Planta Medicinal!";
-        CerrarMenus();
-        ActualizarInterfaz();
-        ActualizarObjetosDisponibles();
-        StartCoroutine(TurnoDelEnemigo());
+        CerrarMenus(); ActualizarInterfaz(); ActualizarObjetosDisponibles();
+        StartCoroutine(TurnoPippin());
     }
 
     public void AccionEquiparCola()
@@ -228,17 +209,14 @@ public class BattleManager : MonoBehaviour
         datosRyo.EquiparColaDeConejo();
         string estado = (datosRyo.accesorioEquipado == "Cola de Conejo") ? "equipa" : "desequipa";
         textoMensajes.text = "¡" + datosRyo.nombre + " se " + estado + " la Cola de Conejo!";
-        CerrarMenus();
-        ActualizarInterfaz();
-        StartCoroutine(TurnoDelEnemigo());
+        CerrarMenus(); ActualizarInterfaz();
+        StartCoroutine(TurnoPippin());
     }
 
     public void AccionAtacar()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-
         int dañoBase = Mathf.Max(1, datosRyo.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
-
         if (Random.Range(0, 100) < 5)
         {
             dañoBase *= 2;
@@ -250,16 +228,14 @@ public class BattleManager : MonoBehaviour
             ReproducirSonido(sonidoAtaqueJugador);
             textoMensajes.text = "¡" + datosRyo.nombre + " ataca! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dañoBase + " puntos de daño.";
         }
-
         vidaEnemigo -= dañoBase;
         if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
-        else StartCoroutine(TurnoDelEnemigo());
+        else StartCoroutine(TurnoPippin());
     }
 
     public void AccionMagia(string hechizo)
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
-
         if (hechizo == "Minicuracion")
         {
             ConjuroBase conjuro = datosRyo.conjuroNivel3;
@@ -289,10 +265,9 @@ public class BattleManager : MonoBehaviour
             ReproducirSonido(sonidoMagiaAtaque);
             textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Daño: " + dañoM;
         }
-
         ActualizarInterfaz();
         if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
-        else StartCoroutine(TurnoDelEnemigo());
+        else StartCoroutine(TurnoPippin());
     }
 
     public void AccionDefender()
@@ -303,13 +278,108 @@ public class BattleManager : MonoBehaviour
         textoMensajes.text = "¡" + datosRyo.nombre + " se defiende!";
         if (mpSesion < datosRyo.mpMax) mpSesion += 1;
         ActualizarInterfaz();
-        StartCoroutine(TurnoDelEnemigo());
+        StartCoroutine(TurnoPippin());
     }
 
     public void AccionEscapar()
     {
         if (!turnoActivo) return;
         StartCoroutine(IntentarEscapar());
+    }
+
+    // ── IA de Pippin ──────────────────────────────────────────
+
+    IEnumerator TurnoPippin()
+    {
+        turnoActivo = false;
+        yield return new WaitForSeconds(1.0f);
+
+        if (!pippinActivo || pippinCaido || vidaEnemigo <= 0)
+        {
+            StartCoroutine(TurnoDelEnemigo());
+            yield break;
+        }
+
+        string accion = DecidirAccionPippin();
+        yield return new WaitForSeconds(0.2f);
+
+        switch (accion)
+        {
+            case "curar_jugador":
+                ConjuroBase cur = datosPippin.conjuroMinicuracion;
+                mpPippin -= cur.costeMP;
+                int curJ = cur.valorEfecto + datosPippin.terapeucidad;
+                hpSesion = Mathf.Min(hpSesion + curJ, datosRyo.hpMax);
+                ReproducirSonido(sonidoCuracionMagia);
+                textoMensajes.text = "¡Pippin lanza Minicuración sobre " + datosRyo.nombre + "! +" + curJ + " HP";
+                ActualizarInterfaz();
+                break;
+
+            case "curar_pippin":
+                ConjuroBase curP = datosPippin.conjuroMinicuracion;
+                mpPippin -= curP.costeMP;
+                int curPP = curP.valorEfecto + datosPippin.terapeucidad;
+                hpPippin = Mathf.Min(hpPippin + curPP, datosPippin.hpMax);
+                ReproducirSonido(sonidoCuracionMagia);
+                textoMensajes.text = "¡Pippin se lanza Minicuración! +" + curPP + " HP";
+                break;
+
+            case "fortalecer_jugador":
+                ConjuroBase fort = datosPippin.conjuroFortalecimiento;
+                mpPippin -= fort.costeMP;
+                datosRyo.bonoDefensaTemporal += fort.valorEfecto;
+                turnosFortalecimiento = Mathf.Max(turnosFortalecimiento, fort.duracionTurnos);
+                ReproducirSonido(sonidoMagiaDefensa);
+                textoMensajes.text = "¡Pippin lanza Fortalecimiento sobre " + datosRyo.nombre + "! Defensa +" + fort.valorEfecto;
+                ActualizarInterfaz();
+                break;
+
+            case "fortalecer_pippin":
+                ConjuroBase fortP = datosPippin.conjuroFortalecimiento;
+                mpPippin -= fortP.costeMP;
+                datosPippin.bonoDefensaTemporal += fortP.valorEfecto;
+                turnosFortalecimientoPippin = fortP.duracionTurnos;
+                ReproducirSonido(sonidoMagiaDefensa);
+                textoMensajes.text = "¡Pippin se lanza Fortalecimiento! Defensa +" + fortP.valorEfecto;
+                break;
+
+            case "minihelada":
+                ConjuroBase helada = datosPippin.conjuroMinihelada;
+                mpPippin -= helada.costeMP;
+                int dH = helada.valorEfecto + datosPippin.fuerzaMagica;
+                vidaEnemigo -= dH;
+                ReproducirSonido(sonidoMagiaAtaque);
+                textoMensajes.text = "¡Pippin lanza Minihelada! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dH + " de daño.";
+                break;
+
+            default: // atacar
+                int dP = Mathf.Max(1, datosPippin.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
+                vidaEnemigo -= dP;
+                ReproducirSonido(sonidoAtaqueJugador);
+                textoMensajes.text = "¡Pippin ataca! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dP + " de daño.";
+                break;
+        }
+
+        yield return new WaitForSeconds(1.2f);
+        if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
+        else StartCoroutine(TurnoDelEnemigo());
+    }
+
+    string DecidirAccionPippin()
+    {
+        float pctJugador = (float)hpSesion / datosRyo.hpMax;
+        float pctPippin  = (float)hpPippin  / datosPippin.hpMax;
+        bool tieneCur  = datosPippin.conjuroMinicuracion     != null;
+        bool tieneFort = datosPippin.conjuroFortalecimiento  != null;
+        bool tieneHel  = datosPippin.conjuroMinihelada       != null;
+
+        if (tieneCur && pctJugador < 0.35f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_jugador";
+        if (tieneCur && pctPippin  < 0.30f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_pippin";
+        if (tieneFort && turnosFortalecimiento <= 0      && mpPippin >= datosPippin.conjuroFortalecimiento.costeMP) return "fortalecer_jugador";
+        if (tieneFort && turnosFortalecimientoPippin <= 0 && mpPippin >= datosPippin.conjuroFortalecimiento.costeMP) return "fortalecer_pippin";
+        if (tieneCur && pctJugador < 0.60f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_jugador";
+        if (tieneHel && mpPippin >= datosPippin.conjuroMinihelada.costeMP) return "minihelada";
+        return "atacar";
     }
 
     // ── Corrutinas ────────────────────────────────────────────
@@ -319,18 +389,16 @@ public class BattleManager : MonoBehaviour
         turnoActivo = false;
         textoMensajes.text = datosRyo.nombre + " intenta huir...";
         yield return new WaitForSeconds(1.2f);
-
-        int agiJugador = datosRyo.AgilidadTotal;
-        int agiEnemigo = MovimientoMapa.enemigoSeleccionado.agilidad;
-        int probabilidad = Mathf.RoundToInt((float)agiJugador / (agiJugador + agiEnemigo) * 100);
-
-        if (Random.Range(0, 100) < probabilidad)
+        int agiJ = datosRyo.AgilidadTotal;
+        int agiE = MovimientoMapa.enemigoSeleccionado.agilidad;
+        int prob = Mathf.RoundToInt((float)agiJ / (agiJ + agiE) * 100);
+        if (Random.Range(0, 100) < prob)
         {
             if (musicaSource != null) musicaSource.Stop();
             ReproducirSonido(sonidoEscapeExito);
             textoMensajes.text = "¡" + datosRyo.nombre + " ha escapado!";
             yield return new WaitForSeconds(1.5f);
-            GuardarEstadoRyo();
+            GuardarEstado();
             StartCoroutine(CargarMapa());
         }
         else
@@ -346,13 +414,10 @@ public class BattleManager : MonoBehaviour
     {
         if (panelTransicion != null)
         {
-            while (panelTransicion.alpha < 1)
-            {
-                panelTransicion.alpha += Time.deltaTime * 2f;
-                yield return null;
-            }
+            while (panelTransicion.alpha < 1) { panelTransicion.alpha += Time.deltaTime * 2f; yield return null; }
         }
-        SceneManager.LoadScene("Underworld");
+        string escenaDestino = !string.IsNullOrEmpty(MovimientoMapa.escenaOrigen) ? MovimientoMapa.escenaOrigen : "Underworld";
+        SceneManager.LoadScene(escenaDestino);
     }
 
     IEnumerator VictoriaAutomatica()
@@ -370,38 +435,21 @@ public class BattleManager : MonoBehaviour
         string mensajeVictoria = "¡Has derrotado al " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + "!";
         string mensajeItem = "";
 
-        // Looteo de items consumibles
         foreach (var entrada in MovimientoMapa.enemigoSeleccionado.tablaLoot)
-        {
             if (entrada.item != null && Random.Range(0, 100) < entrada.probabilidad)
-            {
-                datosRyo.mochilaItems.Add(entrada.item);
-                mensajeItem += "\n¡" + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " ha soltado " + entrada.item.nombre + "!";
-            }
-        }
+            { datosRyo.mochilaItems.Add(entrada.item); mensajeItem += "\n¡Soltó " + entrada.item.nombre + "!"; }
 
-        // Looteo de equipo y accesorios
         foreach (var entrada in MovimientoMapa.enemigoSeleccionado.tablaLootEquipo)
-        {
             if (entrada.equipo != null && Random.Range(0, 100) < entrada.probabilidad)
-            {
-                datosRyo.armarioEquipo.Add(entrada.equipo);
-                mensajeItem += "\n¡" + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " ha soltado " + entrada.equipo.nombre + "!";
-            }
-        }
+            { datosRyo.armarioEquipo.Add(entrada.equipo); mensajeItem += "\n¡Soltó " + entrada.equipo.nombre + "!"; }
 
         string levelUpTexto = "";
         bool subioNivel = false;
-        while (datosRyo.experiencia >= datosRyo.expSiguienteNivel)
-        {
-            levelUpTexto += ComprobarLevelUp();
-            subioNivel = true;
-        }
-
+        while (datosRyo.experiencia >= datosRyo.expSiguienteNivel) { levelUpTexto += ComprobarLevelUp(); subioNivel = true; }
         if (subioNivel) ReproducirSonido(sonidoLevelUp);
 
         ActualizarConjurosAprendidos();
-        GuardarEstadoRyo();
+        GuardarEstado();
         textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + mensajeItem + levelUpTexto;
         yield return new WaitForSeconds(4f);
         StartCoroutine(CargarMapa());
@@ -414,23 +462,27 @@ public class BattleManager : MonoBehaviour
         datosRyo.mpMax += 5;
         datosRyo.fuerza += 3;
         hpSesion = datosRyo.hpMax;
-
         string mensajeConjuro = datosRyo.AprenderConjurosPorNivel();
-
         if (datosRyo.nivel - 1 < datosRyo.tablaExpPilgrim.Length)
             datosRyo.expSiguienteNivel = datosRyo.tablaExpPilgrim[datosRyo.nivel - 1];
         else
             datosRyo.expSiguienteNivel = Mathf.RoundToInt(datosRyo.expSiguienteNivel * 1.5f);
-
         return "\n¡" + datosRyo.nombre + " sube al nivel " + datosRyo.nivel + "!" + mensajeConjuro;
     }
 
-    void GuardarEstadoRyo()
+    void GuardarEstado()
     {
         datosRyo.hpActual = hpSesion;
         datosRyo.mpActual = mpSesion;
+        if (pippinActivo && datosPippin != null)
+        {
+            datosPippin.hpActual = hpPippin;
+            datosPippin.mpActual = mpPippin;
+            datosPippin.RecuperarPostCombate();
+        }
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(datosRyo);
+        if (datosPippin != null) UnityEditor.EditorUtility.SetDirty(datosPippin);
 #endif
     }
 
@@ -439,61 +491,79 @@ public class BattleManager : MonoBehaviour
         turnoActivo = false;
         yield return new WaitForSeconds(1.2f);
 
-        // Descontar turno de Fortalecimiento
         if (turnosFortalecimiento > 0)
         {
             turnosFortalecimiento--;
-            if (turnosFortalecimiento <= 0)
-            {
-                datosRyo.bonoDefensaTemporal = 0;
-                textoMensajes.text = "El efecto de Fortalecimiento ha terminado.";
-                yield return new WaitForSeconds(0.8f);
-            }
+            if (turnosFortalecimiento <= 0) { datosRyo.bonoDefensaTemporal = 0; textoMensajes.text = "El Fortalecimiento del jugador ha terminado."; yield return new WaitForSeconds(0.8f); }
+        }
+        if (turnosFortalecimientoPippin > 0)
+        {
+            turnosFortalecimientoPippin--;
+            if (turnosFortalecimientoPippin <= 0) datosPippin.bonoDefensaTemporal = 0;
         }
 
-        int defTotal = datosRyo.DefensaTotal;
-        int daño = Mathf.Max(1, MovimientoMapa.enemigoSeleccionado.dañoAtaque - defTotal);
+        bool atacarPippin = pippinActivo && !pippinCaido && Random.Range(0, 2) == 0;
 
-        if (Random.Range(0, 100) < 5)
+        if (atacarPippin)
         {
-            daño = Mathf.RoundToInt(MovimientoMapa.enemigoSeleccionado.dañoAtaque * 1.5f);
-            ReproducirSonido(sonidoGolpeCritico);
-            textoMensajes.text = "¡Golpe excelente! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
-        }
-        else
-        {
-            if (estaDefendiendoManual)
+            int defP = datosPippin.DefensaTotal;
+            int dañoP = Mathf.Max(1, MovimientoMapa.enemigoSeleccionado.dañoAtaque - defP);
+            if (Random.Range(0, 100) < 5)
             {
-                daño = 1;
-                estaDefendiendoManual = false;
-                ReproducirSonido(sonidoDefender);
+                dañoP = Mathf.RoundToInt(MovimientoMapa.enemigoSeleccionado.dañoAtaque * 1.5f);
+                ReproducirSonido(sonidoGolpeCritico);
+                textoMensajes.text = "¡Golpe excelente a Pippin! Recibe " + dañoP + " de daño.";
             }
             else
             {
                 ReproducirSonido(sonidoAtaqueEnemigo);
+                textoMensajes.text = "¡El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " ataca a Pippin! Recibe " + dañoP + " de daño.";
             }
-            textoMensajes.text = "¡El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " ataca! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
+            hpPippin -= dañoP;
+            if (hpPippin <= 0)
+            {
+                hpPippin = 0; pippinCaido = true;
+                textoMensajes.text += "\n¡Pippin ha caído! Se recuperará tras el combate.";
+                yield return new WaitForSeconds(1.5f);
+            }
         }
-
-        hpSesion -= daño;
-        ActualizarInterfaz();
-
-        if (hpSesion <= 0)
+        else
         {
-            if (musicaSource != null) musicaSource.Stop();
-            ReproducirSonido(sonidoMuerte);
-            int oroPerdido = datosRyo.oro / 2;
-            datosRyo.oro -= oroPerdido;
-            GuardarEstadoRyo();
-            textoMensajes.text = "¡" + datosRyo.nombre + " ha perecido! Has perdido " + oroPerdido + " G.";
-            yield return new WaitForSeconds(2f);
-            StartCoroutine(CargarMapa());
+            int defTotal = datosRyo.DefensaTotal;
+            int daño = Mathf.Max(1, MovimientoMapa.enemigoSeleccionado.dañoAtaque - defTotal);
+            if (Random.Range(0, 100) < 5)
+            {
+                daño = Mathf.RoundToInt(MovimientoMapa.enemigoSeleccionado.dañoAtaque * 1.5f);
+                ReproducirSonido(sonidoGolpeCritico);
+                textoMensajes.text = "¡Golpe excelente! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
+            }
+            else
+            {
+                if (estaDefendiendoManual) { daño = 1; estaDefendiendoManual = false; ReproducirSonido(sonidoDefender); }
+                else ReproducirSonido(sonidoAtaqueEnemigo);
+                textoMensajes.text = "¡El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " ataca! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
+            }
+            hpSesion -= daño;
+            ActualizarInterfaz();
+            if (hpSesion <= 0)
+            {
+                if (musicaSource != null) musicaSource.Stop();
+                ReproducirSonido(sonidoMuerte);
+                int oroPerdido = datosRyo.oro / 2;
+                datosRyo.oro -= oroPerdido;
+                GuardarEstado();
+                textoMensajes.text = "¡" + datosRyo.nombre + " ha perecido! Has perdido " + oroPerdido + " G.";
+                yield return new WaitForSeconds(2f);
+                StartCoroutine(CargarMapa());
+                yield break;
+            }
         }
-        else turnoActivo = true;
+        turnoActivo = true;
     }
 
     private void OnDestroy()
     {
         if (datosRyo != null) datosRyo.ResetearBonos();
+        if (datosPippin != null) datosPippin.ResetearBonos();
     }
 }

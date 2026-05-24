@@ -20,6 +20,9 @@ public class MovimientoMapa : MonoBehaviour
     public static bool vieneDeCombate = false;
     public static string escenaOrigen = "";
 
+    // ── Pippin ──────────────────────────────────────────────────
+    public static bool pippinUnido = false;
+
     private bool estaCaminando = false;
     private bool iniciandoCombate = false;
 
@@ -46,8 +49,6 @@ public class MovimientoMapa : MonoBehaviour
     void Update()
     {
         if (iniciandoCombate) return;
-
-        // --- BLOQUEO DE PAUSA ---
         if (EstaEnPausa()) return;
 
         float moveX = Input.GetAxisRaw("Horizontal");
@@ -85,7 +86,7 @@ public class MovimientoMapa : MonoBehaviour
             enemigoSeleccionado = posiblesEnemigos[indice];
             posicionRetorno = transform.position;
             vieneDeCombate = true;
-            escenaOrigen = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            escenaOrigen = SceneManager.GetActiveScene().name;
 
             StartCoroutine(TransicionBatalla());
         }

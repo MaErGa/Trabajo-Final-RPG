@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a112952392addc458adacaaf4a8001d, type: 3}
+  m_Name: DatosPippin
+  m_EditorClassIdentifier: 
+  nombre: Pippin
+  spritePersonaje: {fileID: -432793087, guid: 243ba1269d1cd72498a5adccc632c90f, type: 3}
+  nivel: 8
+  hpMax: 140
+  hpActual: 140
+  mpMax: 25
+  mpActual: 25
+  fuerza: 25
+  defensa: 58
+  fuerzaMagica: 35
+  terapeucidad: 20
+  armaEquipada: {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  escudoEquipado: {fileID: 11400000, guid: ebea8513bdf6cf94da27f7ad4483596d, type: 2}
+  armaduraEquipada: {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
+  conjuroMinicuracion: {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
+  conjuroFortalecimiento: {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
+  conjuroMinihelada: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
+  bonoDefensaTemporal: 0

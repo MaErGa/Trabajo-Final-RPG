@@ -4875,6 +4875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   datosRyo: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
+  datosPippin: {fileID: 11400000, guid: 87a0e14e80634304797cf09e5ca295b5, type: 2}
   textoNombreJugador: {fileID: 1292626240}
   textoMensajes: {fileID: 1068091029}
   textoHPJugador: {fileID: 2095066726}
