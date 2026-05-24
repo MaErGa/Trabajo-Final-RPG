@@ -116,13 +116,25 @@ public class BattleManager : MonoBehaviour
         if (MovimientoMapa.enemigoSeleccionado != null)
         {
             vidaEnemigo = MovimientoMapa.enemigoSeleccionado.vidaMaxima;
-            SpriteRenderer sr = objetoImagenEnemigo.GetComponent<SpriteRenderer>();
-            if (sr != null)
+
+            // Intentar asignar como UI Image (dentro del Canvas)
+            UnityEngine.UI.Image imgEnemigo = objetoImagenEnemigo.GetComponent<UnityEngine.UI.Image>();
+            if (imgEnemigo != null)
             {
-                sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
-                sr.sortingOrder = 20;
-                objetoImagenEnemigo.transform.localScale = new Vector3(5f, 5f, 1f);
+                imgEnemigo.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
+                imgEnemigo.preserveAspect = true;
             }
+            else
+            {
+                // Fallback: SpriteRenderer por si el objeto no tiene Image
+                SpriteRenderer sr = objetoImagenEnemigo.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.sprite = MovimientoMapa.enemigoSeleccionado.imagenEnemigo;
+                    sr.sortingOrder = 20;
+                }
+            }
+
             objetoImagenEnemigo.SetActive(true);
             textoMensajes.text = "¡Un " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " aparece!";
         }
