@@ -15,13 +15,13 @@ MonoBehaviour:
   nombre: Retro
   nivel: 1
   hpMax: 20
-  hpActual: 20
+  hpActual: -7
   mpMax: 5
   mpActual: 5
   fuerza: 8
   agilidad: 6
   defensa: 2
-  oro: 50
+  oro: 4
   experiencia: 0
   fuerzaMagica: 5
   terapeucidad: 4
@@ -47,6 +47,20 @@ MonoBehaviour:
   conjuroNivel5: {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
   mochilaItems: []
-  armarioEquipo: []
+  armarioEquipo:
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
   plantasMedicinales: 0
   colaDeConejo: 0
