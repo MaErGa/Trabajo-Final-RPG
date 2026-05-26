@@ -27,6 +27,8 @@ public class BattleManager : MonoBehaviour
     public GameObject botonMinicuracion;
     public GameObject botonFortalecimiento;
     public GameObject botonMinihelada;
+    public GameObject botonMiniincendio;
+
 
     [Header("Botones de Objetos")]
     public GameObject botonPlanta;
@@ -184,6 +186,10 @@ public class BattleManager : MonoBehaviour
             botonFortalecimiento.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel5) && datosRyo.conjuroNivel5 != null);
         if (botonMinihelada != null)
             botonMinihelada.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel8) && datosRyo.conjuroNivel8 != null);
+        
+        // CORREGIDO: Ahora verifica si el scriptable object contiene el conjuro de nivel 10
+        if (botonMiniincendio != null)
+            botonMiniincendio.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel10) && datosRyo.conjuroNivel10 != null); 
     }
 
     public void ActualizarObjetosDisponibles()
@@ -263,6 +269,19 @@ public class BattleManager : MonoBehaviour
             int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
             vidaEnemigo -= dañoM;
             ReproducirSonido(sonidoMagiaAtaque);
+            textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "!";
+        }
+        else if (hechizo == "Miniincendio")
+        {
+            // CORREGIDO: Ahora usa el sistema dinámico de ScriptableObjects igual que los otros hechizos
+            ConjuroBase conjuro = datosRyo.conjuroNivel10;
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
+            
+            mpSesion -= conjuro.costeMP;
+            int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
+            vidaEnemigo -= dañoM;
+            
+            ReproducirSonido(sonidoMagiaAtaque);
             textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Daño: " + dañoM;
         }
         ActualizarInterfaz();
@@ -300,10 +319,10 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        string accion = DecidirAccionPippin();
+        string action = DecidirAccionPippin();
         yield return new WaitForSeconds(0.2f);
 
-        switch (accion)
+        switch (action)
         {
             case "curar_jugador":
                 ConjuroBase cur = datosPippin.conjuroMinicuracion;
@@ -352,6 +371,14 @@ public class BattleManager : MonoBehaviour
                 textoMensajes.text = "¡Pippin lanza Minihelada! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dH + " de daño.";
                 break;
 
+            case "miniincendio":
+                // CORREGIDO: Quitamos la redefinición de 'int dH' y usamos una nueva variable 'dI'
+                int dI = 20 + datosPippin.fuerzaMagica; 
+                vidaEnemigo -= dI;
+                ReproducirSonido(sonidoMagiaAtaque);
+                textoMensajes.text = "¡Pippin lanza Miniincendio! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dI + " de daño.";
+                break;
+
             default: // atacar
                 int dP = Mathf.Max(1, datosPippin.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
                 vidaEnemigo -= dP;
@@ -379,6 +406,7 @@ public class BattleManager : MonoBehaviour
         if (tieneFort && turnosFortalecimientoPippin <= 0 && mpPippin >= datosPippin.conjuroFortalecimiento.costeMP) return "fortalecer_pippin";
         if (tieneCur && pctJugador < 0.60f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_jugador";
         if (tieneHel && mpPippin >= datosPippin.conjuroMinihelada.costeMP) return "minihelada";
+        
         return "atacar";
     }
 

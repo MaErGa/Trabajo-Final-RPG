@@ -54,6 +54,7 @@ public class DatosJugador : ScriptableObject
     public ConjuroBase conjuroNivel3;
     public ConjuroBase conjuroNivel5;
     public ConjuroBase conjuroNivel8;
+    public ConjuroBase conjuroNivel10; // ¡AÑADIDO! Ranura para Miniincendio
 
     [Header("Inventario Dinámico")]
     public List<ItemConsumible> mochilaItems = new List<ItemConsumible>();
@@ -86,13 +87,9 @@ public class DatosJugador : ScriptableObject
     /// </summary>
     public void ActualizarEstadisticasPorNivel()
     {
-        // Limitamos el nivel entre 1 y 10
         nivel = Mathf.Clamp(nivel, 1, 10);
-
-        // Factor de interpolación (0 a nivel 1, 1 a nivel 10)
         float t = (nivel - 1) / 9f;
 
-        // Escalados Base basados en tus valores de nivel 1 y los objetivos de nivel 10
         hpMax = Mathf.RoundToInt(Mathf.Lerp(20, 110, t));
         mpMax = Mathf.RoundToInt(Mathf.Lerp(5, 50, t));
         
@@ -100,13 +97,11 @@ public class DatosJugador : ScriptableObject
         agilidad = Mathf.RoundToInt(Mathf.Lerp(6, 24, t)); 
         defensa = Mathf.RoundToInt(Mathf.Lerp(2, 22, t));  
 
-        // Actualizar la experiencia requerida según tu tabla
         if (tablaExpPilgrim != null && (nivel - 1) < tablaExpPilgrim.Length)
         {
             expSiguienteNivel = tablaExpPilgrim[nivel - 1];
         }
         
-        // Auto-aprender conjuros de forma interactiva en el editor
         AprenderConjurosPorNivel();
     }
 
@@ -129,6 +124,12 @@ public class DatosJugador : ScriptableObject
         {
             conjurosAprendidos.Add(conjuroNivel8);
             mensaje += "\n¡Has aprendido " + conjuroNivel8.nombreConjuro + "!";
+        }
+        // ¡AÑADIDO! Condición para aprender el conjuro de nivel 10
+        if (nivel >= 10 && conjuroNivel10 != null && !conjurosAprendidos.Contains(conjuroNivel10))
+        {
+            conjurosAprendidos.Add(conjuroNivel10);
+            mensaje += "\n¡Has aprendido " + conjuroNivel10.nombreConjuro + "!";
         }
 
         return mensaje;
@@ -214,14 +215,12 @@ public class DatosJugador : ScriptableObject
         accesorioEquipado = "Ninguno";
         cascoEquipado = "Ninguno";
 
-        // Equipar el equipo inicial
         armaEquipadaAsset      = armaInicial;
         armaduraEquipadaAsset  = armaduraInicial;
         escudoEquipadoAsset    = null;
         cascoEquipadoAsset     = null;
         accesorioEquipadoAsset = null;
 
-        // Nombres antiguos
         armaEquipada     = armaInicial     != null ? armaInicial.nombre     : "Ninguno";
         armaduraEquipada = armaduraInicial != null ? armaduraInicial.nombre : "Ninguno";
         escudoEquipado   = "Ninguno";
