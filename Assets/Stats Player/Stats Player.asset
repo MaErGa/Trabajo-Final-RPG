@@ -17,12 +17,12 @@ MonoBehaviour:
   hpMax: 110
   hpActual: 110
   mpMax: 50
-  mpActual: 5
+  mpActual: 3
   fuerza: 35
   agilidad: 24
   defensa: 22
-  oro: 58
-  experiencia: 1847
+  oro: 66
+  experiencia: 1853
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0

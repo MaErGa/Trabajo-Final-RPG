@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cce8cc71b8e0fb04da556ec45b9ec5f5, type: 3}
-  m_Name: MiniIncendio
+  m_Name: Miniincendio
   m_EditorClassIdentifier: 
   nombreConjuro: Miniincendio
   descripcion: "Da\xF1a a un grupo de enemigos caus\xE1ndoles entre 25 de da\xF1o.
