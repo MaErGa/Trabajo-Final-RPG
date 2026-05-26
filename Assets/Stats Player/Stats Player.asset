@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Stats Player
   m_EditorClassIdentifier: 
   nombre: Retro
-  nivel: 11
-  hpMax: 120
-  hpActual: 120
-  mpMax: 55
+  nivel: 12
+  hpMax: 130
+  hpActual: 130
+  mpMax: 60
   mpActual: 5
-  fuerza: 38
+  fuerza: 41
   agilidad: 24
   defensa: 22
-  oro: 61
-  experiencia: 2807
+  oro: 64
+  experiencia: 4206
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   escudoEquipado: Ninguno
   cascoEquipado: Ninguno
   accesorioEquipado: Ninguno
-  expSiguienteNivel: 4197
+  expSiguienteNivel: 6296
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
   conjurosAprendidos:
   - {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
