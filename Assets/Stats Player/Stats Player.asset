@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: Stats Player
   m_EditorClassIdentifier: 
   nombre: Retro
-  nivel: 1
-  hpMax: 20
-  hpActual: -7
-  mpMax: 5
+  nivel: 10
+  hpMax: 30
+  hpActual: 30
+  mpMax: 10
   mpActual: 5
-  fuerza: 8
+  fuerza: 11
   agilidad: 6
   defensa: 2
-  oro: 4
-  experiencia: 0
+  oro: 2805
+  experiencia: 18
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
   bonoAtaqueTemporal: 0
   bonoAgilidadTemporal: 0
-  armaEquipadaAsset: {fileID: 0}
-  armaduraEquipadaAsset: {fileID: 0}
+  armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
+  armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
   escudoEquipadoAsset: {fileID: 0}
   cascoEquipadoAsset: {fileID: 0}
   accesorioEquipadoAsset: {fileID: 0}
@@ -40,27 +40,16 @@ MonoBehaviour:
   escudoEquipado: Ninguno
   cascoEquipado: Ninguno
   accesorioEquipado: Ninguno
-  expSiguienteNivel: 14
+  expSiguienteNivel: 2798
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
-  conjurosAprendidos: []
+  conjurosAprendidos:
+  - {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
+  - {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
+  - {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
   conjuroNivel3: {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
   conjuroNivel5: {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
   mochilaItems: []
-  armarioEquipo:
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  armarioEquipo: []
   plantasMedicinales: 0
   colaDeConejo: 0

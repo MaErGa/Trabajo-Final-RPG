@@ -21,4 +21,6 @@ MonoBehaviour:
   expAlMorir: 72
   oroAlMorir: 7
   tablaLoot: []
-  tablaLootEquipo: []
+  tablaLootEquipo:
+  - equipo: {fileID: 0}
+    probabilidad: 0
