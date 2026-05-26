@@ -11,10 +11,6 @@ public class Cofre : MonoBehaviour
     public EquipoBase equipoContenido;
     public ItemConsumible itemContenido;
 
-    [Header("Sprites")]
-    public Sprite spriteCerrado;
-    public Sprite spriteAbierto;
-
     [Header("Referencia al jugador")]
     public DatosJugador datosJugador;
 
@@ -28,15 +24,11 @@ public class Cofre : MonoBehaviour
 
     private bool abierto = false;
     private bool esperandoRespuesta = false;
-    private SpriteRenderer sr;
     private Transform jugador;
 
     void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-        if (sr != null && spriteCerrado != null) sr.sprite = spriteCerrado;
-
-        // Ocultar UI al inicio — correcto
+        // Ocultar UI al inicio
         if (panelDialogo != null)
             panelDialogo.SetActive(false);
         else
@@ -82,9 +74,6 @@ public class Cofre : MonoBehaviour
         abierto = true;
         dialogoActivo = true;
 
-        if (sr != null && spriteAbierto != null)
-            sr.sprite = spriteAbierto;
-
         if (equipoContenido != null)
         {
             if (datosJugador != null)
@@ -111,15 +100,13 @@ public class Cofre : MonoBehaviour
 
     IEnumerator MostrarDialogoEquipo()
     {
-        // Mostrar panel
         if (panelDialogo != null) panelDialogo.SetActive(true);
-        else { Debug.LogError("[Cofre] panelDialogo es null en MostrarDialogoEquipo"); yield break; }
+        else { Debug.LogError("[Cofre] panelDialogo es null"); yield break; }
 
         textoDialogo.text = "¡Encontraste " + equipoContenido.nombre + "!\n" + equipoContenido.descripcion;
 
         yield return StartCoroutine(EsperarInput());
 
-        // Segunda pantalla: pregunta equipar
         textoDialogo.text = "¿Deseas equipar " + equipoContenido.nombre + "?";
 
         if (botonesEquipar != null)
@@ -133,13 +120,12 @@ public class Cofre : MonoBehaviour
         }
 
         esperandoRespuesta = true;
-        // El flujo continúa desde EquiparSi() o EquiparNo()
     }
 
     IEnumerator MostrarDialogoItem()
     {
         if (panelDialogo != null) panelDialogo.SetActive(true);
-        else { Debug.LogError("[Cofre] panelDialogo es null en MostrarDialogoItem"); yield break; }
+        else { Debug.LogError("[Cofre] panelDialogo es null"); yield break; }
 
         textoDialogo.text = "¡Encontraste " + itemContenido.nombre + "!\n" + itemContenido.descripcion;
         yield return StartCoroutine(EsperarInput());
@@ -149,7 +135,7 @@ public class Cofre : MonoBehaviour
     IEnumerator MostrarMensaje(string mensaje)
     {
         if (panelDialogo != null) panelDialogo.SetActive(true);
-        else { Debug.LogError("[Cofre] panelDialogo es null en MostrarMensaje"); yield break; }
+        else { Debug.LogError("[Cofre] panelDialogo es null"); yield break; }
 
         textoDialogo.text = mensaje;
         yield return StartCoroutine(EsperarInput());
@@ -158,7 +144,6 @@ public class Cofre : MonoBehaviour
 
     IEnumerator EsperarInput()
     {
-        // Pequeña pausa para evitar que el X de abrir cuente como el X de continuar
         yield return new WaitForSeconds(0.2f);
         while (!Input.GetKeyDown(KeyCode.X))
             yield return null;
@@ -169,12 +154,8 @@ public class Cofre : MonoBehaviour
     public void EquiparSi()
     {
         esperandoRespuesta = false;
-
         if (botonesEquipar != null) botonesEquipar.SetActive(false);
-
-        if (datosJugador != null)
-            datosJugador.EquiparObjeto(equipoContenido);
-
+        if (datosJugador != null) datosJugador.EquiparObjeto(equipoContenido);
         textoDialogo.text = "¡" + equipoContenido.nombre + " equipado!";
         StartCoroutine(CerrarTrasEspera());
     }
@@ -182,9 +163,7 @@ public class Cofre : MonoBehaviour
     public void EquiparNo()
     {
         esperandoRespuesta = false;
-
         if (botonesEquipar != null) botonesEquipar.SetActive(false);
-
         textoDialogo.text = equipoContenido.nombre + " guardado en el armario.";
         StartCoroutine(CerrarTrasEspera());
     }
@@ -197,7 +176,7 @@ public class Cofre : MonoBehaviour
 
     void CerrarDialogo()
     {
-        if (panelDialogo != null)  panelDialogo.SetActive(false);
+        if (panelDialogo != null)   panelDialogo.SetActive(false);
         if (botonesEquipar != null) botonesEquipar.SetActive(false);
         esperandoRespuesta = false;
         dialogoActivo = false;
