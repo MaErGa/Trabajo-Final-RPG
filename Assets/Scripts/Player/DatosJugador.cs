@@ -75,6 +75,41 @@ public class DatosJugador : ScriptableObject
     public int AgilidadTotal => agilidad + bonoAgilidadTemporal +
                                 (accesorioEquipadoAsset != null ? accesorioEquipadoAsset.bonoAgilidad : 0);
 
+    // --- SISTEMA DE ESCALADO AUTOMÁTICO ---
+    private void OnValidate()
+    {
+        ActualizarEstadisticasPorNivel();
+    }
+
+    /// <summary>
+    /// Modifica los atributos BASE del jugador usando interpolación matemática lineal (Lerp)
+    /// </summary>
+    public void ActualizarEstadisticasPorNivel()
+    {
+        // Limitamos el nivel entre 1 y 10
+        nivel = Mathf.Clamp(nivel, 1, 10);
+
+        // Factor de interpolación (0 a nivel 1, 1 a nivel 10)
+        float t = (nivel - 1) / 9f;
+
+        // Escalados Base basados en tus valores de nivel 1 y los objetivos de nivel 10
+        hpMax = Mathf.RoundToInt(Mathf.Lerp(20, 110, t));
+        mpMax = Mathf.RoundToInt(Mathf.Lerp(5, 50, t));
+        
+        fuerza = Mathf.RoundToInt(Mathf.Lerp(8, 35, t));
+        agilidad = Mathf.RoundToInt(Mathf.Lerp(6, 24, t)); 
+        defensa = Mathf.RoundToInt(Mathf.Lerp(2, 22, t));  
+
+        // Actualizar la experiencia requerida según tu tabla
+        if (tablaExpPilgrim != null && (nivel - 1) < tablaExpPilgrim.Length)
+        {
+            expSiguienteNivel = tablaExpPilgrim[nivel - 1];
+        }
+        
+        // Auto-aprender conjuros de forma interactiva en el editor
+        AprenderConjurosPorNivel();
+    }
+
     // --- CONJUROS ---
     public string AprenderConjurosPorNivel()
     {
@@ -145,6 +180,21 @@ public class DatosJugador : ScriptableObject
         #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
         #endif
+    }
+
+    public void SubirNivelYCurar()
+    {
+        if (nivel < 10)
+        {
+            nivel++;
+            ActualizarEstadisticasPorNivel();
+            hpActual = hpMax;
+            mpActual = mpMax;
+            
+            #if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+            #endif
+        }
     }
 
     [ContextMenu("Reiniciar a Nivel 1")]

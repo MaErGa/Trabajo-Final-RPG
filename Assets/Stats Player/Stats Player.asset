@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Retro
   nivel: 10
-  hpMax: 30
-  hpActual: 30
-  mpMax: 10
+  hpMax: 110
+  hpActual: 110
+  mpMax: 50
   mpActual: 5
-  fuerza: 11
+  fuerza: 35
   agilidad: 6
   defensa: 2
-  oro: 2805
-  experiencia: 18
+  oro: 58
+  experiencia: 1847
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
