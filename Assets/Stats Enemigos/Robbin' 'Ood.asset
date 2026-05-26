@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f10b8c3c7d74f4ab4ec1d47b14220b, type: 3}
+  m_Name: Robbin' 'Ood
+  m_EditorClassIdentifier: 
+  nombreEnemigo: Robbin' 'Ood
+  vidaMaxima: 225
+  "da\xF1oAtaque": 35
+  agilidad: 32
+  defensa: 15
+  imagenEnemigo: {fileID: 21300000, guid: 78ee4bfbc870cce45b2e06dad7caf263, type: 3}
+  expAlMorir: 1144
+  oroAlMorir: 147
+  tablaLoot: []
+  tablaLootEquipo: []
