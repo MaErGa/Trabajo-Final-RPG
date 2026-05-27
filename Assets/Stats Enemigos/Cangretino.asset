@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f10b8c3c7d74f4ab4ec1d47b14220b, type: 3}
+  m_Name: Cangretino
+  m_EditorClassIdentifier: 
+  nombreEnemigo: Cangretino
+  vidaMaxima: 22
+  "da\xF1oAtaque": 6
+  agilidad: 4
+  defensa: 8
+  imagenEnemigo: {fileID: 958655149, guid: 5fd60b7e0a6af1f46a113a4b3232a831, type: 3}
+  expAlMorir: 6
+  oroAlMorir: 4
+  tablaLoot:
+  - item: {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+    probabilidad: 25
+  tablaLootEquipo: []
