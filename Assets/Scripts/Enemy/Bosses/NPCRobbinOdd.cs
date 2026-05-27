@@ -86,6 +86,9 @@ public class NPCRobbinOdd : MonoBehaviour
     public static void MarcarDerrotado()
     {
         robbinDerrotado = true;
+        // Avisar a Pippin para que se despida
+        NPCCompañero pippin = FindObjectOfType<NPCCompañero>();
+        if (pippin != null) pippin.IniciarDespedida();
     }
 
     public void MostrarDialogoDerrota()

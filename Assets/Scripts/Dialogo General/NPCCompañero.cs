@@ -5,11 +5,12 @@ public class NPCCompañero : MonoBehaviour
     [Header("Distancia para interactuar")]
     public float distancia = 5f;
 
-    public enum EstadoMision { EncuentroBosque, RobinOddDerrotado, YaEsCompañero }
+    public enum EstadoMision { EncuentroBosque, RobinOddDerrotado, YaEsCompañero, Despedida }
     public EstadoMision estadoActual = EstadoMision.EncuentroBosque;
 
     private Transform jugador;
     private bool esperandoUnion = false;
+    private bool esperandoDespedida = false;
 
     private string[] dialogoEncuentro = new string[]
     {
@@ -35,12 +36,22 @@ public class NPCCompañero : MonoBehaviour
         "¿Cuál es nuestro próximo destino?"
     };
 
+    private string[] dialogoDespedida = new string[]
+    {
+        "Pippin: ¡Lo hemos conseguido! ¡Robbin Odd ha caído y el pueblo está a salvo!",
+        "Pippin: Oye... tengo que decirte algo. Ha sido un honor luchar a tu lado, de verdad.",
+        "Pippin: Pero mi lugar está aquí, con mi madre y con la gente de esta aldea.",
+        "Pippin: Ellos me necesitan. Y tú... tú tienes un camino mucho más grande por delante, lo sé.",
+        "Pippin: Llévate esto contigo. — Te entrega unas monedas y una sonrisa. —",
+        "Pippin: Si algún día vuelves por el bosque, ya sabes dónde encontrarme. ¡Hasta siempre, camarada!",
+        "¡Pippin abandona el grupo!"
+    };
+
     void Start()
     {
         GameObject obj = GameObject.FindGameObjectWithTag("Player");
         if (obj != null) jugador = obj.transform;
 
-        // Si ya se unió antes, ocultar sprite directamente
         if (MovimientoMapa.pippinUnido)
         {
             gameObject.SetActive(false);
@@ -53,14 +64,26 @@ public class NPCCompañero : MonoBehaviour
 
         float dist = Vector2.Distance(transform.position, jugador.position);
 
-        // Detectar fin de diálogo para hacer desaparecer a Pippin
+        // Espera a que termine el diálogo de unión
         if (esperandoUnion)
         {
             if (DialogoManagerCompañero.instancia != null && !DialogoManagerCompañero.instancia.EstaActivo())
             {
                 esperandoUnion = false;
                 MovimientoMapa.pippinUnido = true;
-                gameObject.SetActive(false); // Desaparece del escenario
+                gameObject.SetActive(false);
+            }
+            return;
+        }
+
+        // Espera a que termine el diálogo de despedida
+        if (esperandoDespedida)
+        {
+            if (DialogoManagerCompañero.instancia != null && !DialogoManagerCompañero.instancia.EstaActivo())
+            {
+                esperandoDespedida = false;
+                MovimientoMapa.pippinUnido = false; // Ya no acompaña al jugador
+                gameObject.SetActive(false);
             }
             return;
         }
@@ -74,7 +97,7 @@ public class NPCCompañero : MonoBehaviour
                 case EstadoMision.EncuentroBosque:
                     DialogoManagerCompañero.instancia.MostrarDialogo(dialogoEncuentro);
                     estadoActual = EstadoMision.YaEsCompañero;
-                    esperandoUnion = true; // Espera a que termine el diálogo
+                    esperandoUnion = true;
                     break;
 
                 case EstadoMision.RobinOddDerrotado:
@@ -84,8 +107,23 @@ public class NPCCompañero : MonoBehaviour
                 case EstadoMision.YaEsCompañero:
                     DialogoManagerCompañero.instancia.MostrarDialogo(dialogoAliadoFijo);
                     break;
+
+                case EstadoMision.Despedida:
+                    // No hace nada, la despedida se lanza automáticamente desde IniciarDespedida()
+                    break;
             }
         }
+    }
+
+    // Llamado desde NPCRobbinOdd.MarcarDerrotado()
+    public void IniciarDespedida()
+    {
+        // Reactivar a Pippin en escena para que dé el diálogo
+        gameObject.SetActive(true);
+        estadoActual = EstadoMision.Despedida;
+        esperandoDespedida = true;
+        if (DialogoManagerCompañero.instancia != null)
+            DialogoManagerCompañero.instancia.MostrarDialogo(dialogoDespedida);
     }
 
     public void CambiarEstado(EstadoMision nuevoEstado)
