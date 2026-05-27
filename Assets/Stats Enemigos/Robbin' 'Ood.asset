@@ -17,7 +17,7 @@ MonoBehaviour:
   "da\xF1oAtaque": 35
   agilidad: 32
   defensa: 15
-  imagenEnemigo: {fileID: 21300000, guid: 78ee4bfbc870cce45b2e06dad7caf263, type: 3}
+  imagenEnemigo: {fileID: 974580510, guid: 78ee4bfbc870cce45b2e06dad7caf263, type: 3}
   expAlMorir: 1144
   oroAlMorir: 147
   tablaLoot: []

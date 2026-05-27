@@ -478,6 +478,16 @@ public class BattleManager : MonoBehaviour
 
         ActualizarConjurosAprendidos();
         GuardarEstado();
+
+        // Marcar boss o secuaz derrotado
+        if (MovimientoMapa.combateBoss)
+        {
+            if (MovimientoMapa.combateSecuaz) NPCSecuaz.MarcarDerrotado();
+            else NPCRobbinOdd.MarcarDerrotado();
+            MovimientoMapa.combateBoss = false;
+            MovimientoMapa.combateSecuaz = false;
+        }
+
         textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + mensajeItem + levelUpTexto;
         yield return new WaitForSeconds(4f);
         StartCoroutine(CargarMapa());

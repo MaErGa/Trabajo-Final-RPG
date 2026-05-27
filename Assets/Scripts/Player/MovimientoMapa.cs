@@ -15,20 +15,26 @@ public class MovimientoMapa : MonoBehaviour
     [Header("Transición")]
     public CanvasGroup panelTransicion;
 
+    // Statics compartidos
     public static DatosEnemigo enemigoSeleccionado;
     public static Vector3 posicionRetorno;
     public static bool vieneDeCombate = false;
     public static string escenaOrigen = "";
     public static bool pippinUnido = false;
+    public static bool combateBoss = false;
+    public static bool combateSecuaz = false;
 
+    // Componentes
     private Rigidbody2D rb;
     private Animator animator;
 
+    // Movimiento
     private float moviX;
     private float moviY;
     private float ultimoX = 0f;
     private float ultimoY = -1f;
 
+    // Combate
     private bool estaCaminando = false;
     private bool iniciandoCombate = false;
 
@@ -37,13 +43,18 @@ public class MovimientoMapa : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
+        Debug.Log("escenaOrigen al cargar: '" + escenaOrigen + "'");
+        Debug.Log("vieneDeCombate: " + vieneDeCombate);
+
         if (vieneDeCombate)
         {
+            // Vuelve de combate: restaura posición exacta antes del combate
             transform.position = posicionRetorno;
             vieneDeCombate = false;
         }
         else if (!string.IsNullOrEmpty(escenaOrigen))
         {
+            // Viene de otra escena: busca punto de entrada
             bool colocado = false;
             EntradaEscena[] entradas = FindObjectsOfType<EntradaEscena>();
             foreach (EntradaEscena entrada in entradas)
@@ -52,6 +63,7 @@ public class MovimientoMapa : MonoBehaviour
                 {
                     transform.position = entrada.transform.position;
                     colocado = true;
+                    Debug.Log("Colocado en entrada: " + entrada.transform.position);
                     break;
                 }
             }
@@ -60,6 +72,7 @@ public class MovimientoMapa : MonoBehaviour
         }
         else
         {
+            // Primera carga: usa posición guardada si existe
             if (SistemaGuardado.instancia != null && SistemaGuardado.instancia.hayPosicionGuardada)
                 SistemaGuardado.instancia.AplicarPosicionJugador();
         }
@@ -72,30 +85,25 @@ public class MovimientoMapa : MonoBehaviour
         return MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo();
     }
 
-    // Centraliza todos los bloqueos de movimiento en un solo lugar
-    bool MovimientoBloqueado()
-    {
-        if (iniciandoCombate) return true;
-        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return true;
-        if (EstaEnPausa()) return true;
-        if (Cofre.dialogoActivo) return true; // ← bloqueo por cofre
-        return false;
-    }
-
     void Update()
     {
-        if (MovimientoBloqueado())
+        if (iniciandoCombate) return;
+
+        // Bloqueo diálogo
+        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo())
         {
             moviX = 0; moviY = 0;
             if (animator != null) animator.SetBool("Moviéndose", false);
             if (rb != null) rb.velocity = Vector2.zero;
+            return;
+        }
 
-            // Detener el chequeo de combate si estaba activo
-            if (estaCaminando)
-            {
-                estaCaminando = false;
-                CancelInvoke("ChequearCombate");
-            }
+        // Bloqueo pausa
+        if (EstaEnPausa())
+        {
+            moviX = 0; moviY = 0;
+            if (animator != null) animator.SetBool("Moviéndose", false);
+            if (rb != null) rb.velocity = Vector2.zero;
             return;
         }
 
@@ -118,6 +126,7 @@ public class MovimientoMapa : MonoBehaviour
                 ultimoX = 0; ultimoY = moviY;
             }
 
+            // Chequeo de combate por pasos
             if (!estaCaminando)
             {
                 estaCaminando = true;
@@ -133,7 +142,9 @@ public class MovimientoMapa : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (MovimientoBloqueado()) return;
+        if (iniciandoCombate) return;
+        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return;
+        if (EstaEnPausa()) return;
 
         bool corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         float velocidad = corriendo ? velocidadCarrera : velocidadNormal;
