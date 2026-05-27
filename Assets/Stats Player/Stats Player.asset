@@ -15,14 +15,14 @@ MonoBehaviour:
   nombre: Retro
   nivel: 18
   hpMax: 190
-  hpActual: 189
+  hpActual: 188
   mpMax: 90
-  mpActual: 58
+  mpActual: 36
   fuerza: 59
   agilidad: 24
   defensa: 22
-  oro: 567
-  experiencia: 51545
+  oro: 873
+  experiencia: 53089
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
