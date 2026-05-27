@@ -18,7 +18,7 @@ MonoBehaviour:
   hpMax: 140
   hpActual: 108
   mpMax: 25
-  mpActual: 13
+  mpActual: 5
   fuerza: 25
   defensa: 58
   fuerzaMagica: 35
