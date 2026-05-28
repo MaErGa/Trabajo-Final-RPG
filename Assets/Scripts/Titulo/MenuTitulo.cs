@@ -101,40 +101,20 @@ public class MenuTitulo : MonoBehaviour
     public void CancelarNombre()
     {
         if (panelNombre != null) panelNombre.SetActive(false);
-    }
+    }    
 
-    // ── Borrar Partida ────────────────────────────────────────
-
-    public void BotonBorrarPartida()
-    {
-        if (panelConfirmar != null) panelConfirmar.SetActive(true);
-    }
-
-    public void ConfirmarBorrar()
-    {
-        if (SistemaGuardado.instancia != null)
-            SistemaGuardado.instancia.BorrarPartida();
-
-        if (panelConfirmar != null) panelConfirmar.SetActive(false);
-        Start();
-    }
-
-    public void CancelarBorrar()
-    {
-        if (panelConfirmar != null) panelConfirmar.SetActive(false);
-    }
-
+    
     // ── Opciones ──────────────────────────────────────────────
 
     public void BotonOpciones()
     {
-        SceneManager.LoadScene(escenaOpciones);
+        SceneManager.LoadScene("Opciones");
     }
 
     // ── Creditos ──────────────────────────────────────────────
 
     public void BotonCreditos()
     {
-        SceneManager.LoadScene(escenaCreditos);
+        SceneManager.LoadScene("Creditos2");
     }
 }

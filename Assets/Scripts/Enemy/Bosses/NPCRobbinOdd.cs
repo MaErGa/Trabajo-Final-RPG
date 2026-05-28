@@ -15,29 +15,29 @@ public class NPCRobbinOdd : MonoBehaviour
 
     private string[] dialogoAntesCombate = new string[]
     {
-        "Robbin Odd: Alto ahi, renacuajo! Quien te da permiso para entrar en la guarida del mismisimo, ilustre y elegantisimo... Robbin Odd!?",
-        "Robbin Odd: Que vienes de parte de los pueblerinos a recuperar sus tesoros? Por favor! Que insulto!",
-        "Robbin Odd: Esos tacanos andan diciendo por ahi que les robe oro y joyas... Mentira! Calumnias! Yo tengo estandares! Lo que me lleve de ese pueblo fue su bien mas preciado...",
-        "Robbin Odd: Su cargamento secreto de ropa interior de seda real con encaje dorado! Una obra de arte textil!",
-        "Robbin Odd: Como se atreven a ocultar semejante botin historico diciendo que solo eran simples monedas? Eso hiere mi reputacion de saqueador refinado!",
-        "Robbin Odd: Ya que estas aqui, te dare una leccion por escuchar los chismes de esa gente sin estilo! Prepara los punos!"
+        "Alto ahi, renacuajo! Quien te da permiso para entrar en la guarida del mismisimo, ilustre y elegantisimo... Robbin Odd!?",
+        "Que vienes de parte de los pueblerinos a recuperar sus tesoros? Por favor! Que insulto!",
+        "Esos tacanos andan diciendo por ahi que les robe oro y joyas... Mentira! Calumnias! Yo tengo estandares! Lo que me lleve de ese pueblo fue su bien mas preciado...",
+        "Su cargamento secreto de ropa interior de seda real con encaje dorado! Una obra de arte textil!",
+        "Como se atreven a ocultar semejante botin historico diciendo que solo eran simples monedas? Eso hiere mi reputacion de saqueador refinado!",
+        "Ya que estas aqui, te dare una leccion por escuchar los chismes de esa gente sin estilo! Prepara los punos!"
     };
 
     private string[] dialogoDerrota = new string[]
     {
-        "Robbin Odd: Ay, ay, ay! Mis costillas imperiales! Vale, vale, tu ganas! Retiro lo de renacuajo... eres mas bien un lobo con piel de heroe.",
-        "Robbin Odd: La ropa interior de seda? Estoo... veras, mi querido y fuerte amigo... Hay un pequeno, diminuto y logistico problema.",
-        "Robbin Odd: Ya no la tengo conmigo! Y no me mires asi, que no me la he puesto!",
-        "Robbin Odd: Es que... uno de mis secuaces (el muy traidor incompetente) vio que la cosa se ponia fea y salio corriendo con el botin metido en un saco.",
-        "Robbin Odd: Dijo algo como: Me llevo esto a la gran ciudad para revenderlo en el mercado negro, jefe, ahi pagan el triple! Y pfff... desaparecio!",
-        "Robbin Odd: Si quieres recuperar esa seda tan... comoda y transpirable, vas a tener que buscar a mi esbirro en el proximo pueblo.",
-        "Robbin Odd: Y ahora, si me disculpas... un verdadero caballero de la delincuencia sabe cuando retirarse a llorar a un rincon. Hasta la vista!"
+        "Ay, ay, ay! Mis costillas imperiales! Vale, vale, tu ganas! Retiro lo de renacuajo... eres mas bien un lobo con piel de heroe.",
+        "La ropa interior de seda? Estoo... veras, mi querido y fuerte amigo... Hay un pequeno, diminuto y logistico problema.",
+        "Ya no la tengo conmigo! Y no me mires asi, que no me la he puesto!",
+        "Es que... uno de mis secuaces (el muy traidor incompetente) vio que la cosa se ponia fea y salio corriendo con el botin metido en un saco.",
+        "Dijo algo como: Me llevo esto a la gran ciudad para revenderlo en el mercado negro, jefe, ahi pagan el triple! Y pfff... desaparecio!",
+        "Si quieres recuperar esa seda tan... comoda y transpirable, vas a tener que buscar a mi esbirro en el proximo pueblo.",
+        "Y ahora, si me disculpas... un verdadero caballero de la delincuencia sabe cuando retirarse a llorar a un rincon. Hasta la vista!"
     };
 
     private string[] dialogoBloqueado = new string[]
     {
-        "Robbin Odd: Ey, ey! A donde vas tan rapido?",
-        "Robbin Odd: Si quieres hablar conmigo, primero supera a mi guardaespaldas Grock. Ese chico necesita motivacion!"
+        "Ey, ey! A donde vas tan rapido?",
+        "Si quieres hablar conmigo, primero supera a mi guardaespaldas Grock. Ese chico necesita motivacion!"
     };
 
     void Start()
