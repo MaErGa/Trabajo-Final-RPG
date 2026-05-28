@@ -101,7 +101,7 @@ public class MenuPausaManager : MonoBehaviour
 
     // ── Navegación ────────────────────────────────────────────
 
-    void MostrarStats()
+    public void MostrarStats()
     {
         Debug.Log("[Menu] MostrarStats");
         OcultarTodosLosPaneles();
@@ -110,7 +110,7 @@ public class MenuPausaManager : MonoBehaviour
         ActualizarStats();
     }
 
-    void MostrarInventario()
+    public void MostrarInventario()
     {
         Debug.Log("[Menu] MostrarInventario");
         OcultarTodosLosPaneles();
@@ -120,7 +120,7 @@ public class MenuPausaManager : MonoBehaviour
         CargarInventario();
     }
 
-    void MostrarEquipo()
+    public void MostrarEquipo()
     {
         Debug.Log("[Menu] MostrarEquipo");
         OcultarTodosLosPaneles();
@@ -134,7 +134,7 @@ public class MenuPausaManager : MonoBehaviour
         CargarEquipo();
     }
 
-    void MostrarConjuros()
+    public void MostrarConjuros()
     {
         Debug.Log("[Menu] MostrarConjuros");
         OcultarTodosLosPaneles();
@@ -143,7 +143,7 @@ public class MenuPausaManager : MonoBehaviour
         ActualizarConjuros();
     }
 
-    void SalirAlTitulo()
+    public void SalirAlTitulo()
     {
         SceneManager.LoadScene("Titulo");
     }
