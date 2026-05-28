@@ -155,7 +155,7 @@ RectTransform:
   m_Children:
   - {fileID: 1202204039}
   - {fileID: 1782491926}
-  m_Father: {fileID: 475444308}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -519,8 +519,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 21123284}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &475444309
@@ -576,6 +575,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1109683864}
+  - component: {fileID: 1109683865}
   m_Layer: 0
   m_Name: Script Boton
   m_TagString: Untagged
@@ -598,6 +598,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1109683865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109683863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb26b7c18aaa8e94498d17df4d186e22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1202204038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,7 +1104,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1782491928}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1109683865}
+        m_TargetAssemblyTypeName: BotonIrACreditos, Assembly-CSharp
+        m_MethodName: CargarEscenaCreditos2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1782491928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,6 +1160,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 475444308}
+  - {fileID: 21123284}
   - {fileID: 1579352556}
   - {fileID: 267342210}
   - {fileID: 1109683864}
