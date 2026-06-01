@@ -55,5 +55,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   armarioEquipo:
   - {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
-  plantasMedicinales: 0
-  colaDeConejo: 0
+  plantasMedicinales: 10
+  colaDeConejo: 10

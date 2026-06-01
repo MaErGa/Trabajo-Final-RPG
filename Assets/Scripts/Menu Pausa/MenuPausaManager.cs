@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Text;
 
@@ -20,10 +21,10 @@ public class MenuPausaManager : MonoBehaviour
     [Header("Texto de Stats")]
     public TextMeshProUGUI txtStats;
 
-    [Header("Texto de Inventario")]
+    // txtInventario y txtEquipo ya NO se usan para mostrar listas —
+    // se mantienen por si los tienes asignados en el Inspector (no romperá nada).
+    [Header("Texto Legacy (opcional, no se usa)")]
     public TextMeshProUGUI txtInventario;
-
-    [Header("Texto de Equipo")]
     public TextMeshProUGUI txtEquipo;
 
     [Header("Texto de Conjuros")]
@@ -31,6 +32,26 @@ public class MenuPausaManager : MonoBehaviour
 
     [Header("Texto de Oro (siempre visible)")]
     public TextMeshProUGUI txtOro;
+
+    // ── Panel Inventario Dinámico ─────────────────────────────
+    [Header("Inventario Dinámico")]
+    /// <summary>El Transform del Content dentro del ScrollView del panelInventario.</summary>
+    public Transform contenedorInventario;
+    /// <summary>Prefab con el script FilaInventario.</summary>
+    public GameObject prefabFilaInventario;
+    /// <summary>Texto de feedback ("HP ya al máximo", etc.).</summary>
+    public TextMeshProUGUI txtFeedbackInventario;
+
+    // ── Panel Equipo Dinámico ─────────────────────────────────
+    [Header("Equipo Dinámico")]
+    /// <summary>El Transform del Content dentro del ScrollView del panelEquipo.</summary>
+    public Transform contenedorEquipo;
+    /// <summary>Prefab con el script FilaEquipo.</summary>
+    public GameObject prefabFilaEquipo;
+    /// <summary>Texto de feedback ("Equipado: Espada +5", etc.).</summary>
+    public TextMeshProUGUI txtFeedbackEquipo;
+
+    // ─────────────────────────────────────────────────────────
 
     void Awake()
     {
@@ -48,7 +69,6 @@ public class MenuPausaManager : MonoBehaviour
             ToggleMenu();
     }
 
-    // Método que consulta PlayerController para saber si el menú está abierto
     public bool MenuActivo()
     {
         return objetoMenu != null && objetoMenu.activeSelf;
@@ -74,6 +94,7 @@ public class MenuPausaManager : MonoBehaviour
     {
         if (panelStats == null) return;
         bool nuevoEstado = !panelStats.activeSelf;
+        OcultarTodosLosPaneles();
         panelStats.SetActive(nuevoEstado);
         if (nuevoEstado) ActualizarStats();
     }
@@ -82,27 +103,135 @@ public class MenuPausaManager : MonoBehaviour
     {
         if (panelInventario == null) return;
         bool nuevoEstado = !panelInventario.activeSelf;
+        OcultarTodosLosPaneles();
         panelInventario.SetActive(nuevoEstado);
-        if (nuevoEstado) ActualizarInventario();
+        if (nuevoEstado) RefrescarPanelInventario();
     }
 
     public void BotonPresionadoEquipo()
     {
         if (panelEquipo == null) return;
         bool nuevoEstado = !panelEquipo.activeSelf;
+        OcultarTodosLosPaneles();
         panelEquipo.SetActive(nuevoEstado);
-        if (nuevoEstado) ActualizarEquipo();
+        if (nuevoEstado) RefrescarPanelEquipo();
     }
 
     public void BotonPresionadoConjuros()
     {
         if (panelConjuros == null) return;
         bool nuevoEstado = !panelConjuros.activeSelf;
+        OcultarTodosLosPaneles();
         panelConjuros.SetActive(nuevoEstado);
         if (nuevoEstado) ActualizarConjuros();
     }
 
-    // ── Actualización de datos ────────────────────────────────
+    // ── Panel Inventario ──────────────────────────────────────
+
+    void RefrescarPanelInventario()
+    {
+        if (contenedorInventario == null || prefabFilaInventario == null || datosRyo == null)
+        {
+            Debug.LogWarning("[MenuPausa] Faltan referencias en el panel de inventario.");
+            return;
+        }
+
+        // Limpiar filas anteriores
+        foreach (Transform hijo in contenedorInventario)
+            Destroy(hijo.gameObject);
+
+        LimpiarFeedback(txtFeedbackInventario);
+
+        bool hayItems = false;
+
+        // Items consumibles de la mochila
+        foreach (var item in datosRyo.mochilaItems)
+        {
+            if (item == null) continue;
+            hayItems = true;
+            GameObject fila = Instantiate(prefabFilaInventario, contenedorInventario);
+            FilaInventario filaScript = fila.GetComponent<FilaInventario>();
+            if (filaScript != null)
+                filaScript.Inicializar(item, OnUsarItem);
+        }
+
+        if (!hayItems)
+            MostrarFeedback(txtFeedbackInventario, "La mochila está vacía.");
+    }
+
+    void OnUsarItem(ItemConsumible item)
+    {
+        bool exito = UsarItemConsumible.UsarItem(item, datosRyo);
+
+        if (exito)
+        {
+            // Quitar UNA unidad del item de la mochila
+            datosRyo.mochilaItems.Remove(item);
+            MostrarFeedback(txtFeedbackInventario,
+                "Usaste " + item.nombre + ". " + item.queCura + " +" + item.potencia);
+            ActualizarOro();
+            RefrescarPanelInventario(); // Recargar la lista actualizada
+        }
+        else
+        {
+            MostrarFeedback(txtFeedbackInventario,
+                "No puedes usar " + item.nombre + " ahora mismo.");
+        }
+    }
+
+    // ── Panel Equipo ──────────────────────────────────────────
+
+    void RefrescarPanelEquipo()
+    {
+        if (contenedorEquipo == null || prefabFilaEquipo == null || datosRyo == null)
+        {
+            Debug.LogWarning("[MenuPausa] Faltan referencias en el panel de equipo.");
+            return;
+        }
+
+        // Limpiar filas anteriores
+        foreach (Transform hijo in contenedorEquipo)
+            Destroy(hijo.gameObject);
+
+        LimpiarFeedback(txtFeedbackEquipo);
+
+        if (datosRyo.armarioEquipo == null || datosRyo.armarioEquipo.Count == 0)
+        {
+            MostrarFeedback(txtFeedbackEquipo, "El armario está vacío.");
+            return;
+        }
+
+        foreach (var equipo in datosRyo.armarioEquipo)
+        {
+            if (equipo == null) continue;
+
+            bool yaEquipado = EstaEquipado(equipo);
+
+            GameObject fila = Instantiate(prefabFilaEquipo, contenedorEquipo);
+            FilaEquipo filaScript = fila.GetComponent<FilaEquipo>();
+            if (filaScript != null)
+                filaScript.Inicializar(equipo, yaEquipado, OnEquiparItem);
+        }
+    }
+
+    void OnEquiparItem(EquipoBase equipo)
+    {
+        datosRyo.EquiparObjeto(equipo);
+        MostrarFeedback(txtFeedbackEquipo, "Equipado: " + equipo.nombre);
+        RefrescarPanelEquipo(); // Recargar para actualizar estado "Equipado"
+    }
+
+    /// <summary>Comprueba si un equipo ya está en alguno de los slots equipados.</summary>
+    bool EstaEquipado(EquipoBase equipo)
+    {
+        return equipo == datosRyo.armaEquipadaAsset
+            || equipo == datosRyo.armaduraEquipadaAsset
+            || equipo == datosRyo.escudoEquipadoAsset
+            || equipo == datosRyo.cascoEquipadoAsset
+            || equipo == datosRyo.accesorioEquipadoAsset;
+    }
+
+    // ── Actualización de datos (Stats, Conjuros, Oro) ─────────
 
     void ActualizarOro()
     {
@@ -128,52 +257,6 @@ public class MenuPausaManager : MonoBehaviour
         txtStats.text = sb.ToString();
     }
 
-    void ActualizarInventario()
-    {
-        if (txtInventario == null || datosRyo == null) return;
-
-        if ((datosRyo.mochilaItems == null || datosRyo.mochilaItems.Count == 0)
-            && datosRyo.plantasMedicinales == 0 && datosRyo.colaDeConejo == 0)
-        {
-            txtInventario.text = "Mochila vacía.";
-            return;
-        }
-
-        StringBuilder sb = new StringBuilder();
-        foreach (var item in datosRyo.mochilaItems)
-            if (item != null)
-                sb.AppendLine("• " + item.nombre + " (" + item.queCura + " +" + item.potencia + ")");
-
-        if (datosRyo.plantasMedicinales > 0)
-            sb.AppendLine("• Planta Medicinal x" + datosRyo.plantasMedicinales);
-        if (datosRyo.colaDeConejo > 0)
-            sb.AppendLine("• Cola de Conejo x" + datosRyo.colaDeConejo);
-
-        txtInventario.text = sb.ToString();
-    }
-
-    void ActualizarEquipo()
-    {
-        if (txtEquipo == null || datosRyo == null) return;
-
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine("Arma: "      + NombreEquipo(datosRyo.armaEquipadaAsset,      datosRyo.armaEquipada));
-        sb.AppendLine("Armadura: "  + NombreEquipo(datosRyo.armaduraEquipadaAsset,  datosRyo.armaduraEquipada));
-        sb.AppendLine("Escudo: "    + NombreEquipo(datosRyo.escudoEquipadoAsset,    datosRyo.escudoEquipado));
-        sb.AppendLine("Casco: "     + NombreEquipo(datosRyo.cascoEquipadoAsset,     datosRyo.cascoEquipado));
-        sb.AppendLine("Accesorio: " + NombreEquipo(datosRyo.accesorioEquipadoAsset, datosRyo.accesorioEquipado));
-
-        if (datosRyo.armarioEquipo != null && datosRyo.armarioEquipo.Count > 0)
-        {
-            sb.AppendLine("");
-            foreach (var equipo in datosRyo.armarioEquipo)
-                if (equipo != null)
-                    sb.AppendLine("• " + equipo.nombre);
-        }
-
-        txtEquipo.text = sb.ToString();
-    }
-
     void ActualizarConjuros()
     {
         if (txtConjuros == null || datosRyo == null) return;
@@ -196,6 +279,18 @@ public class MenuPausaManager : MonoBehaviour
             sb.AppendLine("Aún no conoces ningún conjuro.");
 
         txtConjuros.text = sb.ToString();
+    }
+
+    // ── Feedback ──────────────────────────────────────────────
+
+    void MostrarFeedback(TextMeshProUGUI txt, string mensaje)
+    {
+        if (txt != null) txt.text = mensaje;
+    }
+
+    void LimpiarFeedback(TextMeshProUGUI txt)
+    {
+        if (txt != null) txt.text = "";
     }
 
     // ── Utilidades ────────────────────────────────────────────
