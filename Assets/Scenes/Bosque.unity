@@ -712,6 +712,37 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &187719808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 187719809}
+  m_Layer: 0
+  m_Name: scriptmonstruos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &187719809
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187719808}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 186.01736, y: 486.09033, z: -13.791211}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &191061012
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,6 +1164,12 @@ MonoBehaviour:
   txtEquipo: {fileID: 1390995989}
   txtConjuros: {fileID: 2022495222}
   txtOro: {fileID: 1363134986}
+  contenedorInventario: {fileID: 0}
+  prefabFilaInventario: {fileID: 0}
+  txtFeedbackInventario: {fileID: 0}
+  contenedorEquipo: {fileID: 0}
+  prefabFilaEquipo: {fileID: 0}
+  txtFeedbackEquipo: {fileID: 0}
 --- !u!4 &257892162
 Transform:
   m_ObjectHideFlags: 0
@@ -3498,7 +3535,8 @@ MonoBehaviour:
   posiblesEnemigos:
   - {fileID: 11400000, guid: 855299d64707a19468df9b4b6ff51ed7, type: 2}
   - {fileID: 11400000, guid: 0df1cda58d47f4043b6a2b2f6894c434, type: 2}
-  panelTransicion: {fileID: 0}
+  - {fileID: 11400000, guid: e5a0d59711b48fc4493aa1323703deef, type: 2}
+  panelTransicion: {fileID: 191061013}
 --- !u!61 &565397074
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15145,3 +15183,4 @@ SceneRoots:
   - {fileID: 1801837062}
   - {fileID: 532956431}
   - {fileID: 1174479215}
+  - {fileID: 187719809}

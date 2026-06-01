@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e9eb2188450d8e840a09ed9c1e87b439
+guid: 85cc685e8845c704f84d9d3a6ea10161
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -98,7 +98,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Robbin_oodlum_1_DQ_III_HD_sprite_0
+      name: LodoBobo_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 5
-        width: 73
-        height: 61
+        x: 3
+        y: 2
+        width: 68
+        height: 54
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,8 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55d5190131a35bf4295727982eebb13c
-      internalID: 1850444874
+      spriteID: 16452ecdd6911fe4098026ecee4535a8
+      internalID: 1737316030
       vertices: []
       indices: 
       edges: []
@@ -141,7 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Robbin_oodlum_1_DQ_III_HD_sprite_0: 1850444874
+      LodoBobo_0: 1737316030
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
