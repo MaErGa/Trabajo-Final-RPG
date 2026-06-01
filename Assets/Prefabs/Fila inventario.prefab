@@ -146,7 +146,6 @@ GameObject:
   m_Component:
   - component: {fileID: 807575220789385704}
   - component: {fileID: 7481214010648649403}
-  - component: {fileID: 8779164119054389300}
   m_Layer: 0
   m_Name: Fila inventario
   m_TagString: Untagged
@@ -192,32 +191,6 @@ MonoBehaviour:
   txtNombre: {fileID: 0}
   txtDescripcion: {fileID: 0}
   btnUsar: {fileID: 0}
---- !u!114 &8779164119054389300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3037446216275392945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &3446614325424235188
 GameObject:
   m_ObjectHideFlags: 0
