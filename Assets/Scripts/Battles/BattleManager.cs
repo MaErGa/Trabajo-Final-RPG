@@ -78,6 +78,18 @@ public class BattleManager : MonoBehaviour
     private bool pippinCaido = false;
     private int turnosFortalecimientoPippin = 0;
 
+    // ── Inspiración ───────────────────────────────────────────────────────────
+    // +20% ataque, defensa y agilidad durante 3 turnos.
+    // Se activa aleatoriamente al inicio del turno (15%) o al recibir daño (20%).
+    [Header("Inspiración")]
+    public AudioClip sonidoInspiracion;
+    private bool inspiracionActiva = false;
+    private int turnosInspiracion = 0;
+    private const float BONUS_INSPIRACION  = 0.20f;
+    private const int   TURNOS_INSPIRACION = 3;
+    private const int   PROB_INICIO_TURNO  = 15;
+    private const int   PROB_RECIBIR_DAÑO  = 20;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -222,6 +234,7 @@ public class BattleManager : MonoBehaviour
     public void AccionAtacar()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
+        ChequearInspiracioInicio();
         int dañoBase = Mathf.Max(1, datosRyo.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
         if (Random.Range(0, 100) < 5)
         {
@@ -242,6 +255,7 @@ public class BattleManager : MonoBehaviour
     public void AccionMagia(string hechizo)
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
+        ChequearInspiracioInicio();
         if (hechizo == "Minicuracion")
         {
             ConjuroBase conjuro = datosRyo.conjuroNivel3;
@@ -292,6 +306,7 @@ public class BattleManager : MonoBehaviour
     public void AccionDefender()
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
+        ChequearInspiracioInicio();
         estaDefendiendoManual = true;
         ReproducirSonido(sonidoDefender);
         textoMensajes.text = "¡" + datosRyo.nombre + " se defiende!";
@@ -540,6 +555,21 @@ public class BattleManager : MonoBehaviour
             if (turnosFortalecimientoPippin <= 0) datosPippin.bonoDefensaTemporal = 0;
         }
 
+        // Bajar contador de inspiración
+        if (inspiracionActiva)
+        {
+            turnosInspiracion--;
+            if (turnosInspiracion <= 0)
+            {
+                inspiracionActiva = false;
+                datosRyo.bonoAtaqueTemporal   -= Mathf.RoundToInt(datosRyo.fuerza * BONUS_INSPIRACION);
+                datosRyo.bonoDefensaTemporal  -= Mathf.RoundToInt(datosRyo.defensa * BONUS_INSPIRACION);
+                datosRyo.bonoAgilidadTemporal -= Mathf.RoundToInt(datosRyo.agilidad * BONUS_INSPIRACION);
+                textoMensajes.text = "¡La Inspiración de " + datosRyo.nombre + " ha terminado.";
+                yield return new WaitForSeconds(0.8f);
+            }
+        }
+
         bool atacarPippin = pippinActivo && !pippinCaido && Random.Range(0, 2) == 0;
 
         if (atacarPippin)
@@ -583,6 +613,9 @@ public class BattleManager : MonoBehaviour
             }
             hpSesion -= daño;
             ActualizarInterfaz();
+            // Posible inspiración al recibir daño
+            if (!inspiracionActiva && Random.Range(0, 100) < PROB_RECIBIR_DAÑO)
+                ActivarInspiracion();
             if (hpSesion <= 0)
             {
                 if (musicaSource != null) musicaSource.Stop();
@@ -597,6 +630,34 @@ public class BattleManager : MonoBehaviour
             }
         }
         turnoActivo = true;
+    }
+
+    // ── Inspiración ───────────────────────────────────────────────────────────
+
+    void ChequearInspiracioInicio()
+    {
+        if (!inspiracionActiva && Random.Range(0, 100) < PROB_INICIO_TURNO)
+            ActivarInspiracion();
+    }
+
+    void ActivarInspiracion()
+    {
+        inspiracionActiva   = true;
+        turnosInspiracion   = TURNOS_INSPIRACION;
+
+        int bonoAtaque    = Mathf.RoundToInt(datosRyo.fuerza   * BONUS_INSPIRACION);
+        int bonoDefensa   = Mathf.RoundToInt(datosRyo.defensa  * BONUS_INSPIRACION);
+        int bonoAgilidad  = Mathf.RoundToInt(datosRyo.agilidad * BONUS_INSPIRACION);
+
+        datosRyo.bonoAtaqueTemporal   += bonoAtaque;
+        datosRyo.bonoDefensaTemporal  += bonoDefensa;
+        datosRyo.bonoAgilidadTemporal += bonoAgilidad;
+
+        if (sonidoInspiracion != null) ReproducirSonido(sonidoInspiracion);
+
+        textoMensajes.text = "✨ ¡" + datosRyo.nombre + " entra en estado de Inspiración!\n" +
+                             "ATQ +" + bonoAtaque + " | DEF +" + bonoDefensa + " | AGI +" + bonoAgilidad +
+                             " durante " + TURNOS_INSPIRACION + " turnos.";
     }
 
     private void OnDestroy()
