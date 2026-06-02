@@ -4,19 +4,11 @@ using TMPro;
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  MenuController.cs  –  Menú principal estilo FF7
-//  El script vive dentro del Canvas del menú.
-//  Para no desactivarse a sí mismo (y perder el Update), usa CanvasGroup
-//  para mostrar/ocultar toda la UI sin tocar SetActive en este GameObject.
-//
-//  SETUP (sin arrastrar nada al inspector para el menuRoot):
-//    · Añade este script al GameObject raíz del Canvas del menú.
-//    · El CanvasGroup se crea automáticamente en Start() si no existe.
-//    · El resto de referencias (paneles, botones, TMP) se asignan en el inspector
-//      como siempre.
+//  CAMBIO: sistema de tiempo reemplazado por DateTime.Now (inmune a timeScale)
 // ─────────────────────────────────────────────────────────────────────────────
 public class MenuController : MonoBehaviour
 {
-    // ── Control de visibilidad (sin SetActive sobre sí mismo) ─────────────────
+    // ── Control de visibilidad ────────────────────────────────────────────────
     private CanvasGroup canvasGroup;
     private bool menuAbierto = false;
 
@@ -36,9 +28,7 @@ public class MenuController : MonoBehaviour
     public Button btnEquipo;
     public Button btnEstado;
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  STATS PANEL – referencias TMP
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── Stats Panel ───────────────────────────────────────────────────────────
     [Header("Stats Panel – nombre y nivel")]
     public TextMeshProUGUI tmpNombreJugador;
     public TextMeshProUGUI tmpNivel;
@@ -73,7 +63,10 @@ public class MenuController : MonoBehaviour
     // ── HUD de tiempo ─────────────────────────────────────────────────────────
     [Header("HUD – tiempo de juego")]
     public TextMeshProUGUI tmpTiempo;
-    private float segundosJugados = 0f;
+
+    // NUEVO: DateTime en lugar de realtimeSinceStartup (inmune a timeScale)
+    private float segundosJugados = 0f;          // total acumulado al pausar
+    private System.DateTime momentoCierre;        // momento en que se cerró el menú (o Start)
 
     // ── Referencia al InventoryManager ────────────────────────────────────────
     [Header("Referencia al InventoryManager del panel inventario")]
@@ -91,7 +84,11 @@ public class MenuController : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────────────
     void Start()
     {
-        // ── CanvasGroup: se crea solo si no existe en el inspector ────────────
+        // Recuperar tiempo guardado e iniciar conteo desde ahora
+        segundosJugados = PlayerPrefs.GetFloat("TiempoJugado", 0f);
+        momentoCierre   = System.DateTime.Now;
+
+        // CanvasGroup
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
@@ -101,31 +98,37 @@ public class MenuController : MonoBehaviour
         btnEquipo?.onClick.AddListener(AbrirEquipo);
         btnEstado?.onClick.AddListener(AbrirStats);
 
-        // Menú oculto al arrancar (sin desactivar el GameObject)
+        // Menú oculto al arrancar
         SetMenuVisible(false);
         menuAbierto = false;
     }
 
     void Update()
     {
-        // El timer solo corre mientras el juego está activo
-        if (!menuAbierto)
-            segundosJugados += Time.deltaTime;
-
         ActualizarTiempo();
 
-        // Abrir / cerrar menú con P
         if (Input.GetKeyDown(KeyCode.P))
         {
             menuAbierto = !menuAbierto;
             SetMenuVisible(menuAbierto);
 
-            if (menuAbierto) AbrirStats();
+            if (menuAbierto)
+            {
+                // PAUSA: acumular el tiempo jugado hasta este instante
+                segundosJugados += (float)(System.DateTime.Now - momentoCierre).TotalSeconds;
+                PlayerPrefs.SetFloat("TiempoJugado", segundosJugados);
+                AbrirStats();
+            }
+            else
+            {
+                // REANUDA: marcar el momento exacto en que se cierra el menú
+                momentoCierre = System.DateTime.Now;
+            }
         }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  VISIBILIDAD  –  CanvasGroup en lugar de SetActive
+    //  VISIBILIDAD
     // ─────────────────────────────────────────────────────────────────────────
     void SetMenuVisible(bool visible)
     {
@@ -220,14 +223,21 @@ public class MenuController : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  TIEMPO DE JUEGO
+    //  TIEMPO DE JUEGO  –  DateTime.Now, inmune a timeScale
     // ─────────────────────────────────────────────────────────────────────────
     void ActualizarTiempo()
     {
         if (tmpTiempo == null) return;
-        int h = (int)(segundosJugados / 3600);
-        int m = (int)((segundosJugados % 3600) / 60);
-        int s = (int)(segundosJugados % 60);
+
+        // Si el menú está abierto mostramos el acumulado congelado.
+        // Si está cerrado sumamos los segundos transcurridos desde que se cerró.
+        float total = menuAbierto
+            ? segundosJugados
+            : segundosJugados + (float)(System.DateTime.Now - momentoCierre).TotalSeconds;
+
+        int h = (int)(total / 3600);
+        int m = (int)((total % 3600) / 60);
+        int s = (int)(total % 60);
         tmpTiempo.text = $"{h}:{m:D2}:{s:D2}";
     }
 }

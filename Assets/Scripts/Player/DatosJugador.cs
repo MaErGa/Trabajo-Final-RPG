@@ -76,6 +76,7 @@ public class DatosJugador : ScriptableObject
     public int AgilidadTotal => agilidad + bonoAgilidadTemporal +
                                 (accesorioEquipadoAsset != null ? accesorioEquipadoAsset.bonoAgilidad : 0);
 
+    
     // --- SISTEMA DE ESCALADO AUTOMÁTICO ---
     private void OnValidate()
     {
