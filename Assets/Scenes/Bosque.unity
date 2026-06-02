@@ -3536,6 +3536,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 855299d64707a19468df9b4b6ff51ed7, type: 2}
   - {fileID: 11400000, guid: 0df1cda58d47f4043b6a2b2f6894c434, type: 2}
   - {fileID: 11400000, guid: e5a0d59711b48fc4493aa1323703deef, type: 2}
+  - {fileID: 11400000, guid: bb68d5b72ddf4dd4e88a21708fd5972f, type: 2}
   panelTransicion: {fileID: 191061013}
 --- !u!61 &565397074
 BoxCollider2D:

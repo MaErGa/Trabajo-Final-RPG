@@ -21,14 +21,14 @@ MonoBehaviour:
   fuerza: 38
   agilidad: 24
   defensa: 22
-  oro: 33
-  experiencia: 2813
+  oro: 111
+  experiencia: 3164
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
   bonoAtaqueTemporal: 0
   bonoAgilidadTemporal: 0
-  armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
+  armaEquipadaAsset: {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
   armaduraEquipadaAsset: {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
   escudoEquipadoAsset: {fileID: 0}
   cascoEquipadoAsset: {fileID: 0}
@@ -53,7 +53,10 @@ MonoBehaviour:
   conjuroNivel10: {fileID: 11400000, guid: 50913cd5df0830048a7cacee19fb5fa8, type: 2}
   mochilaItems:
   - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   armarioEquipo:
   - {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
+  - {fileID: 11400000, guid: 0f31d22c07e0bc34bac2a85928f27010, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
   plantasMedicinales: 10
   colaDeConejo: 10
