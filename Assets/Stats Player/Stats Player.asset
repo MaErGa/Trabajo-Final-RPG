@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Stats Player
   m_EditorClassIdentifier: 
   nombre: Retro
-  nivel: 11
-  hpMax: 120
-  hpActual: 120
-  mpMax: 55
+  nivel: 10
+  hpMax: 110
+  hpActual: 110
+  mpMax: 50
   mpActual: 3
-  fuerza: 38
+  fuerza: 35
   agilidad: 24
   defensa: 22
   oro: 111
@@ -31,7 +31,7 @@ MonoBehaviour:
   armaEquipadaAsset: {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
   armaduraEquipadaAsset: {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
   escudoEquipadoAsset: {fileID: 0}
-  cascoEquipadoAsset: {fileID: 0}
+  cascoEquipadoAsset: {fileID: 11400000, guid: 0f31d22c07e0bc34bac2a85928f27010, type: 2}
   accesorioEquipadoAsset: {fileID: 0}
   armaInicial: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
   armaduraInicial: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
@@ -40,7 +40,7 @@ MonoBehaviour:
   escudoEquipado: Ninguno
   cascoEquipado: Ninguno
   accesorioEquipado: Ninguno
-  expSiguienteNivel: 4197
+  expSiguienteNivel: 2798
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
   conjurosAprendidos:
   - {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
@@ -53,10 +53,6 @@ MonoBehaviour:
   conjuroNivel10: {fileID: 11400000, guid: 50913cd5df0830048a7cacee19fb5fa8, type: 2}
   mochilaItems:
   - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
-  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
-  armarioEquipo:
-  - {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
-  - {fileID: 11400000, guid: 0f31d22c07e0bc34bac2a85928f27010, type: 2}
-  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  armarioEquipo: []
   plantasMedicinales: 10
   colaDeConejo: 10

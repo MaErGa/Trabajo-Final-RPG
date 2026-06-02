@@ -85,6 +85,9 @@ public class BattleManager : MonoBehaviour
     public AudioClip sonidoInspiracion;
     private bool inspiracionActiva = false;
     private int turnosInspiracion = 0;
+    private int inspiracionBonoAtaque   = 0;  // guardamos el valor exacto aplicado
+    private int inspiracionBonoDefensa  = 0;
+    private int inspiracionBonoAgilidad = 0;
     private const float BONUS_INSPIRACION  = 0.20f;
     private const int   TURNOS_INSPIRACION = 3;
     private const int   PROB_INICIO_TURNO  = 15;
@@ -562,10 +565,11 @@ public class BattleManager : MonoBehaviour
             if (turnosInspiracion <= 0)
             {
                 inspiracionActiva = false;
-                datosRyo.bonoAtaqueTemporal   -= Mathf.RoundToInt(datosRyo.fuerza * BONUS_INSPIRACION);
-                datosRyo.bonoDefensaTemporal  -= Mathf.RoundToInt(datosRyo.defensa * BONUS_INSPIRACION);
-                datosRyo.bonoAgilidadTemporal -= Mathf.RoundToInt(datosRyo.agilidad * BONUS_INSPIRACION);
-                textoMensajes.text = "¡La Inspiración de " + datosRyo.nombre + " ha terminado.";
+                datosRyo.bonoAtaqueTemporal   -= inspiracionBonoAtaque;
+                datosRyo.bonoDefensaTemporal  -= inspiracionBonoDefensa;
+                datosRyo.bonoAgilidadTemporal -= inspiracionBonoAgilidad;
+                inspiracionBonoAtaque = inspiracionBonoDefensa = inspiracionBonoAgilidad = 0;
+                textoMensajes.text = "La Inspiración de " + datosRyo.nombre + " ha terminado.";
                 yield return new WaitForSeconds(0.8f);
             }
         }
@@ -645,18 +649,19 @@ public class BattleManager : MonoBehaviour
         inspiracionActiva   = true;
         turnosInspiracion   = TURNOS_INSPIRACION;
 
-        int bonoAtaque    = Mathf.RoundToInt(datosRyo.fuerza   * BONUS_INSPIRACION);
-        int bonoDefensa   = Mathf.RoundToInt(datosRyo.defensa  * BONUS_INSPIRACION);
-        int bonoAgilidad  = Mathf.RoundToInt(datosRyo.agilidad * BONUS_INSPIRACION);
+        inspiracionBonoAtaque   = Mathf.RoundToInt(datosRyo.fuerza   * BONUS_INSPIRACION);
+        inspiracionBonoDefensa  = Mathf.RoundToInt(datosRyo.defensa  * BONUS_INSPIRACION);
+        inspiracionBonoAgilidad = Mathf.RoundToInt(datosRyo.agilidad * BONUS_INSPIRACION);
 
-        datosRyo.bonoAtaqueTemporal   += bonoAtaque;
-        datosRyo.bonoDefensaTemporal  += bonoDefensa;
-        datosRyo.bonoAgilidadTemporal += bonoAgilidad;
+        datosRyo.bonoAtaqueTemporal   += inspiracionBonoAtaque;
+        datosRyo.bonoDefensaTemporal  += inspiracionBonoDefensa;
+        datosRyo.bonoAgilidadTemporal += inspiracionBonoAgilidad;
 
         if (sonidoInspiracion != null) ReproducirSonido(sonidoInspiracion);
 
         textoMensajes.text = "✨ ¡" + datosRyo.nombre + " entra en estado de Inspiración!\n" +
-                             "ATQ +" + bonoAtaque + " | DEF +" + bonoDefensa + " | AGI +" + bonoAgilidad +
+                             "ATQ +" + inspiracionBonoAtaque + " | DEF +" + inspiracionBonoDefensa +
+                             " | AGI +" + inspiracionBonoAgilidad +
                              " durante " + TURNOS_INSPIRACION + " turnos.";
     }
 

@@ -5188,8 +5188,9 @@ MonoBehaviour:
   sonidoEscapeFallo: {fileID: 8300000, guid: 6c6c55477a243c742a9eabc024214bea, type: 3}
   sonidoVictoria: {fileID: 8300000, guid: d6872d0cea73a6f40b130259865282f9, type: 3}
   sonidoLevelUp: {fileID: 8300000, guid: 1a02701fb3459454499fd1ed018a91b2, type: 3}
-  sonidoMuerte: {fileID: 0}
+  sonidoMuerte: {fileID: 8300000, guid: 64c8111ccb4a85146b6fd3aade457b5d, type: 3}
   musicaBatalla: {fileID: 8300000, guid: baa3db438236cd64aa46e99d8fca76aa, type: 3}
+  sonidoInspiracion: {fileID: 8300000, guid: 1d4b94e0d16e1ce4cb10cc05e1c3672b, type: 3}
 --- !u!4 &2128480716
 Transform:
   m_ObjectHideFlags: 0
