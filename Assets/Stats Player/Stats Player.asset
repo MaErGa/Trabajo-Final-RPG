@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Stats Player
   m_EditorClassIdentifier: 
   nombre: Retro
-  nivel: 10
-  hpMax: 110
+  nivel: 11
+  hpMax: 120
   hpActual: 120
-  mpMax: 50
+  mpMax: 55
   mpActual: 3
-  fuerza: 35
+  fuerza: 38
   agilidad: 24
   defensa: 22
-  oro: 153
-  experiencia: 3221
+  oro: 227
+  experiencia: 3328
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   escudoEquipado: Ninguno
   cascoEquipado: Ninguno
   accesorioEquipado: Ninguno
-  expSiguienteNivel: 2798
+  expSiguienteNivel: 4197
   tablaExpPilgrim: 0e0000002a00000062000000b600000034010000f10100000c030000b504000032070000ee0a0000
   conjurosAprendidos:
   - {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
@@ -52,6 +52,8 @@ MonoBehaviour:
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
   conjuroNivel10: {fileID: 11400000, guid: 50913cd5df0830048a7cacee19fb5fa8, type: 2}
   mochilaItems:
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   armarioEquipo: []
   plantasMedicinales: 10
