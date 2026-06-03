@@ -85,13 +85,13 @@ public class BattleManager : MonoBehaviour
     public AudioClip sonidoInspiracion;
     private bool inspiracionActiva = false;
     private int turnosInspiracion = 0;
-    private int inspiracionBonoAtaque   = 0;  // guardamos el valor exacto aplicado
-    private int inspiracionBonoDefensa  = 0;
+    private int inspiracionBonoAtaque = 0;  // guardamos el valor exacto aplicado
+    private int inspiracionBonoDefensa = 0;
     private int inspiracionBonoAgilidad = 0;
-    private const float BONUS_INSPIRACION  = 0.20f;
-    private const int   TURNOS_INSPIRACION = 3;
-    private const int   PROB_INICIO_TURNO  = 15;
-    private const int   PROB_RECIBIR_DAÑO  = 20;
+    private const float BONUS_INSPIRACION = 0.20f;
+    private const int TURNOS_INSPIRACION = 3;
+    private const int PROB_INICIO_TURNO = 15;
+    private const int PROB_RECIBIR_DAÑO = 20;
 
     void Start()
     {
@@ -111,7 +111,8 @@ public class BattleManager : MonoBehaviour
             Sprite spriteElegido = fondoDefecto;
             switch (MovimientoMapa.escenaOrigen)
             {
-                case "Underworld": case "UnderWorld":
+                case "Underworld":
+                case "UnderWorld":
                     if (fondoUnderworld != null) spriteElegido = fondoUnderworld; break;
                 case "Bosque":
                     if (fondoBosque != null) spriteElegido = fondoBosque; break;
@@ -180,6 +181,13 @@ public class BattleManager : MonoBehaviour
         textoLVJugador.text = "LV: " + datosRyo.nivel;
     }
 
+    public void AbrirMenuMagia()
+    {
+        if (!turnoActivo) return;
+        CerrarMenus();
+        if (panelMagia != null) { panelMagia.SetActive(true); ActualizarConjurosAprendidos(); }
+    }
+
     public void AbrirMenuObjetos()
     {
         if (!turnoActivo) return;
@@ -201,10 +209,10 @@ public class BattleManager : MonoBehaviour
             botonFortalecimiento.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel5) && datosRyo.conjuroNivel5 != null);
         if (botonMinihelada != null)
             botonMinihelada.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel8) && datosRyo.conjuroNivel8 != null);
-        
+
         // CORREGIDO: Ahora verifica si el scriptable object contiene el conjuro de nivel 10
         if (botonMiniincendio != null)
-            botonMiniincendio.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel10) && datosRyo.conjuroNivel10 != null); 
+            botonMiniincendio.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel10) && datosRyo.conjuroNivel10 != null);
     }
 
     public void ActualizarObjetosDisponibles()
@@ -293,11 +301,11 @@ public class BattleManager : MonoBehaviour
             // CORREGIDO: Ahora usa el sistema dinámico de ScriptableObjects igual que los otros hechizos
             ConjuroBase conjuro = datosRyo.conjuroNivel10;
             if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
-            
+
             mpSesion -= conjuro.costeMP;
             int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
             vidaEnemigo -= dañoM;
-            
+
             ReproducirSonido(sonidoMagiaAtaque);
             textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Daño: " + dañoM;
         }
@@ -391,7 +399,7 @@ public class BattleManager : MonoBehaviour
 
             case "miniincendio":
                 // CORREGIDO: Quitamos la redefinición de 'int dH' y usamos una nueva variable 'dI'
-                int dI = 20 + datosPippin.fuerzaMagica; 
+                int dI = 20 + datosPippin.fuerzaMagica;
                 vidaEnemigo -= dI;
                 ReproducirSonido(sonidoMagiaAtaque);
                 textoMensajes.text = "¡Pippin lanza Miniincendio! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dI + " de daño.";
@@ -413,18 +421,18 @@ public class BattleManager : MonoBehaviour
     string DecidirAccionPippin()
     {
         float pctJugador = (float)hpSesion / datosRyo.hpMax;
-        float pctPippin  = (float)hpPippin  / datosPippin.hpMax;
-        bool tieneCur  = datosPippin.conjuroMinicuracion     != null;
-        bool tieneFort = datosPippin.conjuroFortalecimiento  != null;
-        bool tieneHel  = datosPippin.conjuroMinihelada       != null;
+        float pctPippin = (float)hpPippin / datosPippin.hpMax;
+        bool tieneCur = datosPippin.conjuroMinicuracion != null;
+        bool tieneFort = datosPippin.conjuroFortalecimiento != null;
+        bool tieneHel = datosPippin.conjuroMinihelada != null;
 
         if (tieneCur && pctJugador < 0.35f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_jugador";
-        if (tieneCur && pctPippin  < 0.30f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_pippin";
-        if (tieneFort && turnosFortalecimiento <= 0      && mpPippin >= datosPippin.conjuroFortalecimiento.costeMP) return "fortalecer_jugador";
+        if (tieneCur && pctPippin < 0.30f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_pippin";
+        if (tieneFort && turnosFortalecimiento <= 0 && mpPippin >= datosPippin.conjuroFortalecimiento.costeMP) return "fortalecer_jugador";
         if (tieneFort && turnosFortalecimientoPippin <= 0 && mpPippin >= datosPippin.conjuroFortalecimiento.costeMP) return "fortalecer_pippin";
         if (tieneCur && pctJugador < 0.60f && mpPippin >= datosPippin.conjuroMinicuracion.costeMP) return "curar_jugador";
         if (tieneHel && mpPippin >= datosPippin.conjuroMinihelada.costeMP) return "minihelada";
-        
+
         return "atacar";
     }
 
@@ -565,8 +573,8 @@ public class BattleManager : MonoBehaviour
             if (turnosInspiracion <= 0)
             {
                 inspiracionActiva = false;
-                datosRyo.bonoAtaqueTemporal   -= inspiracionBonoAtaque;
-                datosRyo.bonoDefensaTemporal  -= inspiracionBonoDefensa;
+                datosRyo.bonoAtaqueTemporal -= inspiracionBonoAtaque;
+                datosRyo.bonoDefensaTemporal -= inspiracionBonoDefensa;
                 datosRyo.bonoAgilidadTemporal -= inspiracionBonoAgilidad;
                 inspiracionBonoAtaque = inspiracionBonoDefensa = inspiracionBonoAgilidad = 0;
                 textoMensajes.text = "La Inspiración de " + datosRyo.nombre + " ha terminado.";
@@ -646,15 +654,15 @@ public class BattleManager : MonoBehaviour
 
     void ActivarInspiracion()
     {
-        inspiracionActiva   = true;
-        turnosInspiracion   = TURNOS_INSPIRACION;
+        inspiracionActiva = true;
+        turnosInspiracion = TURNOS_INSPIRACION;
 
-        inspiracionBonoAtaque   = Mathf.RoundToInt(datosRyo.fuerza   * BONUS_INSPIRACION);
-        inspiracionBonoDefensa  = Mathf.RoundToInt(datosRyo.defensa  * BONUS_INSPIRACION);
+        inspiracionBonoAtaque = Mathf.RoundToInt(datosRyo.fuerza * BONUS_INSPIRACION);
+        inspiracionBonoDefensa = Mathf.RoundToInt(datosRyo.defensa * BONUS_INSPIRACION);
         inspiracionBonoAgilidad = Mathf.RoundToInt(datosRyo.agilidad * BONUS_INSPIRACION);
 
-        datosRyo.bonoAtaqueTemporal   += inspiracionBonoAtaque;
-        datosRyo.bonoDefensaTemporal  += inspiracionBonoDefensa;
+        datosRyo.bonoAtaqueTemporal += inspiracionBonoAtaque;
+        datosRyo.bonoDefensaTemporal += inspiracionBonoDefensa;
         datosRyo.bonoAgilidadTemporal += inspiracionBonoAgilidad;
 
         if (sonidoInspiracion != null) ReproducirSonido(sonidoInspiracion);
