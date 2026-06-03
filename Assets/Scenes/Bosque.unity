@@ -1355,14 +1355,14 @@ RectTransform:
   m_GameObject: {fileID: 191061012}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.50117, y: 0.41764, z: 0.41764}
+  m_LocalScale: {x: 1.2329466, y: 1.0274515, z: 1.0274515}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1280402082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 355.05826, y: 296.1348}
+  m_AnchoredPosition: {x: 19, y: -20}
   m_SizeDelta: {x: 1697.9, y: 1221.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &196089112
@@ -5998,7 +5998,7 @@ MonoBehaviour:
   posiblesEnemigos:
   - {fileID: 11400000, guid: 855299d64707a19468df9b4b6ff51ed7, type: 2}
   - {fileID: 11400000, guid: 0df1cda58d47f4043b6a2b2f6894c434, type: 2}
-  panelTransicion: {fileID: 0}
+  panelTransicion: {fileID: 191061013}
 --- !u!61 &565397074
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15980,6 +15980,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1317439696}
+  - {fileID: 191061016}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -25014,7 +25015,6 @@ SceneRoots:
   - {fileID: 1241069262}
   - {fileID: 359994400}
   - {fileID: 215613888}
-  - {fileID: 191061016}
   - {fileID: 1801837062}
   - {fileID: 532956431}
   - {fileID: 1174479215}
