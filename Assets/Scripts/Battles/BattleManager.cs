@@ -673,6 +673,20 @@ public class BattleManager : MonoBehaviour
                              " durante " + TURNOS_INSPIRACION + " turnos.";
     }
 
+    // ── Wrappers para botones de magia (OnClick del Inspector) ───────────────
+
+    public void BotonMiniincendio() => AccionMagia("Miniincendio");
+    public void BotonMinihelada() => AccionMagia("Minihelada");
+    public void BotonMinicuracion() => AccionMagia("Minicuracion");
+    public void BotonFortalecimiento() => AccionMagia("Fortalecimiento");
+
+    // ── Botón cerrar panel objetos ────────────────────────────────────────────
+
+    public void CerrarPanelObjetos()
+    {
+        if (panelObjetos != null) panelObjetos.SetActive(false);
+    }
+
     private void OnDestroy()
     {
         if (datosRyo != null) datosRyo.ResetearBonos();
