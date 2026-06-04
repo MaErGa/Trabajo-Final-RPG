@@ -15,6 +15,7 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI textoHPJugador;
     public TextMeshProUGUI textoMPJugador;
     public TextMeshProUGUI textoLVJugador;
+    public TextMeshProUGUI textoEstadoJugador; // ← nuevo: muestra estado inspiración
 
     [Header("El Hueco del Enemigo")]
     public GameObject objetoImagenEnemigo;
@@ -179,6 +180,14 @@ public class BattleManager : MonoBehaviour
         textoHPJugador.text = "HP: " + hpSesion;
         textoMPJugador.text = "MP: " + mpSesion;
         textoLVJugador.text = "LV: " + datosRyo.nivel;
+
+        if (textoEstadoJugador != null)
+        {
+            if (inspiracionActiva)
+                textoEstadoJugador.text = "INSPIRADO (" + turnosInspiracion + ")";
+            else
+                textoEstadoJugador.text = "";
+        }
     }
 
     public void AbrirMenuMagia()
@@ -667,7 +676,7 @@ public class BattleManager : MonoBehaviour
 
         if (sonidoInspiracion != null) ReproducirSonido(sonidoInspiracion);
 
-        textoMensajes.text = "✨ ¡" + datosRyo.nombre + " entra en estado de Inspiración!\n" +
+        textoMensajes.text = "¡" + datosRyo.nombre + " entra en estado de Inspiracion!\n" +
                              "ATQ +" + inspiracionBonoAtaque + " | DEF +" + inspiracionBonoDefensa +
                              " | AGI +" + inspiracionBonoAgilidad +
                              " durante " + TURNOS_INSPIRACION + " turnos.";
