@@ -2248,67 +2248,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242112741}
   m_CullTransparentMesh: 1
---- !u!1 &244401672
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 244401674}
-  - component: {fileID: 244401673}
-  m_Layer: 0
-  m_Name: _ScriptsMenuPausa
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &244401673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244401672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d55a53cb56c67f340b5095daf4799adc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  datosRyo: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
-  objetoMenu: {fileID: 0}
-  panelStats: {fileID: 0}
-  panelInventario: {fileID: 0}
-  panelEquipo: {fileID: 0}
-  panelConjuros: {fileID: 0}
-  txtStats: {fileID: 0}
-  txtInventario: {fileID: 0}
-  txtEquipo: {fileID: 0}
-  txtConjuros: {fileID: 0}
-  txtOro: {fileID: 0}
-  contenedorInventario: {fileID: 0}
-  prefabFilaInventario: {fileID: 0}
-  txtFeedbackInventario: {fileID: 0}
-  contenedorEquipo: {fileID: 0}
-  prefabFilaEquipo: {fileID: 0}
-  txtFeedbackEquipo: {fileID: 0}
---- !u!4 &244401674
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244401672}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 330.05994, y: 303.79935, z: -2.0658338}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &286440189
 GameObject:
   m_ObjectHideFlags: 0
@@ -12921,8 +12860,7 @@ MonoBehaviour:
   - "\xA1Vuelve cuando quieras!"
   - Que tengas un buen viaje, aventurero.
   distancia: 6
-  panelTienda: {fileID: 415432865}
-  tiendaManager: {fileID: 166971798}
+  tiendaUI: {fileID: 0}
 --- !u!1 &1697086385
 GameObject:
   m_ObjectHideFlags: 0
@@ -13314,6 +13252,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1705572447}
   m_CullTransparentMesh: 1
+--- !u!1 &1721852675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1721852677}
+  - component: {fileID: 1721852676}
+  m_Layer: 0
+  m_Name: TiendaUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1721852676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721852675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 563532cb69f18b242912f529a1098c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  datosRyo: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
+  itemsConsumiblesVenta:
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+  equipoEnVenta:
+  - {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
+  - {fileID: 11400000, guid: 6b33fa670067af8428725b80606afc14, type: 2}
+  - {fileID: 11400000, guid: ebea8513bdf6cf94da27f7ad4483596d, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: 0f31d22c07e0bc34bac2a85928f27010, type: 2}
+  - {fileID: 11400000, guid: 52a5e61dc3a851949ace0fabed05b61c, type: 2}
+  - {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
+  - {fileID: 11400000, guid: 47240456a6d08834fbae7d1b86a031c9, type: 2}
+  - {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
+  fuentePixel: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
+--- !u!4 &1721852677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721852675}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 618.9903, y: 280.7332, z: -4.916703}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1728058432
 GameObject:
   m_ObjectHideFlags: 0
@@ -13703,7 +13699,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1839135656
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15591,5 +15587,5 @@ SceneRoots:
   - {fileID: 166971797}
   - {fileID: 1510792013}
   - {fileID: 1839135656}
-  - {fileID: 244401674}
   - {fileID: 303403242}
+  - {fileID: 1721852677}
