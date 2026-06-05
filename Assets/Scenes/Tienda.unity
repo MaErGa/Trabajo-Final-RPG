@@ -300,7 +300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &26467216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3171,6 +3171,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 331341094}
   m_CullTransparentMesh: 1
+--- !u!1 &334061597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 334061599}
+  - component: {fileID: 334061598}
+  m_Layer: 0
+  m_Name: ff7tienda
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &334061598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334061597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c5b05f8902996468388662d7821ec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  datosRyo: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
+  itemsConsumiblesVenta:
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+  equipoEnVenta:
+  - {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
+  - {fileID: 11400000, guid: 17f732891419bab489095c1f3a5e9270, type: 2}
+  - {fileID: 11400000, guid: 6b33fa670067af8428725b80606afc14, type: 2}
+  - {fileID: 11400000, guid: ebea8513bdf6cf94da27f7ad4483596d, type: 2}
+  - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
+  - {fileID: 11400000, guid: 0f31d22c07e0bc34bac2a85928f27010, type: 2}
+  - {fileID: 11400000, guid: 52a5e61dc3a851949ace0fabed05b61c, type: 2}
+  - {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
+  - {fileID: 11400000, guid: 47240456a6d08834fbae7d1b86a031c9, type: 2}
+  - {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
+  tagJugador: Player
+  distanciaInteraccion: 6
+  lineasBienvenida:
+  - "\xA1Bienvenido a la tienda!"
+  - "\xBFEn qu\xE9 puedo ayudarte?"
+  lineasDespedida:
+  - "\xA1Hasta la pr\xF3xima, aventurero!"
+  fuentePixel: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
+--- !u!4 &334061599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334061597}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.04, y: -0.04658, z: -7}
+  m_LocalScale: {x: 0.8457746, y: 1.304873, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1651193680}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &374743440
 GameObject:
   m_ObjectHideFlags: 0
@@ -10588,10 +10654,10 @@ RectTransform:
   - {fileID: 1169000944}
   m_Father: {fileID: 1726829538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 35}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 377, y: -17.5}
+  m_SizeDelta: {x: 246, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1206695698
 MonoBehaviour:
@@ -11749,10 +11815,10 @@ RectTransform:
   - {fileID: 1698847637}
   m_Father: {fileID: 1726829538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 35}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 123, y: -17.5}
+  m_SizeDelta: {x: 246, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1327913245
 MonoBehaviour:
@@ -12238,7 +12304,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 8}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1368303092
 MonoBehaviour:
@@ -14884,7 +14950,8 @@ Transform:
   m_LocalPosition: {x: -2.9327233, y: -0.046583965, z: -7}
   m_LocalScale: {x: 0.8457746, y: 1.304873, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 334061599}
   m_Father: {fileID: 68737501}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1651193681
@@ -14894,7 +14961,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651193678}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f0fdf9a8ed808d4e94f18fc63a092b3, type: 3}
   m_Name: 
