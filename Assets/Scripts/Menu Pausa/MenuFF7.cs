@@ -467,7 +467,7 @@ public class MenuFF7 : MonoBehaviour
         rtP.anchorMin = new Vector2(0, 1); rtP.anchorMax = new Vector2(0, 1);
         rtP.pivot = new Vector2(0, 1);
         rtP.anchoredPosition = new Vector2(10, -10);
-        rtP.sizeDelta = new Vector2(100, 100);
+        rtP.sizeDelta = new Vector2(100, 126);
         _imgPortrait = portraitGO.AddComponent<Image>();
         _imgPortrait.color = Color.white;
 
