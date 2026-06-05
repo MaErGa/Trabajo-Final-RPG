@@ -1997,7 +1997,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0f31d22c07e0bc34bac2a85928f27010, type: 2}
   - {fileID: 11400000, guid: 47240456a6d08834fbae7d1b86a031c9, type: 2}
   - {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
-  - {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
   panelTienda: {fileID: 415432865}
   contenedorLista: {fileID: 1285592834}
   prefabBotonItem: {fileID: 2774448089318010722, guid: 80e5377c60b05de49b4d297f80c00c6f, type: 3}

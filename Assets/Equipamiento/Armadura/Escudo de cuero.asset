@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3f8faeb35ce8b4eb8bb6e5ff7acadf, type: 3}
   m_Name: Escudo de cuero
   m_EditorClassIdentifier: 
-  nombre: Escudo de cuero
+  nombre: Escudo de Cuero
   icono: {fileID: 0}
+  descripcion: 
   tipoSlot: 2
+  precioCompra: 15
+  precioVenta: 7
   bonoAtaque: 0
   bonoDefensa: 2
   bonoAgilidad: 0
-  precioCompra: 15
-  precioVenta: 7

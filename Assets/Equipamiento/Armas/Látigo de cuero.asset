@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3f8faeb35ce8b4eb8bb6e5ff7acadf, type: 3}
   m_Name: "L\xE1tigo de cuero"
   m_EditorClassIdentifier: 
-  nombre: "L\xE1tigo de cuero"
+  nombre: "L\xE1tigo de Cuero"
   icono: {fileID: 0}
+  descripcion: 
+  tipoSlot: 0
+  precioCompra: 10
+  precioVenta: 5
   bonoAtaque: 4
   bonoDefensa: 0
   bonoAgilidad: 0
-  precio: 10
-  precioCompra: 10
-  precioVenta: 5
