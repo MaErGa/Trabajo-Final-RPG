@@ -16,10 +16,10 @@ MonoBehaviour:
   spritePersonaje: {fileID: -432793087, guid: 243ba1269d1cd72498a5adccc632c90f, type: 3}
   nivel: 8
   hpMax: 140
-  hpActual: 101
+  hpActual: 83
   mpMax: 25
-  mpActual: 12
-  fuerza: 25
+  mpActual: 7
+  fuerza: 58
   defensa: 58
   fuerzaMagica: 35
   terapeucidad: 20
