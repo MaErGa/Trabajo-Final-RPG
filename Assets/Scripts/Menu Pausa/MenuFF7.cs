@@ -85,6 +85,17 @@ public class MenuFF7 : MonoBehaviour
     // Panel stats GO (para mostrar/ocultar)
     GameObject _panelStats;
 
+    // Panel magia
+    GameObject      _panelMagia;
+    Transform       _contenedorMagias;
+    ConjuroBase     _conjuroSel;
+    TextMeshProUGUI _txtMagNombre, _txtMagDesc;
+    Button          _btnMagAccion;
+    TextMeshProUGUI _txtBtnMagAccion;
+
+    // Texto XP numérico
+    TextMeshProUGUI _txtXP;
+
     // ─────────────────────────────────────────────────────────────────────────
     // ESTADO
     // ─────────────────────────────────────────────────────────────────────────
@@ -127,6 +138,7 @@ public class MenuFF7 : MonoBehaviour
         _panelStats.SetActive(true);
         _panelInventario.SetActive(false);
         _panelEquipo.SetActive(false);
+        if (_panelMagia != null) _panelMagia.SetActive(false);
         ResaltarBtn(_btnEstado);
         ActualizarBotonMagia();
         RefrescarStats();
@@ -138,10 +150,91 @@ public class MenuFF7 : MonoBehaviour
         bool tieneMagia = datosJugador.conjurosAprendidos != null &&
                           datosJugador.conjurosAprendidos.Count > 0;
         _btnMagia.interactable = tieneMagia;
+        _btnMagia.onClick.RemoveAllListeners();
+        if (tieneMagia) _btnMagia.onClick.AddListener(AbrirMagia);
         var img = _btnMagia.GetComponent<Image>();
         if (img) img.color = tieneMagia ? C_MEDIO : new Color(0.15f, 0.15f, 0.25f, 1f);
         var txt = _btnMagia.GetComponentInChildren<TextMeshProUGUI>();
         if (txt) txt.color = tieneMagia ? C_BLANCO : C_GRIS;
+    }
+
+    void AbrirMagia()
+    {
+        _panelStats.SetActive(false);
+        _panelInventario.SetActive(false);
+        _panelEquipo.SetActive(false);
+        _panelMagia.SetActive(true);
+        ResaltarBtn(_btnMagia);
+        if (_txtMagNombre) _txtMagNombre.text = "";
+        if (_txtMagDesc)   _txtMagDesc.text   = "";
+        if (_btnMagAccion) _btnMagAccion.gameObject.SetActive(false);
+        _conjuroSel = null;
+        RefrescarMagia();
+    }
+
+    void RefrescarMagia()
+    {
+        if (datosJugador == null || _contenedorMagias == null) return;
+        LimpiarContenedor(_contenedorMagias);
+
+        if (datosJugador.conjurosAprendidos == null || datosJugador.conjurosAprendidos.Count == 0)
+        {
+            CrearFilaInventario_En(_contenedorMagias, "Sin conjuros aprendidos", "", null);
+            return;
+        }
+        foreach (var conjuro in datosJugador.conjurosAprendidos)
+        {
+            if (conjuro == null) continue;
+            var cap = conjuro;
+            string coste = cap.costeMP > 0 ? cap.costeMP + " MP" : "--";
+            CrearFilaInventario_En(_contenedorMagias, cap.nombreConjuro, coste,
+                () => SeleccionarConjuro(cap));
+        }
+    }
+
+    void SeleccionarConjuro(ConjuroBase conjuro)
+    {
+        _conjuroSel = conjuro;
+        if (_txtMagNombre) _txtMagNombre.text = conjuro.nombreConjuro;
+        string desc = conjuro.descripcion;
+        if (conjuro.costeMP > 0) desc += $"   Coste: {conjuro.costeMP} MP";
+        if (conjuro.valorEfecto > 0) desc += $"   Efecto: +{conjuro.valorEfecto}";
+        if (_txtMagDesc) _txtMagDesc.text = desc;
+
+        if ((int)conjuro.tipo == 0)
+        {
+            if (_btnMagAccion) _btnMagAccion.gameObject.SetActive(true);
+            if (_btnMagAccion)
+            {
+                _btnMagAccion.onClick.RemoveAllListeners();
+                _btnMagAccion.onClick.AddListener(UsarConjuro);
+            }
+            if (_txtBtnMagAccion) _txtBtnMagAccion.text = "Usar";
+        }
+        else
+        {
+            if (_btnMagAccion) _btnMagAccion.gameObject.SetActive(false);
+            if (_txtMagDesc) _txtMagDesc.text += "\n(Solo usable en combate)";
+        }
+    }
+
+    void UsarConjuro()
+    {
+        if (_conjuroSel == null || datosJugador == null) return;
+        if (datosJugador.mpActual < _conjuroSel.costeMP)
+        {
+            if (_txtMagDesc) _txtMagDesc.text = "¡No tienes suficiente MP!";
+            if (_btnMagAccion) _btnMagAccion.gameObject.SetActive(false);
+            return;
+        }
+        datosJugador.mpActual -= _conjuroSel.costeMP;
+        datosJugador.hpActual  = Mathf.Min(datosJugador.hpMax,
+                                            datosJugador.hpActual + _conjuroSel.valorEfecto);
+        if (_txtMagDesc)
+            _txtMagDesc.text = $"¡{_conjuroSel.nombreConjuro} usado!\n+{_conjuroSel.valorEfecto} HP  |  MP: {datosJugador.mpActual}/{datosJugador.mpMax}";
+        if (_btnMagAccion) _btnMagAccion.gameObject.SetActive(false);
+        _conjuroSel = null;
+        RefrescarStats();
     }
 
     void AbrirInventario()
@@ -149,6 +242,7 @@ public class MenuFF7 : MonoBehaviour
         _panelStats.SetActive(false);
         _panelInventario.SetActive(true);
         _panelEquipo.SetActive(false);
+        if (_panelMagia != null) _panelMagia.SetActive(false);
         ResaltarBtn(_btnItem);
         RefrescarInventario();
     }
@@ -158,6 +252,7 @@ public class MenuFF7 : MonoBehaviour
         _panelStats.SetActive(false);
         _panelInventario.SetActive(false);
         _panelEquipo.SetActive(true);
+        if (_panelMagia != null) _panelMagia.SetActive(false);
         ResaltarBtn(_btnEquipo);
         RefrescarEquipo();
     }
@@ -185,6 +280,16 @@ public class MenuFF7 : MonoBehaviour
         // Barra XP
         if (_fillXP && datosJugador.expSiguienteNivel > 0)
             _fillXP.fillAmount = Mathf.Clamp01((float)datosJugador.experiencia / datosJugador.expSiguienteNivel);
+        if (_txtXP)
+        {
+            if (datosJugador.nivel >= 10)
+                _txtXP.text = "MAX";
+            else
+            {
+                int falta = Mathf.Max(0, datosJugador.expSiguienteNivel - datosJugador.experiencia);
+                _txtXP.text = $"{datosJugador.experiencia}/{datosJugador.expSiguienteNivel}  (-{falta})";
+            }
+        }
 
         if (_txtAtq) _txtAtq.text = datosJugador.AtaqueTotal.ToString();
         if (_txtDef) _txtDef.text = datosJugador.DefensaTotal.ToString();
@@ -192,11 +297,11 @@ public class MenuFF7 : MonoBehaviour
         if (_txtMag) _txtMag.text = datosJugador.fuerzaMagica.ToString();
         if (_txtTer) _txtTer.text = datosJugador.terapeucidad.ToString();
 
-        if (_txtArma) _txtArma.text = datosJugador.armaEquipadaAsset != null ? datosJugador.armaEquipadaAsset.nombre : "——";
-        if (_txtArmadura) _txtArmadura.text = datosJugador.armaduraEquipadaAsset != null ? datosJugador.armaduraEquipadaAsset.nombre : "——";
-        if (_txtEscudo) _txtEscudo.text = datosJugador.escudoEquipadoAsset != null ? datosJugador.escudoEquipadoAsset.nombre : "——";
-        if (_txtCasco) _txtCasco.text = datosJugador.cascoEquipadoAsset != null ? datosJugador.cascoEquipadoAsset.nombre : "——";
-        if (_txtAccesorio) _txtAccesorio.text = datosJugador.accesorioEquipadoAsset != null ? datosJugador.accesorioEquipadoAsset.nombre : "——";
+        if (_txtArma) _txtArma.text = datosJugador.armaEquipadaAsset != null ? datosJugador.armaEquipadaAsset.nombre : "--";
+        if (_txtArmadura) _txtArmadura.text = datosJugador.armaduraEquipadaAsset != null ? datosJugador.armaduraEquipadaAsset.nombre : "--";
+        if (_txtEscudo) _txtEscudo.text = datosJugador.escudoEquipadoAsset != null ? datosJugador.escudoEquipadoAsset.nombre : "--";
+        if (_txtCasco) _txtCasco.text = datosJugador.cascoEquipadoAsset != null ? datosJugador.cascoEquipadoAsset.nombre : "--";
+        if (_txtAccesorio) _txtAccesorio.text = datosJugador.accesorioEquipadoAsset != null ? datosJugador.accesorioEquipadoAsset.nombre : "--";
 
         if (_txtOro) _txtOro.text = "Gil  " + datosJugador.oro;
     }
@@ -243,11 +348,11 @@ public class MenuFF7 : MonoBehaviour
     void RefrescarEquipo()
     {
         if (datosJugador == null) return;
-        if (_eqArma) _eqArma.text = datosJugador.armaEquipadaAsset != null ? datosJugador.armaEquipadaAsset.nombre : "——";
-        if (_eqArmadura) _eqArmadura.text = datosJugador.armaduraEquipadaAsset != null ? datosJugador.armaduraEquipadaAsset.nombre : "——";
-        if (_eqEscudo) _eqEscudo.text = datosJugador.escudoEquipadoAsset != null ? datosJugador.escudoEquipadoAsset.nombre : "——";
-        if (_eqCasco) _eqCasco.text = datosJugador.cascoEquipadoAsset != null ? datosJugador.cascoEquipadoAsset.nombre : "——";
-        if (_eqAccesorio) _eqAccesorio.text = datosJugador.accesorioEquipadoAsset != null ? datosJugador.accesorioEquipadoAsset.nombre : "——";
+        if (_eqArma) _eqArma.text = datosJugador.armaEquipadaAsset != null ? datosJugador.armaEquipadaAsset.nombre : "--";
+        if (_eqArmadura) _eqArmadura.text = datosJugador.armaduraEquipadaAsset != null ? datosJugador.armaduraEquipadaAsset.nombre : "--";
+        if (_eqEscudo) _eqEscudo.text = datosJugador.escudoEquipadoAsset != null ? datosJugador.escudoEquipadoAsset.nombre : "--";
+        if (_eqCasco) _eqCasco.text = datosJugador.cascoEquipadoAsset != null ? datosJugador.cascoEquipadoAsset.nombre : "--";
+        if (_eqAccesorio) _eqAccesorio.text = datosJugador.accesorioEquipadoAsset != null ? datosJugador.accesorioEquipadoAsset.nombre : "--";
 
         if (_eqBonos)
             _eqBonos.text = $"ATQ  {datosJugador.AtaqueTotal}     DEF  {datosJugador.DefensaTotal}     AGI  {datosJugador.AgilidadTotal}";
@@ -341,7 +446,7 @@ public class MenuFF7 : MonoBehaviour
 
     void ResaltarBtn(Button activo)
     {
-        foreach (var b in new[] { _btnEstado, _btnItem, _btnEquipo })
+        foreach (var b in new[] { _btnEstado, _btnItem, _btnEquipo, _btnMagia })
         {
             if (b == null) continue;
             var img = b.GetComponent<Image>();
@@ -355,8 +460,12 @@ public class MenuFF7 : MonoBehaviour
     }
 
     void CrearFilaInventario(string nombre, string detalle, UnityEngine.Events.UnityAction accion)
+        => CrearFilaInventario_En(_contenedorItems, nombre, detalle, accion);
+
+    void CrearFilaInventario_En(Transform contenedor, string nombre, string detalle,
+        UnityEngine.Events.UnityAction accion)
     {
-        var fila = Nodo("Fila_" + nombre, _contenedorItems);
+        var fila = Nodo("Fila_" + nombre, contenedor);
         var rt = fila.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(0, 32);
         var img = fila.AddComponent<Image>(); img.color = C_FONDO;
@@ -494,6 +603,8 @@ public class MenuFF7 : MonoBehaviour
         var lblXP = TMP_Anclado(stR, "LblXP", "next level", 10, C_GRIS,
             new Vector2(0, 1), new Vector2(0, 1), new Vector2(520, -68), new Vector2(200, 16));
         _fillXP = CrearBarra(stR, "BarraXP", new Vector2(520, -86), new Vector2(300, 10), C_ORO);
+        _txtXP = TMP_Anclado(stR, "TxtXP", "0/0", 10, C_ORO,
+            new Vector2(0, 1), new Vector2(0, 1), new Vector2(520, -100), new Vector2(300, 16));
 
         // Separador
         var sep1 = Nodo("Sep1", stR);
@@ -600,6 +711,52 @@ public class MenuFF7 : MonoBehaviour
 
         _eqBonos = TMP_Anclado(eqR, "EqBonos", "", 13, C_ORO,
             new Vector2(0, 1), new Vector2(1, 1), new Vector2(10, ey), new Vector2(-10, 22));
+
+        // ── PANEL MAGIA ───────────────────────────────────────────────────────
+        _panelMagia = PanelFF("PanelMagia", _raiz.transform, new Vector2(20, 20), new Vector2(1120, 690));
+        _panelMagia.SetActive(false);
+        var magRelleno = _panelMagia.transform.Find("Relleno");
+        Transform magR = magRelleno ?? _panelMagia.transform;
+
+        TMP_Anclado(magR, "TituloMag", "MAGIA", 16, C_CYAN,
+            new Vector2(0, 1), new Vector2(0, 1), new Vector2(10, -10), new Vector2(200, 28));
+
+        // Lista conjuros con scroll (deja espacio abajo para info)
+        var scrollMag = CrearScroll(magR, new Vector2(10, -46), new Vector2(-10, -170));
+        _contenedorMagias = scrollMag.GetComponentInChildren<VerticalLayoutGroup>().transform;
+
+        // Panel info conjuro seleccionado
+        var infoMagGO = Nodo("InfoMagia", magR);
+        var rtIM = infoMagGO.GetComponent<RectTransform>();
+        rtIM.anchorMin = new Vector2(0, 0); rtIM.anchorMax = new Vector2(1, 0);
+        rtIM.pivot = new Vector2(0, 0);
+        rtIM.anchoredPosition = new Vector2(10, 50); rtIM.sizeDelta = new Vector2(-20, 110);
+        infoMagGO.AddComponent<Image>().color = C_MEDIO;
+
+        _txtMagNombre = TMP_Anclado(infoMagGO.transform, "MagNombre", "", 14, C_ORO,
+            new Vector2(0, 1), new Vector2(1, 1), new Vector2(8, -8), new Vector2(-8, 26));
+        _txtMagDesc = TMP_Anclado(infoMagGO.transform, "MagDesc", "", 12, C_BLANCO,
+            new Vector2(0, 0), new Vector2(1, 1), new Vector2(8, -38), new Vector2(-8, 8));
+        _txtMagDesc.enableWordWrapping = true;
+
+        // Botón Usar
+        var btnMagGO = Nodo("BtnUsarMagia", magR);
+        var rtBM = btnMagGO.GetComponent<RectTransform>();
+        rtBM.anchorMin = new Vector2(0, 0); rtBM.anchorMax = new Vector2(0, 0);
+        rtBM.pivot = new Vector2(0, 0);
+        rtBM.anchoredPosition = new Vector2(10, 8); rtBM.sizeDelta = new Vector2(160, 38);
+        btnMagGO.AddComponent<Image>().color = C_CLARO;
+        _btnMagAccion = btnMagGO.AddComponent<Button>();
+        var cbMag = _btnMagAccion.colors;
+        cbMag.normalColor = C_CLARO; cbMag.highlightedColor = C_SEL; cbMag.pressedColor = C_BORDE;
+        _btnMagAccion.colors = cbMag;
+        var txtMagGO = Nodo("Txt", btnMagGO.transform);
+        Stretch(txtMagGO.GetComponent<RectTransform>(), Vector2.zero, Vector2.zero);
+        _txtBtnMagAccion = txtMagGO.AddComponent<TextMeshProUGUI>();
+        _txtBtnMagAccion.text = "Usar"; _txtBtnMagAccion.fontSize = 15;
+        _txtBtnMagAccion.color = C_BLANCO; _txtBtnMagAccion.alignment = TextAlignmentOptions.Center;
+        if (fuentePixel) _txtBtnMagAccion.font = fuentePixel;
+        btnMagGO.SetActive(false);
     }
 
     // ═════════════════════════════════════════════════════════════════════════
@@ -693,7 +850,7 @@ public class MenuFF7 : MonoBehaviour
     {
         var lbl = TMP_Anclado(padre, "Lbl_" + id, label, 12, C_CYAN,
             new Vector2(0, 1), new Vector2(0, 1), new Vector2(20, y), new Vector2(140, 20));
-        var val = TMP_Anclado(padre, "Val_" + id, "——", 12, C_BLANCO,
+        var val = TMP_Anclado(padre, "Val_" + id, "--", 12, C_BLANCO,
             new Vector2(0, 1), new Vector2(0, 1), new Vector2(170, y), new Vector2(500, 20));
         y -= 26f;
         return val;
