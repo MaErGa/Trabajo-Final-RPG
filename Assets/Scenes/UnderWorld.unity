@@ -147258,7 +147258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   datosJugador: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
   portrait: {fileID: -8787387693451921544, guid: 874818d5b66575a4fb31edd6a46aa3f7, type: 3}
-  fuentePixel: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
+  fuentePixel: {fileID: 11400000, guid: 82efd64735b12484993dafd2fe72105a, type: 2}
 --- !u!4 &541120058
 Transform:
   m_ObjectHideFlags: 0

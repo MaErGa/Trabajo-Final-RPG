@@ -14893,7 +14893,7 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82efd64735b12484993dafd2fe72105a, type: 2}
   m_sharedMaterial: {fileID: 2673695547091453396, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -14957,7 +14957,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1776532570
@@ -17810,7 +17810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   datosJugador: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
   portrait: {fileID: -8787387693451921544, guid: 874818d5b66575a4fb31edd6a46aa3f7, type: 3}
-  fuentePixel: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
+  fuentePixel: {fileID: 11400000, guid: 82efd64735b12484993dafd2fe72105a, type: 2}
 --- !u!4 &2078809533
 Transform:
   m_ObjectHideFlags: 0

@@ -199,8 +199,8 @@ MonoBehaviour:
     del curso \"IFCD57\"\r\nY a todas las personas que apoyan la formaci\xF3n t\xE9cnica\r\n\r\n\xA1MUCHAS
     GRACIAS POR JUGAR!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82efd64735b12484993dafd2fe72105a, type: 2}
+  m_sharedMaterial: {fileID: -4819660113561974880, guid: 82efd64735b12484993dafd2fe72105a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
