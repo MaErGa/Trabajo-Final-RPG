@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// ╠══════════════════════════════════════════════════════════╣
 /// ║  • Genera toda la UI por código (nunca se descuadra)     ║
 /// ║  • Comprar / Vender consumibles y equipo                 ║
-/// ║  • Diálogo de bienvenida y despedida del NPC integrado   ║
+/// ║  • Diálogo de bienvenida y despedida INDEPENDIENTE       ║
 /// ║  • Confirmación de compra/venta                          ║
 /// ╠══════════════════════════════════════════════════════════╣
 /// ║  SETUP en el Inspector:                                  ║
@@ -19,9 +19,6 @@ using System.Collections.Generic;
 /// ║    equipoEnVenta         → tus EquipoBase assets         ║
 /// ║    fuentePixel           → fuente TMP pixel (opcional)   ║
 /// ║    distanciaInteraccion  → radio para abrir con tecla X  ║
-/// ║                                                          ║
-/// ║  Añade este script a un GameObject vacío en la escena.   ║
-/// ║  El jugador pulsa X cerca del NPC para abrir la tienda.  ║
 /// ╚══════════════════════════════════════════════════════════╝
 /// </summary>
 public class TiendaFF : MonoBehaviour
@@ -38,7 +35,6 @@ public class TiendaFF : MonoBehaviour
     public List<EquipoBase> equipoEnVenta = new List<EquipoBase>();
 
     [Header("── NPC ─────────────────────────────────────────")]
-    [Tooltip("Tag del jugador para detectar proximidad")]
     public string tagJugador = "Player";
     public float distanciaInteraccion = 6f;
 
@@ -75,30 +71,25 @@ public class TiendaFF : MonoBehaviour
     Canvas _canvas;
     GameObject _raiz;
 
-    // Panel izquierdo menú
     GameObject _panelMenu;
-    Button _btnComprar, _btnVender, _btnSalir;
+    Button _btnComprar, _btnVender;
 
-    // Panel Gil
     TextMeshProUGUI _txtGil;
 
-    // Panel lista (derecha superior)
     GameObject _panelLista;
     Transform _headerLista;
     Transform _contenedor;
 
-    // Panel descripción (inferior)
     GameObject _panelDesc;
     TextMeshProUGUI _txtDesc;
 
-    // Panel confirmación (overlay)
     GameObject _panelConf;
     TextMeshProUGUI _txtConf;
     Button _btnSi, _btnNo;
 
-    // Panel diálogo NPC (inferior, tapa desc mientras habla)
     GameObject _panelDialogo;
     TextMeshProUGUI _txtDialogo;
+    TextMeshProUGUI _txtContinuar;
 
     // ─────────────────────────────────────────────────────────────────────────
     // ESTADO
@@ -133,9 +124,6 @@ public class TiendaFF : MonoBehaviour
     {
         if (_jugador == null || _iniciando) return;
 
-        // Si el DialogoManager externo está mostrando algo, no procesar input de tienda
-        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return;
-
         float dist = Vector2.Distance(transform.position, _jugador.position);
 
         if (dist <= distanciaInteraccion && Input.GetKeyDown(KeyCode.X))
@@ -154,7 +142,7 @@ public class TiendaFF : MonoBehaviour
     IEnumerator CorAbrir()
     {
         _iniciando = true;
-        yield return null; // esperar un frame para que Update no consuma la X
+        yield return null; // esperar un frame para que la X no se consuma aquí
         yield return StartCoroutine(MostrarDialogo(lineasBienvenida));
         _raiz.SetActive(true);
         ActualizarGil();
@@ -168,12 +156,11 @@ public class TiendaFF : MonoBehaviour
         _iniciando = true;
         _raiz.SetActive(false);
         _abierta = false;
-        yield return null; // esperar un frame
+        yield return null;
         yield return StartCoroutine(MostrarDialogo(lineasDespedida));
         _iniciando = false;
     }
 
-    // También llamable externamente (desde NPCTienda si lo prefieres)
     public void AbrirTienda() => StartCoroutine(CorAbrir());
     public void CerrarTienda() => StartCoroutine(CorCerrar());
 
@@ -248,7 +235,7 @@ public class TiendaFF : MonoBehaviour
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    // SELECCIÓN → abre confirmación directamente
+    // SELECCIÓN
     // ═════════════════════════════════════════════════════════════════════════
 
     void AlSeleccionarCompra_Consumible(ItemConsumible item)
@@ -346,7 +333,6 @@ public class TiendaFF : MonoBehaviour
         {
             datosRyo.oro += _equipoSel.precioVenta;
             datosRyo.armarioEquipo.Remove(_equipoSel);
-            // Si estaba equipado, desequipar
             if (_equipoSel == datosRyo.armaEquipadaAsset) datosRyo.armaEquipadaAsset = null;
             if (_equipoSel == datosRyo.armaduraEquipadaAsset) datosRyo.armaduraEquipadaAsset = null;
             if (_equipoSel == datosRyo.escudoEquipadoAsset) datosRyo.escudoEquipadoAsset = null;
@@ -361,41 +347,46 @@ public class TiendaFF : MonoBehaviour
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    // DIÁLOGO NPC (no depende de DialogoManager)
+    // DIÁLOGO NPC — completamente independiente del DialogoManager
     // ═════════════════════════════════════════════════════════════════════════
 
     IEnumerator MostrarDialogo(string[] lineas)
     {
         if (lineas == null || lineas.Length == 0) yield break;
 
-        // Usar el DialogoManager global igual que el resto del juego
-        if (DialogoManager.instancia != null)
+        _panelDialogo.SetActive(true);
+        _txtContinuar.gameObject.SetActive(false);
+
+        foreach (var linea in lineas)
         {
-            DialogoManager.instancia.MostrarDialogo(lineas);
-            yield return null; // esperar un frame para que dialogoActivo se ponga true
-            yield return new WaitUntil(() => !DialogoManager.instancia.EstaActivo());
-        }
-        else
-        {
-            // Fallback: panel propio si no hay DialogoManager
-            _panelDialogo.SetActive(true);
-            foreach (var linea in lineas)
+            _txtDialogo.text = "";
+            _txtContinuar.gameObject.SetActive(false);
+
+            // Efecto máquina de escribir
+            foreach (char c in linea)
             {
-                _txtDialogo.text = "";
-                foreach (char c in linea)
-                {
-                    _txtDialogo.text += c;
-                    yield return new WaitForSeconds(0.03f);
-                }
-                yield return new WaitUntil(() =>
-                    Input.GetKeyDown(KeyCode.Z) ||
-                    Input.GetKeyDown(KeyCode.X) ||
-                    Input.GetKeyDown(KeyCode.Return) ||
-                    Input.GetKeyDown(KeyCode.Space));
-                yield return null;
+                _txtDialogo.text += c;
+                yield return new WaitForSeconds(0.03f);
             }
-            _panelDialogo.SetActive(false);
+
+            // Mostrar indicador "continuar"
+            _txtContinuar.gameObject.SetActive(true);
+
+            // Pequeño delay para que la X que abrió la tienda no avance el diálogo
+            yield return new WaitForSeconds(0.15f);
+
+            // Esperar input del jugador
+            yield return new WaitUntil(() =>
+                Input.GetKeyDown(KeyCode.X) ||
+                Input.GetKeyDown(KeyCode.Z) ||
+                Input.GetKeyDown(KeyCode.Return) ||
+                Input.GetKeyDown(KeyCode.Space));
+
+            yield return null; // un frame extra antes de la siguiente línea
         }
+
+        _txtContinuar.gameObject.SetActive(false);
+        _panelDialogo.SetActive(false);
     }
 
     // ═════════════════════════════════════════════════════════════════════════
@@ -420,11 +411,7 @@ public class TiendaFF : MonoBehaviour
             _txtGil.text = "Gil  " + datosRyo.oro;
     }
 
-    void SetDesc(string texto)
-    {
-        if (_txtDesc != null) _txtDesc.text = texto;
-    }
-
+    void SetDesc(string texto) { if (_txtDesc != null) _txtDesc.text = texto; }
     void LimpiarDesc() => SetDesc("");
 
     void LimpiarLista()
@@ -434,7 +421,6 @@ public class TiendaFF : MonoBehaviour
         _filaActiva = null;
     }
 
-    /// Comprueba si un EquipoBase está equipado en algún slot
     bool EstaEquipado(EquipoBase eq)
     {
         if (datosRyo == null || eq == null) return false;
@@ -475,18 +461,6 @@ public class TiendaFF : MonoBehaviour
 
     // ═════════════════════════════════════════════════════════════════════════
     // CONSTRUCCIÓN UI
-    // Toda la UI se genera aquí. Resolución de referencia: 1366 × 768
-    // Layout:
-    //   ┌──────────┬──────────────────────────────────┐
-    //   │  MENÚ    │  HEADER: Nombre | Costo | Equip  │
-    //   │ Comprar  │  ─────────────────────────────── │
-    //   │ Vender   │  item 1                          │
-    //   │ Salir    │  item 2  ...  (scroll)           │
-    //   ├──────────┤                                  │
-    //   │  GIL     │                                  │
-    //   └──────────┴──────────────────────────────────┘
-    //   └──── DESCRIPCIÓN / FEEDBACK ───────────────────┘
-    //   └──── DIÁLOGO NPC (solo mientras habla) ─────────┘
     // ═════════════════════════════════════════════════════════════════════════
 
     void ConstruirUI()
@@ -503,27 +477,29 @@ public class TiendaFF : MonoBehaviour
         cs.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
         cgo.AddComponent<GraphicRaycaster>();
 
-        // Raíz transparente pantalla completa
         _raiz = Nodo("Raiz", cgo.transform);
         Stretch(_raiz.GetComponent<RectTransform>(), Vector2.zero, Vector2.one);
 
-        // ── Panel Menú (izquierda, 20-270, y desde arriba 20 hasta 420) ───────
+        // Panel Menú
         _panelMenu = PanelFF("PanelMenu", _raiz.transform, new Vector2(20, 20), new Vector2(250, 400));
+        var rellenoMenu = _panelMenu.transform.Find("Relleno");
+        Transform menuRoot = rellenoMenu ?? _panelMenu.transform;
+        _btnComprar = BotonMenu("Comprar", menuRoot, 0, () => EntrarModoComprar());
+        _btnVender = BotonMenu("Vender", menuRoot, 56, () => EntrarModoVender());
+        BotonMenu("Salir", menuRoot, 112, () => StartCoroutine(CorCerrar()));
 
-        // ── Panel Gil (izquierda, debajo del menú) ────────────────────────────
+        // Panel Gil
         var panelGil = PanelFF("PanelGil", _raiz.transform, new Vector2(20, 430), new Vector2(250, 60));
-        // Texto dentro del relleno del panel
         var rellenoGil = panelGil.transform.Find("Relleno");
         _txtGil = CrearTMP(rellenoGil ?? panelGil.transform, "TxtGil",
             "Gil  0", 14, TextAlignmentOptions.Left, C_ORO, bold: true);
         Stretch(_txtGil.rectTransform, new Vector2(10, 4), new Vector2(-10, -4));
 
-        // ── Panel Lista (derecha, x 290, y 20, w 1056, h 490) ─────────────────
+        // Panel Lista
         _panelLista = PanelFF("PanelLista", _raiz.transform, new Vector2(290, 20), new Vector2(1056, 490));
         var rellenoLista = _panelLista.transform.Find("Relleno");
         Transform listaRoot = rellenoLista ?? _panelLista.transform;
 
-        // Header fijo dentro del panel lista
         var headerGO = Nodo("Header", listaRoot);
         _headerLista = headerGO.transform;
         var rtH = headerGO.GetComponent<RectTransform>();
@@ -533,13 +509,12 @@ public class TiendaFF : MonoBehaviour
         rtH.sizeDelta = new Vector2(0, 34);
         headerGO.AddComponent<Image>().color = C_CLARO;
         AgregarColumnas(headerGO.transform, "Nombre", "Costo", "Equipado",
-                        C_BLANCO, C_BLANCO, C_BLANCO, esHeader: true);
+            C_BLANCO, C_BLANCO, C_BLANCO, esHeader: true);
 
-        // ScrollView para los items
         var scrollGO = CrearScroll(listaRoot, new Vector2(0, 0), new Vector2(0, -34));
         _contenedor = scrollGO.GetComponentInChildren<VerticalLayoutGroup>().transform;
 
-        // ── Panel Descripción (inferior, x 20, y 510, w 1326, h 68) ──────────
+        // Panel Descripción
         _panelDesc = PanelFF("PanelDesc", _raiz.transform, new Vector2(20, 510), new Vector2(1326, 68));
         var rellenoDesc = _panelDesc.transform.Find("Relleno");
         _txtDesc = CrearTMP(rellenoDesc ?? _panelDesc.transform, "TxtDesc",
@@ -547,25 +522,38 @@ public class TiendaFF : MonoBehaviour
         Stretch(_txtDesc.rectTransform, new Vector2(10, 4), new Vector2(-10, -4));
         _txtDesc.enableWordWrapping = true;
 
-        // ── Panel Diálogo NPC (misma posición que desc, lo tapa mientras habla)
-        _panelDialogo = PanelFF("PanelDialogo", _raiz.transform, new Vector2(20, 510), new Vector2(1326, 68));
+        // Panel Diálogo NPC (independiente, tapa la desc mientras habla)
+        _panelDialogo = PanelFF("PanelDialogo", _canvas.transform, new Vector2(20, 510), new Vector2(1326, 68));
         var rellenoDialogo = _panelDialogo.transform.Find("Relleno");
-        _txtDialogo = CrearTMP(rellenoDialogo ?? _panelDialogo.transform, "TxtDialogo",
+        Transform dialogoRoot = rellenoDialogo ?? _panelDialogo.transform;
+
+        _txtDialogo = CrearTMP(dialogoRoot, "TxtDialogo",
             "", 13, TextAlignmentOptions.Left, C_BLANCO);
-        Stretch(_txtDialogo.rectTransform, new Vector2(10, 4), new Vector2(-10, -4));
+        // Deja espacio a la derecha para el indicador "continuar"
+        var rtTD = _txtDialogo.rectTransform;
+        rtTD.anchorMin = Vector2.zero; rtTD.anchorMax = Vector2.one;
+        rtTD.offsetMin = new Vector2(10, 4); rtTD.offsetMax = new Vector2(-60, -4);
         _txtDialogo.enableWordWrapping = true;
+
+        // Indicador "continuar" (▼)
+        var continGO = Nodo("TxtContinuar", dialogoRoot);
+        var rtC2 = continGO.GetComponent<RectTransform>();
+        rtC2.anchorMin = new Vector2(1, 0); rtC2.anchorMax = new Vector2(1, 1);
+        rtC2.pivot = new Vector2(1, 0.5f);
+        rtC2.anchoredPosition = new Vector2(-8, 0);
+        rtC2.sizeDelta = new Vector2(40, 0);
+        _txtContinuar = continGO.AddComponent<TextMeshProUGUI>();
+        _txtContinuar.text = "▼";
+        _txtContinuar.fontSize = 14;
+        _txtContinuar.color = C_ORO;
+        _txtContinuar.alignment = TextAlignmentOptions.Center;
+        if (fuentePixel) _txtContinuar.font = fuentePixel;
+        _txtContinuar.gameObject.SetActive(false);
+
         _panelDialogo.SetActive(false);
-        _panelDialogo.transform.SetAsLastSibling(); // siempre encima de panelDesc
+        _panelDialogo.transform.SetAsLastSibling();
 
-        // ── Botones del menú ──────────────────────────────────────────────────
-        var rellenoMenu = _panelMenu.transform.Find("Relleno");
-        Transform menuRoot = rellenoMenu ?? _panelMenu.transform;
-
-        _btnComprar = BotonMenu("Comprar", menuRoot, 0, () => EntrarModoComprar());
-        _btnVender = BotonMenu("Vender", menuRoot, 56, () => EntrarModoVender());
-        BotonMenu("Salir", menuRoot, 112, () => StartCoroutine(CorCerrar()));
-
-        // ── Panel Confirmación (overlay centrado) ─────────────────────────────
+        // Panel Confirmación
         _panelConf = PanelFF("PanelConf", _raiz.transform, new Vector2(383, 234), new Vector2(600, 200));
         _panelConf.SetActive(false);
         var rellenoConf = _panelConf.transform.Find("Relleno");
@@ -587,7 +575,6 @@ public class TiendaFF : MonoBehaviour
     // FÁBRICA DE WIDGETS
     // ═════════════════════════════════════════════════════════════════════════
 
-    /// Panel azul oscuro con borde blanco y relleno. Pivot arriba-izquierda.
     GameObject PanelFF(string nombre, Transform padre, Vector2 posTopLeft, Vector2 tamano)
     {
         var go = Nodo(nombre, padre);
@@ -597,23 +584,13 @@ public class TiendaFF : MonoBehaviour
         rt.anchoredPosition = new Vector2(posTopLeft.x, -posTopLeft.y);
         rt.sizeDelta = tamano;
         go.AddComponent<Image>().color = C_FONDO;
-
-        // Borde
-        var b = Nodo("Borde", go.transform);
-        Stretch(b.GetComponent<RectTransform>(), new Vector2(2, 2), new Vector2(-2, -2));
-        b.AddComponent<Image>().color = C_BORDE;
-        b.GetComponent<Image>().raycastTarget = false;
-
-        // Relleno (tapa el borde dejando solo el contorno)
-        var r = Nodo("Relleno", go.transform);
-        Stretch(r.GetComponent<RectTransform>(), new Vector2(4, 4), new Vector2(-4, -4));
-        r.AddComponent<Image>().color = C_FONDO;
-        r.GetComponent<Image>().raycastTarget = false;
-
+        var b = Nodo("Borde", go.transform); Stretch(b.GetComponent<RectTransform>(), new Vector2(2, 2), new Vector2(-2, -2));
+        b.AddComponent<Image>().color = C_BORDE; b.GetComponent<Image>().raycastTarget = false;
+        var r = Nodo("Relleno", go.transform); Stretch(r.GetComponent<RectTransform>(), new Vector2(4, 4), new Vector2(-4, -4));
+        r.AddComponent<Image>().color = C_FONDO; r.GetComponent<Image>().raycastTarget = false;
         return go;
     }
 
-    /// Botón del menú lateral. yFromTop en píxeles desde el borde superior del relleno.
     Button BotonMenu(string etiqueta, Transform padre, float yFromTop,
         UnityEngine.Events.UnityAction accion)
     {
@@ -623,9 +600,7 @@ public class TiendaFF : MonoBehaviour
         rt.pivot = new Vector2(0, 1);
         rt.anchoredPosition = new Vector2(0, -yFromTop);
         rt.sizeDelta = new Vector2(0, 48);
-
-        var img = go.AddComponent<Image>();
-        img.color = C_MEDIO;
+        var img = go.AddComponent<Image>(); img.color = C_MEDIO;
         var btn = go.AddComponent<Button>();
         var cb = btn.colors;
         cb.normalColor = C_MEDIO;
@@ -633,18 +608,15 @@ public class TiendaFF : MonoBehaviour
         cb.pressedColor = C_SEL;
         btn.colors = cb;
         btn.onClick.AddListener(accion);
-
         var tGO = Nodo("Txt", go.transform);
         Stretch(tGO.GetComponent<RectTransform>(), new Vector2(12, 0), new Vector2(-12, 0));
         var t = tGO.AddComponent<TextMeshProUGUI>();
         t.text = etiqueta; t.fontSize = 16; t.color = C_BLANCO;
         t.alignment = TextAlignmentOptions.Left;
         if (fuentePixel) t.font = fuentePixel;
-
         return btn;
     }
 
-    /// Botón de confirmación con anclas proporcionales dentro del padre.
     Button BotonConf(string nombre, string etiqueta, Transform padre,
         Vector2 anchorMin, Vector2 anchorMax, Color color)
     {
@@ -652,76 +624,57 @@ public class TiendaFF : MonoBehaviour
         var rt = go.GetComponent<RectTransform>();
         rt.anchorMin = anchorMin; rt.anchorMax = anchorMax;
         rt.offsetMin = new Vector2(4, 4); rt.offsetMax = new Vector2(-4, -4);
-
-        var img = go.AddComponent<Image>();
-        img.color = color;
+        var img = go.AddComponent<Image>(); img.color = color;
         var btn = go.AddComponent<Button>();
         var cb = btn.colors;
         cb.normalColor = color;
         cb.highlightedColor = Color.Lerp(color, Color.white, 0.25f);
         cb.pressedColor = Color.Lerp(color, Color.black, 0.25f);
         btn.colors = cb;
-
         var tGO = Nodo("Txt", go.transform);
         Stretch(tGO.GetComponent<RectTransform>(), Vector2.zero, Vector2.zero);
         var t = tGO.AddComponent<TextMeshProUGUI>();
         t.text = etiqueta; t.fontSize = 16; t.color = C_BLANCO;
-        t.fontStyle = FontStyles.Bold;
-        t.alignment = TextAlignmentOptions.Center;
+        t.fontStyle = FontStyles.Bold; t.alignment = TextAlignmentOptions.Center;
         if (fuentePixel) t.font = fuentePixel;
-
         return btn;
     }
 
-    /// Fila de item clickable en la lista.
     void CrearFilaItem(string nombre, string costo, string col3,
         UnityEngine.Events.UnityAction accion)
     {
         var fila = Nodo("Fila_" + nombre, _contenedor);
         var rt = fila.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(0, 30);
-
-        var img = fila.AddComponent<Image>();
-        img.color = C_FONDO;
+        var img = fila.AddComponent<Image>(); img.color = C_FONDO;
         var btn = fila.AddComponent<Button>();
         var cb = btn.colors;
-        cb.normalColor = C_FONDO;
-        cb.highlightedColor = C_MEDIO;
-        cb.pressedColor = C_SEL;
+        cb.normalColor = C_FONDO; cb.highlightedColor = C_MEDIO; cb.pressedColor = C_SEL;
         btn.colors = cb;
-
         AgregarColumnas(fila.transform, nombre, costo, col3,
-                        C_BLANCO, C_ORO, C_GRIS, esHeader: false);
-
+            C_BLANCO, C_ORO, C_GRIS, esHeader: false);
         btn.onClick.AddListener(() =>
         {
-            if (_filaActiva != null)
-            {
-                var imgPrev = _filaActiva.GetComponent<Image>();
-                if (imgPrev) imgPrev.color = C_FONDO;
-            }
+            if (_filaActiva != null) { var ip = _filaActiva.GetComponent<Image>(); if (ip) ip.color = C_FONDO; }
             img.color = C_SEL;
             _filaActiva = fila;
             accion?.Invoke();
         });
     }
 
-    /// 3 columnas de texto dentro de una fila: nombre(50%) | costo(25%) | col3(25%)
     void AgregarColumnas(Transform padre,
         string c1, string c2, string c3,
         Color col1, Color col2, Color col3, bool esHeader)
     {
         float fs = esHeader ? 12f : 13f;
         bool bold = esHeader;
-
         TxtCol(padre, "C1", c1, new Vector2(0, 0), new Vector2(0.50f, 1), col1, fs, bold, TextAlignmentOptions.Left);
         TxtCol(padre, "C2", c2, new Vector2(0.50f, 0), new Vector2(0.75f, 1), col2, fs, bold, TextAlignmentOptions.Right);
         TxtCol(padre, "C3", c3, new Vector2(0.75f, 0), new Vector2(1f, 1), col3, fs, bold, TextAlignmentOptions.Right);
     }
 
     void TxtCol(Transform padre, string nombre, string texto,
-        Vector2 aMin, Vector2 aMax, Color color, float fs, bool bold,
-        TextAlignmentOptions align)
+        Vector2 aMin, Vector2 aMax, Color color, float fs, bool bold, TextAlignmentOptions align)
     {
         var go = Nodo(nombre, padre);
         var rt = go.GetComponent<RectTransform>();
@@ -734,37 +687,28 @@ public class TiendaFF : MonoBehaviour
         if (fuentePixel) t.font = fuentePixel;
     }
 
-    /// ScrollView con Viewport + Content + VerticalLayoutGroup.
     GameObject CrearScroll(Transform padre, Vector2 offsetMin, Vector2 offsetMax)
     {
         var go = Nodo("Scroll", padre);
         Stretch(go.GetComponent<RectTransform>(), offsetMin, offsetMax);
-        var imgScrollBg = go.AddComponent<Image>();
-        imgScrollBg.color = Color.clear;
-        imgScrollBg.raycastTarget = false;
+        go.AddComponent<Image>().color = Color.clear;
         var sr = go.AddComponent<ScrollRect>();
-        sr.horizontal = false;
-        sr.scrollSensitivity = 30;
-
+        sr.horizontal = false; sr.scrollSensitivity = 30;
         var vp = Nodo("Viewport", go.transform);
         Stretch(vp.GetComponent<RectTransform>(), Vector2.zero, Vector2.zero);
-        vp.AddComponent<RectMask2D>(); // RectMask2D funciona sin Image, mejor en Unity 2022
+        vp.AddComponent<RectMask2D>();
         sr.viewport = vp.GetComponent<RectTransform>();
-
         var ct = Nodo("Content", vp.transform);
         var rtC = ct.GetComponent<RectTransform>();
         rtC.anchorMin = new Vector2(0, 1); rtC.anchorMax = new Vector2(1, 1);
         rtC.pivot = new Vector2(0.5f, 1);
         rtC.sizeDelta = Vector2.zero; rtC.anchoredPosition = Vector2.zero;
         var vlg = ct.AddComponent<VerticalLayoutGroup>();
-        vlg.spacing = 2;
-        vlg.childControlWidth = true; vlg.childForceExpandWidth = true;
+        vlg.spacing = 2; vlg.childControlWidth = true; vlg.childForceExpandWidth = true;
         vlg.childControlHeight = false; vlg.childForceExpandHeight = false;
         vlg.padding = new RectOffset(4, 4, 4, 4);
-        var csf = ct.AddComponent<ContentSizeFitter>();
-        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        ct.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         sr.content = rtC;
-
         return go;
     }
 
@@ -781,9 +725,6 @@ public class TiendaFF : MonoBehaviour
         return t;
     }
 
-    // ── Micro helpers ────────────────────────────────────────────────────────
-
-    /// Crea un GameObject con RectTransform hijo del padre dado.
     GameObject Nodo(string nombre, Transform padre)
     {
         var go = new GameObject(nombre, typeof(RectTransform));
@@ -791,7 +732,6 @@ public class TiendaFF : MonoBehaviour
         return go;
     }
 
-    /// Ancla estirable (offsetMin/Max como padding).
     void Stretch(RectTransform rt, Vector2 offsetMin, Vector2 offsetMax)
     {
         rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
