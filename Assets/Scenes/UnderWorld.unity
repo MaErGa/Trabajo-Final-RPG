@@ -147253,7 +147253,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 541120056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8580b378eae8c046bbc79c46e9ba2a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f060eea8ac1c6e4ba700686ea8a1650, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   datosJugador: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}

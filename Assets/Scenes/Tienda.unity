@@ -2350,53 +2350,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242112741}
   m_CullTransparentMesh: 1
---- !u!1 &243172895
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 243172897}
-  - component: {fileID: 243172896}
-  m_Layer: 0
-  m_Name: FF7Script
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &243172896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 243172895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8580b378eae8c046bbc79c46e9ba2a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  datosJugador: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
-  portrait: {fileID: -8787387693451921544, guid: 874818d5b66575a4fb31edd6a46aa3f7, type: 3}
-  fuentePixel: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
---- !u!4 &243172897
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 243172895}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 239.83595, y: 259.60092, z: -2.842587}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &286440189
 GameObject:
   m_ObjectHideFlags: 0
@@ -4802,6 +4755,53 @@ Transform:
   - {fileID: 482413741}
   - {fileID: 1728058433}
   - {fileID: 874708822}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &612672046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 612672048}
+  - component: {fileID: 612672047}
+  m_Layer: 0
+  m_Name: FF7Script
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &612672047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612672046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f060eea8ac1c6e4ba700686ea8a1650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  datosJugador: {fileID: 11400000, guid: 80dd190cb0bbe8e479f390a7e542d28d, type: 2}
+  portrait: {fileID: -8787387693451921544, guid: 874818d5b66575a4fb31edd6a46aa3f7, type: 3}
+  fuentePixel: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
+--- !u!4 &612672048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612672046}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 239.83595, y: 259.60092, z: -2.842587}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &615905352
@@ -17916,4 +17916,4 @@ SceneRoots:
   - {fileID: 1839135656}
   - {fileID: 303403242}
   - {fileID: 26467219}
-  - {fileID: 243172897}
+  - {fileID: 612672048}
