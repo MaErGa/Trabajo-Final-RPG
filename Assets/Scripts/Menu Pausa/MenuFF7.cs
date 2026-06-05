@@ -649,7 +649,7 @@ public class MenuFF7 : MonoBehaviour
             new Vector2(0, 1), new Vector2(0, 1), new Vector2(10, -10), new Vector2(200, 28));
 
         // ScrollView lista items
-        var scrollInv = CrearScroll(invR, new Vector2(10, -46), new Vector2(-10, -200));
+        var scrollInv = CrearScroll(invR, new Vector2(10, -46), new Vector2(-10, -120));
         _contenedorItems = scrollInv.GetComponentInChildren<VerticalLayoutGroup>().transform;
 
         // Panel info item seleccionado
@@ -657,7 +657,7 @@ public class MenuFF7 : MonoBehaviour
         var rtInfo = infoGO.GetComponent<RectTransform>();
         rtInfo.anchorMin = new Vector2(0, 0); rtInfo.anchorMax = new Vector2(1, 0);
         rtInfo.pivot = new Vector2(0, 0);
-        rtInfo.anchoredPosition = new Vector2(10, 60); rtInfo.sizeDelta = new Vector2(-20, 120);
+        rtInfo.anchoredPosition = new Vector2(10, 50); rtInfo.sizeDelta = new Vector2(-20, 62);
         infoGO.AddComponent<Image>().color = C_MEDIO;
 
         _txtItemNombre = TMP_Anclado(infoGO.transform, "ItemNombre", "", 14, C_ORO,
@@ -722,7 +722,7 @@ public class MenuFF7 : MonoBehaviour
             new Vector2(0, 1), new Vector2(0, 1), new Vector2(10, -10), new Vector2(200, 28));
 
         // Lista conjuros con scroll (deja espacio abajo para info)
-        var scrollMag = CrearScroll(magR, new Vector2(10, -46), new Vector2(-10, -170));
+        var scrollMag = CrearScroll(magR, new Vector2(10, -46), new Vector2(-10, -120));
         _contenedorMagias = scrollMag.GetComponentInChildren<VerticalLayoutGroup>().transform;
 
         // Panel info conjuro seleccionado
@@ -730,7 +730,7 @@ public class MenuFF7 : MonoBehaviour
         var rtIM = infoMagGO.GetComponent<RectTransform>();
         rtIM.anchorMin = new Vector2(0, 0); rtIM.anchorMax = new Vector2(1, 0);
         rtIM.pivot = new Vector2(0, 0);
-        rtIM.anchoredPosition = new Vector2(10, 50); rtIM.sizeDelta = new Vector2(-20, 110);
+        rtIM.anchoredPosition = new Vector2(10, 50); rtIM.sizeDelta = new Vector2(-20, 62);
         infoMagGO.AddComponent<Image>().color = C_MEDIO;
 
         _txtMagNombre = TMP_Anclado(infoMagGO.transform, "MagNombre", "", 14, C_ORO,
