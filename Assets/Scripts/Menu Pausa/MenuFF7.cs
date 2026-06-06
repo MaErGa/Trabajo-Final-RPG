@@ -80,7 +80,13 @@ public class MenuFF7 : MonoBehaviour
     TextMeshProUGUI _txtOro, _txtTiempo;
 
     // Sidebar buttons
-    Button _btnEstado, _btnItem, _btnEquipo, _btnSalir, _btnMagia;
+    Button _btnEstado, _btnItem, _btnEquipo, _btnSalir, _btnMagia, _btnConfig;
+
+    // Panel Config inline
+    GameObject      _panelConfig;
+    UnityEngine.UI.Slider _sliderVolConf;
+    UnityEngine.UI.Slider _sliderCRTConf;
+    TMPro.TextMeshProUGUI _txtVolConf, _txtCRTConf;
 
     // Panel stats GO (para mostrar/ocultar)
     GameObject _panelStats;
@@ -138,7 +144,8 @@ public class MenuFF7 : MonoBehaviour
         _panelStats.SetActive(true);
         _panelInventario.SetActive(false);
         _panelEquipo.SetActive(false);
-        if (_panelMagia != null) _panelMagia.SetActive(false);
+        if (_panelMagia  != null) _panelMagia.SetActive(false);
+        if (_panelConfig != null) _panelConfig.SetActive(false);
         ResaltarBtn(_btnEstado);
         ActualizarBotonMagia();
         RefrescarStats();
@@ -156,6 +163,25 @@ public class MenuFF7 : MonoBehaviour
         if (img) img.color = tieneMagia ? C_MEDIO : new Color(0.15f, 0.15f, 0.25f, 1f);
         var txt = _btnMagia.GetComponentInChildren<TextMeshProUGUI>();
         if (txt) txt.color = tieneMagia ? C_BLANCO : C_GRIS;
+    }
+
+    void IrAlTitulo()
+    {
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Titulo");
+    }
+
+    void AbrirConfig()
+    {
+        _panelStats.SetActive(false);
+        _panelInventario.SetActive(false);
+        _panelEquipo.SetActive(false);
+        if (_panelMagia   != null) _panelMagia.SetActive(false);
+        if (_panelConfig  != null) _panelConfig.SetActive(true);
+        ResaltarBtn(_btnConfig);
+        // Sincronizar sliders con valores actuales
+        if (_sliderVolConf != null) _sliderVolConf.value = PlayerPrefs.GetFloat("vol_general", 1f);
+        if (_sliderCRTConf != null) _sliderCRTConf.value = PlayerPrefs.GetFloat("crt_intensidad", 0.35f);
     }
 
     void AbrirMagia()
@@ -242,7 +268,8 @@ public class MenuFF7 : MonoBehaviour
         _panelStats.SetActive(false);
         _panelInventario.SetActive(true);
         _panelEquipo.SetActive(false);
-        if (_panelMagia != null) _panelMagia.SetActive(false);
+        if (_panelMagia  != null) _panelMagia.SetActive(false);
+        if (_panelConfig != null) _panelConfig.SetActive(false);
         ResaltarBtn(_btnItem);
         RefrescarInventario();
     }
@@ -252,7 +279,8 @@ public class MenuFF7 : MonoBehaviour
         _panelStats.SetActive(false);
         _panelInventario.SetActive(false);
         _panelEquipo.SetActive(true);
-        if (_panelMagia != null) _panelMagia.SetActive(false);
+        if (_panelMagia  != null) _panelMagia.SetActive(false);
+        if (_panelConfig != null) _panelConfig.SetActive(false);
         ResaltarBtn(_btnEquipo);
         RefrescarEquipo();
     }
@@ -446,12 +474,75 @@ public class MenuFF7 : MonoBehaviour
 
     void ResaltarBtn(Button activo)
     {
-        foreach (var b in new[] { _btnEstado, _btnItem, _btnEquipo, _btnMagia })
+        foreach (var b in new[] { _btnEstado, _btnItem, _btnEquipo, _btnMagia, _btnConfig })
         {
             if (b == null) continue;
             var img = b.GetComponent<Image>();
             if (img) img.color = (b == activo) ? C_CLARO : C_MEDIO;
         }
+    }
+
+    // Slider para el panel config (340×20)
+    UnityEngine.UI.Slider CrearSliderOpciones(Transform padre, string nombre, Vector2 pos)
+    {
+        var go = Nodo(nombre, padre);
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0, 1); rt.anchorMax = new Vector2(0, 1);
+        rt.pivot = new Vector2(0, 1);
+        rt.anchoredPosition = pos; rt.sizeDelta = new Vector2(340, 20);
+
+        var bg = Nodo("Background", go.transform);
+        Stretch(bg.GetComponent<RectTransform>(), Vector2.zero, Vector2.zero);
+        bg.AddComponent<Image>().color = new Color(0.1f, 0.1f, 0.2f, 1f);
+
+        var fillArea = Nodo("Fill Area", go.transform);
+        var rtFA = fillArea.GetComponent<RectTransform>();
+        rtFA.anchorMin = Vector2.zero; rtFA.anchorMax = Vector2.one;
+        rtFA.offsetMin = new Vector2(5, 2); rtFA.offsetMax = new Vector2(-5, -2);
+
+        var fill = Nodo("Fill", fillArea.transform);
+        Stretch(fill.GetComponent<RectTransform>(), Vector2.zero, Vector2.zero);
+        var imgFill = fill.AddComponent<Image>();
+        imgFill.color = C_BORDE;
+
+        var handleArea = Nodo("Handle Slide Area", go.transform);
+        Stretch(handleArea.GetComponent<RectTransform>(), Vector2.zero, Vector2.zero);
+        var handle = Nodo("Handle", handleArea.transform);
+        handle.GetComponent<RectTransform>().sizeDelta = new Vector2(12, 0);
+        var imgHandle = handle.AddComponent<Image>();
+        imgHandle.color = Color.white;
+
+        var slider = go.AddComponent<UnityEngine.UI.Slider>();
+        slider.fillRect   = fill.GetComponent<RectTransform>();
+        slider.handleRect = handle.GetComponent<RectTransform>();
+        slider.targetGraphic = imgHandle;
+        slider.direction  = UnityEngine.UI.Slider.Direction.LeftToRight;
+        slider.minValue = 0f; slider.maxValue = 1f;
+        return slider;
+    }
+
+    void EtiquetaConfig(Transform padre, string id, string texto, float y)
+    {
+        var go = Nodo(id, padre);
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0, 1); rt.anchorMax = new Vector2(0, 1);
+        rt.pivot = new Vector2(0, 1);
+        rt.anchoredPosition = new Vector2(20, y); rt.sizeDelta = new Vector2(300, 22);
+        var t = go.AddComponent<TextMeshProUGUI>();
+        t.text = texto; t.fontSize = 13; t.color = C_CYAN;
+        t.alignment = TextAlignmentOptions.Left;
+        if (fuentePixel) t.font = fuentePixel;
+    }
+
+    // Separador horizontal
+    void BarraSep(Transform padre, float y)
+    {
+        var go = Nodo("Sep", padre);
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0, 1); rt.anchorMax = new Vector2(1, 1);
+        rt.pivot = new Vector2(0, 1);
+        rt.anchoredPosition = new Vector2(10, y); rt.sizeDelta = new Vector2(-20, 2);
+        go.AddComponent<Image>().color = C_BORDE;
     }
 
     string EfectoTexto(TipoEfecto e)
@@ -560,8 +651,12 @@ public class MenuFF7 : MonoBehaviour
         // Magia: se activa solo si el jugador tiene conjuros aprendidos
         _btnMagia = BotonSidebar("Magia", sbR, 156, null);
         ColorGris(_btnMagia);
-        // Config placeholder
-        var btnConfig = BotonSidebar("Config", sbR, 208, () => UnityEngine.SceneManagement.SceneManager.LoadScene("Opciones"));
+        // Config: abre panel inline
+        _btnConfig = BotonSidebar("Config", sbR, 208, () => AbrirConfig());
+
+        // Titulo: vuelve al menú principal
+        BotonSidebar("Titulo", sbR, 588, IrAlTitulo);
+
         // Salir siempre al final
         _btnSalir = BotonSidebar("Salir", sbR, 640, () => _raiz.SetActive(false));
 
@@ -757,6 +852,67 @@ public class MenuFF7 : MonoBehaviour
         _txtBtnMagAccion.color = C_BLANCO; _txtBtnMagAccion.alignment = TextAlignmentOptions.Center;
         if (fuentePixel) _txtBtnMagAccion.font = fuentePixel;
         btnMagGO.SetActive(false);
+
+        // ── PANEL CONFIG inline ───────────────────────────────────────────────
+        _panelConfig = PanelFF("PanelConfig", _raiz.transform, new Vector2(20, 20), new Vector2(1120, 690));
+        _panelConfig.SetActive(false);
+        var cfgRelleno = _panelConfig.transform.Find("Relleno");
+        Transform cfgR = cfgRelleno ?? _panelConfig.transform;
+
+        TMP_Anclado(cfgR, "TituloConf", "CONFIG", 16, C_CYAN,
+            new Vector2(0, 1), new Vector2(0, 1), new Vector2(10, -10), new Vector2(200, 28));
+
+        // Fila Volumen
+        float cy = -70f;
+        EtiquetaConfig(cfgR, "LblVol", "Volumen General", cy);
+        _sliderVolConf = CrearSliderOpciones(cfgR, "SliderVol", new Vector2(330, cy - 10));
+        _sliderVolConf.value = PlayerPrefs.GetFloat("vol_general", 1f);
+        _sliderVolConf.onValueChanged.AddListener(OnVolumenCambiado);
+        _txtVolConf = TextoValorSlider(cfgR, "TxtVol",
+            Mathf.RoundToInt(_sliderVolConf.value * 100).ToString(), cy);
+
+        // Separador
+        BarraSep(cfgR, -110f);
+
+        // Fila CRT
+        cy = -130f;
+        EtiquetaConfig(cfgR, "LblCRT", "Filtro CRT", cy);
+        _sliderCRTConf = CrearSliderOpciones(cfgR, "SliderCRT", new Vector2(330, cy - 10));
+        _sliderCRTConf.value = PlayerPrefs.GetFloat("crt_intensidad", 0.35f);
+        _sliderCRTConf.onValueChanged.AddListener(OnCRTCambiado);
+        _txtCRTConf = TextoValorSlider(cfgR, "TxtCRT",
+            Mathf.RoundToInt(_sliderCRTConf.value * 100).ToString(), cy);
+
+        BarraSep(cfgR, -170f);
+    }
+
+    TextMeshProUGUI TextoValorSlider(Transform padre, string id, string texto, float y)
+    {
+        var go = Nodo(id, padre);
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0, 1); rt.anchorMax = new Vector2(0, 1);
+        rt.pivot = new Vector2(0, 1);
+        rt.anchoredPosition = new Vector2(682, y - 4);
+        rt.sizeDelta = new Vector2(60, 22);
+        var t = go.AddComponent<TextMeshProUGUI>();
+        t.text = texto; t.fontSize = 13; t.color = C_BLANCO;
+        t.alignment = TextAlignmentOptions.Left;
+        if (fuentePixel) t.font = fuentePixel;
+        return t;
+    }
+
+    void OnVolumenCambiado(float v)
+    {
+        AudioListener.volume = v;
+        PlayerPrefs.SetFloat("vol_general", v);
+        if (_txtVolConf) _txtVolConf.text = Mathf.RoundToInt(v * 100).ToString();
+    }
+
+    void OnCRTCambiado(float v)
+    {
+        if (CRTEffect.instancia != null) CRTEffect.instancia.SetIntensidad(v);
+        else PlayerPrefs.SetFloat("crt_intensidad", v);
+        if (_txtCRTConf) _txtCRTConf.text = Mathf.RoundToInt(v * 100).ToString();
     }
 
     // ═════════════════════════════════════════════════════════════════════════

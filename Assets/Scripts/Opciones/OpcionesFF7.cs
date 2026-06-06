@@ -46,6 +46,8 @@ public class OpcionesFF7 : MonoBehaviour
     // ── Referencias UI ────────────────────────────────────────────────────────
     TextMeshProUGUI _txtVolValor;
     Slider          _sliderVol;
+    TextMeshProUGUI _txtCRTValor;
+    Slider          _sliderCRT;
 
     // ══════════════════════════════════════════════════════════════════════════
     void Awake() => ConstruirUI();
@@ -127,7 +129,24 @@ public class OpcionesFF7 : MonoBehaviour
         // Separador horizontal
         Separador(r, -120f);
 
-        // ── (aquí puedes añadir más filas de opciones en el futuro) ──────────
+        // ── Fila: Filtro CRT ──────────────────────────────────────────────────
+        float fyCRT = -145f;
+        FilaEtiqueta(r, "LblCRT", "Filtro CRT", fyCRT);
+
+        _sliderCRT = CrearSlider(r, "SliderCRT",
+            new Vector2(330, fyCRT - 10), new Vector2(340, 20));
+        _sliderCRT.minValue = 0f;
+        _sliderCRT.maxValue = 1f;
+        _sliderCRT.value    = PlayerPrefs.GetFloat("crt_intensidad", 0.35f);
+        _sliderCRT.onValueChanged.AddListener(AlCambiarCRT);
+
+        _txtCRTValor = CrearTMPAnclado(r, "TxtCRTVal",
+            Mathf.RoundToInt(_sliderCRT.value * 100).ToString(),
+            13, TextAlignmentOptions.Left, C_BLANCO,
+            new Vector2(0, 1), new Vector2(0, 1),
+            new Vector2(682, fyCRT - 4), new Vector2(60, 22));
+
+        Separador(r, -195f);
 
         // ── Botón Salir al Título ─────────────────────────────────────────────
         var btnSalir = CrearBoton(r, "BtnSalir", "Salir al Titulo",
@@ -142,6 +161,14 @@ public class OpcionesFF7 : MonoBehaviour
     // ══════════════════════════════════════════════════════════════════════════
     // LÓGICA
     // ══════════════════════════════════════════════════════════════════════════
+
+    void AlCambiarCRT(float valor)
+    {
+        if (CRTEffect.instancia != null)
+            CRTEffect.instancia.SetIntensidad(valor);
+        PlayerPrefs.SetFloat("crt_intensidad", valor);
+        if (_txtCRTValor) _txtCRTValor.text = Mathf.RoundToInt(valor * 100).ToString();
+    }
 
     void AlCambiarVolumen(float valor)
     {
