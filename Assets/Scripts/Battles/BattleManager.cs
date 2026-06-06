@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections;
 
 public class BattleManager : MonoBehaviour
@@ -15,7 +16,7 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI textoHPJugador;
     public TextMeshProUGUI textoMPJugador;
     public TextMeshProUGUI textoLVJugador;
-    public TextMeshProUGUI textoEstadoJugador; // ← nuevo: muestra estado inspiración
+    public TextMeshProUGUI textoEstadoJugador;
 
     [Header("El Hueco del Enemigo")]
     public GameObject objetoImagenEnemigo;
@@ -30,13 +31,12 @@ public class BattleManager : MonoBehaviour
     public GameObject botonMinihelada;
     public GameObject botonMiniincendio;
 
-
     [Header("Botones de Objetos")]
     public GameObject botonPlanta;
     public GameObject botonColaDeConejo;
 
     [Header("Transición")]
-    public CanvasGroup panelTransicion;
+    public CanvasGroup panelTransicion; // Si se deja vacío, busca el creado por MovimientoMapa
 
     [Header("Fondo de Batalla")]
     public UnityEngine.UI.Image imagenFondo;
@@ -80,19 +80,22 @@ public class BattleManager : MonoBehaviour
     private int turnosFortalecimientoPippin = 0;
 
     // ── Inspiración ───────────────────────────────────────────────────────────
-    // +20% ataque, defensa y agilidad durante 3 turnos.
-    // Se activa aleatoriamente al inicio del turno (15%) o al recibir daño (20%).
     [Header("Inspiración")]
     public AudioClip sonidoInspiracion;
     private bool inspiracionActiva = false;
     private int turnosInspiracion = 0;
-    private int inspiracionBonoAtaque = 0;  // guardamos el valor exacto aplicado
+    private int inspiracionBonoAtaque = 0;
     private int inspiracionBonoDefensa = 0;
     private int inspiracionBonoAgilidad = 0;
     private const float BONUS_INSPIRACION = 0.20f;
     private const int TURNOS_INSPIRACION = 3;
-    private const int PROB_INICIO_TURNO = 15;
-    private const int PROB_RECIBIR_DAÑO = 20;
+    // Probabilidades base
+    private const int PROB_INICIO_TURNO_BASE = 15;
+    private const int PROB_RECIBIR_DAÑO_BASE = 20;
+    // Cuántas veces se ha activado la inspiración en este combate
+    private int vecesInspirado = 0;
+    // Reducción de probabilidad por cada activación previa (%)
+    private const int REDUCCION_POR_ACTIVACION = 3;
 
     void Start()
     {
@@ -104,7 +107,18 @@ public class BattleManager : MonoBehaviour
         musicaSource.volume = 0.7f;
         if (musicaBatalla != null) { musicaSource.clip = musicaBatalla; musicaSource.Play(); }
 
-        if (panelTransicion != null) panelTransicion.alpha = 0;
+        // Destruir el canvas automático del mapa (ya no lo necesitamos en Battle)
+        GameObject autoCanvas = GameObject.Find("CanvasTransicionAuto");
+        if (autoCanvas != null)
+            Destroy(autoCanvas);
+
+        // Aseguramos que el panel local empieza en negro y hacemos fade de entrada
+        if (panelTransicion != null)
+        {
+            panelTransicion.alpha = 1f;
+            panelTransicion.blocksRaycasts = true;
+            StartCoroutine(FadeEntrada());
+        }
 
         Debug.Log("Escena origen: '" + MovimientoMapa.escenaOrigen + "'");
         if (imagenFondo != null)
@@ -134,7 +148,6 @@ public class BattleManager : MonoBehaviour
             mpSesion = datosRyo.mpActual;
         }
 
-        // Pippin solo activo en el Bosque
         pippinActivo = MovimientoMapa.pippinUnido &&
                        MovimientoMapa.escenaOrigen == "Bosque" &&
                        datosPippin != null;
@@ -167,6 +180,38 @@ public class BattleManager : MonoBehaviour
         if (panelObjetos != null) panelObjetos.SetActive(false);
         ActualizarConjurosAprendidos();
         ActualizarObjetosDisponibles();
+    }
+
+    // ── Fade de entrada (negro → transparente) ────────────────────────────────
+    IEnumerator FadeEntrada()
+    {
+        panelTransicion.alpha = 1f;
+        panelTransicion.blocksRaycasts = true;
+        yield return new WaitForSeconds(0.1f); // Un frame para que cargue la escena
+
+        while (panelTransicion.alpha > 0f)
+        {
+            panelTransicion.alpha -= Time.deltaTime * 2f;
+            yield return null;
+        }
+        panelTransicion.alpha = 0f;
+        panelTransicion.blocksRaycasts = false;
+    }
+
+    // ── Fade de salida (transparente → negro) y carga de escena ──────────────
+    IEnumerator CargarMapa()
+    {
+        if (panelTransicion != null)
+        {
+            panelTransicion.blocksRaycasts = true;
+            while (panelTransicion.alpha < 1f)
+            {
+                panelTransicion.alpha += Time.deltaTime * 2f;
+                yield return null;
+            }
+        }
+        string escenaDestino = !string.IsNullOrEmpty(MovimientoMapa.escenaOrigen) ? MovimientoMapa.escenaOrigen : "Underworld";
+        SceneManager.LoadScene(escenaDestino);
     }
 
     void ReproducirSonido(AudioClip clip)
@@ -218,8 +263,6 @@ public class BattleManager : MonoBehaviour
             botonFortalecimiento.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel5) && datosRyo.conjuroNivel5 != null);
         if (botonMinihelada != null)
             botonMinihelada.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel8) && datosRyo.conjuroNivel8 != null);
-
-        // CORREGIDO: Ahora verifica si el scriptable object contiene el conjuro de nivel 10
         if (botonMiniincendio != null)
             botonMiniincendio.SetActive(datosRyo.conjurosAprendidos.Contains(datosRyo.conjuroNivel10) && datosRyo.conjuroNivel10 != null);
     }
@@ -307,14 +350,11 @@ public class BattleManager : MonoBehaviour
         }
         else if (hechizo == "Miniincendio")
         {
-            // CORREGIDO: Ahora usa el sistema dinámico de ScriptableObjects igual que los otros hechizos
             ConjuroBase conjuro = datosRyo.conjuroNivel10;
             if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
-
             mpSesion -= conjuro.costeMP;
             int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
             vidaEnemigo -= dañoM;
-
             ReproducirSonido(sonidoMagiaAtaque);
             textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Daño: " + dañoM;
         }
@@ -407,14 +447,13 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case "miniincendio":
-                // CORREGIDO: Quitamos la redefinición de 'int dH' y usamos una nueva variable 'dI'
                 int dI = 20 + datosPippin.fuerzaMagica;
                 vidaEnemigo -= dI;
                 ReproducirSonido(sonidoMagiaAtaque);
                 textoMensajes.text = "¡Pippin lanza Miniincendio! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dI + " de daño.";
                 break;
 
-            default: // atacar
+            default:
                 int dP = Mathf.Max(1, datosPippin.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
                 vidaEnemigo -= dP;
                 ReproducirSonido(sonidoAtaqueJugador);
@@ -473,16 +512,6 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    IEnumerator CargarMapa()
-    {
-        if (panelTransicion != null)
-        {
-            while (panelTransicion.alpha < 1) { panelTransicion.alpha += Time.deltaTime * 2f; yield return null; }
-        }
-        string escenaDestino = !string.IsNullOrEmpty(MovimientoMapa.escenaOrigen) ? MovimientoMapa.escenaOrigen : "Underworld";
-        SceneManager.LoadScene(escenaDestino);
-    }
-
     IEnumerator VictoriaAutomatica()
     {
         turnoActivo = false;
@@ -514,7 +543,6 @@ public class BattleManager : MonoBehaviour
         ActualizarConjurosAprendidos();
         GuardarEstado();
 
-        // Marcar boss o secuaz derrotado
         if (MovimientoMapa.combateBoss)
         {
             if (MovimientoMapa.combateSecuaz) NPCSecuaz.MarcarDerrotado();
@@ -575,7 +603,6 @@ public class BattleManager : MonoBehaviour
             if (turnosFortalecimientoPippin <= 0) datosPippin.bonoDefensaTemporal = 0;
         }
 
-        // Bajar contador de inspiración
         if (inspiracionActiva)
         {
             turnosInspiracion--;
@@ -634,9 +661,13 @@ public class BattleManager : MonoBehaviour
             }
             hpSesion -= daño;
             ActualizarInterfaz();
-            // Posible inspiración al recibir daño
-            if (!inspiracionActiva && Random.Range(0, 100) < PROB_RECIBIR_DAÑO)
-                ActivarInspiracion();
+            // Inspiración al recibir daño: probabilidad baja 3% por cada vez que se activó antes
+            if (!inspiracionActiva)
+            {
+                int probDaño = Mathf.Max(0, PROB_RECIBIR_DAÑO_BASE - vecesInspirado * REDUCCION_POR_ACTIVACION);
+                if (probDaño > 0 && Random.Range(0, 100) < probDaño)
+                    ActivarInspiracion();
+            }
             if (hpSesion <= 0)
             {
                 if (musicaSource != null) musicaSource.Stop();
@@ -657,7 +688,8 @@ public class BattleManager : MonoBehaviour
 
     void ChequearInspiracioInicio()
     {
-        if (!inspiracionActiva && Random.Range(0, 100) < PROB_INICIO_TURNO)
+        // Probabilidad de inicio de turno siempre fija en 15%
+        if (!inspiracionActiva && Random.Range(0, 100) < PROB_INICIO_TURNO_BASE)
             ActivarInspiracion();
     }
 
@@ -665,6 +697,7 @@ public class BattleManager : MonoBehaviour
     {
         inspiracionActiva = true;
         turnosInspiracion = TURNOS_INSPIRACION;
+        vecesInspirado++; // Acumula para reducir la próxima probabilidad
 
         inspiracionBonoAtaque = Mathf.RoundToInt(datosRyo.fuerza * BONUS_INSPIRACION);
         inspiracionBonoDefensa = Mathf.RoundToInt(datosRyo.defensa * BONUS_INSPIRACION);
@@ -676,20 +709,20 @@ public class BattleManager : MonoBehaviour
 
         if (sonidoInspiracion != null) ReproducirSonido(sonidoInspiracion);
 
+        int probDañoSiguiente = Mathf.Max(0, PROB_RECIBIR_DAÑO_BASE - vecesInspirado * REDUCCION_POR_ACTIVACION);
         textoMensajes.text = "¡" + datosRyo.nombre + " entra en estado de Inspiracion!\n" +
                              "ATQ +" + inspiracionBonoAtaque + " | DEF +" + inspiracionBonoDefensa +
                              " | AGI +" + inspiracionBonoAgilidad +
-                             " durante " + TURNOS_INSPIRACION + " turnos.";
+                             " durante " + TURNOS_INSPIRACION + " turnos." +
+                             (probDañoSiguiente > 0 ? "\n(Activación por daño: " + probDañoSiguiente + "%)" : "\n(No se activará más por daño)");
     }
 
-    // ── Wrappers para botones de magia (OnClick del Inspector) ───────────────
+    // ── Wrappers para botones de magia ───────────────────────
 
     public void BotonMiniincendio() => AccionMagia("Miniincendio");
     public void BotonMinihelada() => AccionMagia("Minihelada");
     public void BotonMinicuracion() => AccionMagia("Minicuracion");
     public void BotonFortalecimiento() => AccionMagia("Fortalecimiento");
-
-    // ── Botón cerrar panel objetos ────────────────────────────────────────────
 
     public void CerrarPanelObjetos()
     {

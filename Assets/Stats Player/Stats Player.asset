@@ -19,10 +19,10 @@ MonoBehaviour:
   mpMax: 125
   mpActual: 5
   fuerza: 80
-  agilidad: 6
-  defensa: 2
-  oro: 54
-  experiencia: 96263
+  agilidad: 24
+  defensa: 22
+  oro: 66
+  experiencia: 96275
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0

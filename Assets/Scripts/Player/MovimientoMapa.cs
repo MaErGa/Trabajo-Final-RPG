@@ -1,6 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections;
+
+[System.Serializable]
+public class ProbabilidadPorEscena
+{
+    public string nombreEscena;
+    public float probabilidad;
+}
 
 public class MovimientoMapa : MonoBehaviour
 {
@@ -9,7 +17,8 @@ public class MovimientoMapa : MonoBehaviour
     public float velocidadCarrera = 8f;
 
     [Header("Combate")]
-    public float probabilidadCombate = 0.1f;
+    public float probabilidadCombate = 0.05f; // Valor por defecto si la escena no está en la lista
+    public ProbabilidadPorEscena[] probabilidadesPorEscena; // Lista de probabilidades por escena
     public DatosEnemigo[] posiblesEnemigos;
 
     [Header("Transición")]
@@ -43,18 +52,34 @@ public class MovimientoMapa : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        Debug.Log("escenaOrigen al cargar: '" + escenaOrigen + "'");
-        Debug.Log("vieneDeCombate: " + vieneDeCombate);
+        // Ajustar probabilidad según la escena actual
+        string escenaActual = SceneManager.GetActiveScene().name;
+        if (probabilidadesPorEscena != null)
+        {
+            foreach (ProbabilidadPorEscena p in probabilidadesPorEscena)
+            {
+                if (p.nombreEscena == escenaActual)
+                {
+                    probabilidadCombate = p.probabilidad;
+                    Debug.Log("[MovimientoMapa] Probabilidad ajustada para '" + escenaActual + "': " + probabilidadCombate);
+                    break;
+                }
+            }
+        }
+
+        // Crear panel de transición si no está asignado
+        if (panelTransicion == null)
+            panelTransicion = CrearPanelTransicion();
+
+        panelTransicion.alpha = 0;
 
         if (vieneDeCombate)
         {
-            // Vuelve de combate: restaura posición exacta antes del combate
             transform.position = posicionRetorno;
             vieneDeCombate = false;
         }
         else if (!string.IsNullOrEmpty(escenaOrigen))
         {
-            // Viene de otra escena: busca punto de entrada
             bool colocado = false;
             EntradaEscena[] entradas = FindObjectsOfType<EntradaEscena>();
             foreach (EntradaEscena entrada in entradas)
@@ -63,7 +88,6 @@ public class MovimientoMapa : MonoBehaviour
                 {
                     transform.position = entrada.transform.position;
                     colocado = true;
-                    Debug.Log("Colocado en entrada: " + entrada.transform.position);
                     break;
                 }
             }
@@ -72,12 +96,39 @@ public class MovimientoMapa : MonoBehaviour
         }
         else
         {
-            // Primera carga: usa posición guardada si existe
             if (SistemaGuardado.instancia != null && SistemaGuardado.instancia.hayPosicionGuardada)
                 SistemaGuardado.instancia.AplicarPosicionJugador();
         }
+    }
 
-        if (panelTransicion != null) panelTransicion.alpha = 0;
+    CanvasGroup CrearPanelTransicion()
+    {
+        GameObject canvasGO = new GameObject("CanvasTransicionAuto");
+        Canvas canvas = canvasGO.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 999;
+        canvasGO.AddComponent<CanvasScaler>();
+        canvasGO.AddComponent<GraphicRaycaster>();
+        DontDestroyOnLoad(canvasGO);
+
+        GameObject panelGO = new GameObject("PanelTransicion");
+        panelGO.transform.SetParent(canvasGO.transform, false);
+
+        RectTransform rect = panelGO.AddComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        Image imagen = panelGO.AddComponent<Image>();
+        imagen.color = Color.black;
+
+        CanvasGroup grupo = panelGO.AddComponent<CanvasGroup>();
+        grupo.alpha = 0;
+        grupo.blocksRaycasts = false;
+
+        Debug.Log("[MovimientoMapa] Panel de transición creado automáticamente.");
+        return grupo;
     }
 
     bool EstaEnPausa()
@@ -89,7 +140,6 @@ public class MovimientoMapa : MonoBehaviour
     {
         if (iniciandoCombate) return;
 
-        // Bloqueo diálogo
         if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo())
         {
             moviX = 0; moviY = 0;
@@ -98,7 +148,6 @@ public class MovimientoMapa : MonoBehaviour
             return;
         }
 
-        // Bloqueo pausa
         if (EstaEnPausa())
         {
             moviX = 0; moviY = 0;
@@ -126,17 +175,21 @@ public class MovimientoMapa : MonoBehaviour
                 ultimoX = 0; ultimoY = moviY;
             }
 
-            // Chequeo de combate por pasos
             if (!estaCaminando)
             {
                 estaCaminando = true;
+                Debug.Log("[MovimientoMapa] Empezando a caminar, iniciando ChequearCombate.");
                 InvokeRepeating("ChequearCombate", 0.5f, 0.5f);
             }
         }
         else
         {
-            estaCaminando = false;
-            CancelInvoke("ChequearCombate");
+            if (estaCaminando)
+            {
+                estaCaminando = false;
+                Debug.Log("[MovimientoMapa] Parado, cancelando ChequearCombate.");
+                CancelInvoke("ChequearCombate");
+            }
         }
     }
 
@@ -157,9 +210,14 @@ public class MovimientoMapa : MonoBehaviour
     {
         if (EstaEnPausa()) return;
 
-        if (Random.value < probabilidadCombate && posiblesEnemigos.Length > 0)
+        float tirada = Random.value;
+        Debug.Log("[ChequearCombate] Tirada: " + tirada.ToString("F3") + " | Necesario: < " + probabilidadCombate);
+
+        if (tirada < probabilidadCombate && posiblesEnemigos.Length > 0)
         {
+            Debug.Log("[ChequearCombate] ¡COMBATE! Iniciando transición...");
             iniciandoCombate = true;
+            CancelInvoke("ChequearCombate");
             int indice = Random.Range(0, posiblesEnemigos.Length);
             enemigoSeleccionado = posiblesEnemigos[indice];
             posicionRetorno = transform.position;
@@ -171,14 +229,16 @@ public class MovimientoMapa : MonoBehaviour
 
     IEnumerator TransicionBatalla()
     {
-        if (panelTransicion != null)
+        Debug.Log("[TransicionBatalla] Iniciando fade...");
+        panelTransicion.blocksRaycasts = true;
+
+        while (panelTransicion.alpha < 1f)
         {
-            while (panelTransicion.alpha < 1)
-            {
-                panelTransicion.alpha += Time.deltaTime * 2f;
-                yield return null;
-            }
+            panelTransicion.alpha += Time.deltaTime * 2f;
+            yield return null;
         }
+
+        Debug.Log("[TransicionBatalla] Cargando Battle...");
         SceneManager.LoadScene("Battle");
     }
 }
