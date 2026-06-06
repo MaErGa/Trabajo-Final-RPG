@@ -310,7 +310,7 @@ public class MenuFF7 : MonoBehaviour
             _fillXP.fillAmount = Mathf.Clamp01((float)datosJugador.experiencia / datosJugador.expSiguienteNivel);
         if (_txtXP)
         {
-            if (datosJugador.nivel >= 10)
+            if (datosJugador.nivel >= 99)
                 _txtXP.text = "MAX";
             else
             {
@@ -361,6 +361,17 @@ public class MenuFF7 : MonoBehaviour
                     if (_txtItemNombre) _txtItemNombre.text = "Planta Medicinal";
                     if (_txtItemDesc) _txtItemDesc.text = "Restaura 30 HP.";
                     MostrarBtnAccion("Usar", UsarPlanta);
+                });
+
+        // Éter (sistema antiguo)
+        if (datosJugador.eter > 0)
+            CrearFilaInventario($"Éter  x{datosJugador.eter}", "+30 MP",
+                () =>
+                {
+                    _itemSel = null; _equipoSel = null;
+                    if (_txtItemNombre) _txtItemNombre.text = "Éter";
+                    if (_txtItemDesc) _txtItemDesc.text = "Restaura 30 MP.";
+                    MostrarBtnAccion("Usar", UsarEter);
                 });
 
         // Equipo en armario
@@ -438,6 +449,15 @@ public class MenuFF7 : MonoBehaviour
         if (datosJugador.plantasMedicinales <= 0) return;
         datosJugador.hpActual = Mathf.Min(datosJugador.hpMax, datosJugador.hpActual + 30);
         datosJugador.plantasMedicinales--;
+        RefrescarInventario();
+        RefrescarStats();
+    }
+
+    void UsarEter()
+    {
+        if (datosJugador.eter <= 0) return;
+        datosJugador.mpActual = Mathf.Min(datosJugador.mpMax, datosJugador.mpActual + 30);
+        datosJugador.eter--;
         RefrescarInventario();
         RefrescarStats();
     }

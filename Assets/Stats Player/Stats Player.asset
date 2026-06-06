@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombre: Retro
   nivel: 25
-  hpMax: 260
-  hpActual: 260
-  mpMax: 125
-  mpActual: 5
-  fuerza: 80
+  hpMax: 110
+  hpActual: 110
+  mpMax: 50
+  mpActual: 48
+  fuerza: 35
   agilidad: 24
   defensa: 22
-  oro: 66
-  experiencia: 96275
+  oro: 848
+  experiencia: 96281
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
@@ -52,7 +52,8 @@ MonoBehaviour:
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
   conjuroNivel10: {fileID: 11400000, guid: 50913cd5df0830048a7cacee19fb5fa8, type: 2}
   mochilaItems:
-  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
+  - {fileID: 11400000, guid: 17a062088510feb4eb5cc8c3cb31063a, type: 2}
   armarioEquipo: []
   plantasMedicinales: 0
   colaDeConejo: 0
+  eter: 0

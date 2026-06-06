@@ -63,6 +63,7 @@ public class DatosJugador : ScriptableObject
     [Header("Inventario Antiguo")]
     public int plantasMedicinales;
     public int colaDeConejo;
+    public int eter;
 
     // --- PROPIEDADES CON CÁLCULO DE BONOS ---
     public int AtaqueTotal => fuerza + bonoAtaqueTemporal +
@@ -88,7 +89,7 @@ public class DatosJugador : ScriptableObject
     /// </summary>
     public void ActualizarEstadisticasPorNivel()
     {
-        nivel = Mathf.Clamp(nivel, 1, 10);
+        nivel = Mathf.Clamp(nivel, 1, 99);
         float t = (nivel - 1) / 9f;
 
         hpMax = Mathf.RoundToInt(Mathf.Lerp(20, 110, t));

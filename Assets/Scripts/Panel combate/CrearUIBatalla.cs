@@ -56,7 +56,7 @@ public class CrearUIBatalla : MonoBehaviour
         if (canvas == null) { Debug.LogError("Asigna el Canvas primero."); return; }
 
         GameObject panelObjetos = CrearPanel("Panel Objetos", canvas.transform,
-            new Vector2(0, 0), new Vector2(0, 0), new Vector2(10, 10), new Vector2(220, 160));
+            new Vector2(0, 0), new Vector2(0, 0), new Vector2(10, 10), new Vector2(220, 241));
         panelObjetos.GetComponent<RectTransform>().pivot = new Vector2(0, 0);
         panelObjetos.SetActive(false);
 
@@ -64,6 +64,8 @@ public class CrearUIBatalla : MonoBehaviour
 
         CrearBoton("BotonPlanta", panelObjetos.transform, "Planta Medicinal", 35);
         CrearBoton("BotonColaDeConejo", panelObjetos.transform, "Cola de Conejo", 35);
+        CrearBoton("BotonEter", panelObjetos.transform, "Éter", 35);
+        CrearBoton("BotonMiniEter", panelObjetos.transform, "Mini Éter", 35);
 
         CrearBotonCerrar("BtnCerrarObjetos", panelObjetos.transform);
 

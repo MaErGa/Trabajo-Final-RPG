@@ -34,6 +34,8 @@ public class BattleManager : MonoBehaviour
     [Header("Botones de Objetos")]
     public GameObject botonPlanta;
     public GameObject botonColaDeConejo;
+    public GameObject botonEter;
+    public GameObject botonMiniEter;
 
     [Header("Transición")]
     public CanvasGroup panelTransicion; // Si se deja vacío, busca el creado por MovimientoMapa
@@ -70,6 +72,10 @@ public class BattleManager : MonoBehaviour
     private int vidaEnemigo;
     private bool turnoActivo = false;
     private bool estaDefendiendoManual = false;
+
+    // Contadores de items por sesión de combate (no modifican el ScriptableObject hasta el final)
+    private int sesionMiniEter = 0;
+    private int sesionPlantaMochila = 0;
     private int turnosFortalecimiento = 0;
 
     // Pippin
@@ -179,6 +185,9 @@ public class BattleManager : MonoBehaviour
         if (panelMagia != null) panelMagia.SetActive(false);
         if (panelObjetos != null) panelObjetos.SetActive(false);
         ActualizarConjurosAprendidos();
+        // Inicializar contadores de sesión para items de mochilaItems
+        sesionMiniEter    = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Mini Éter").Count;
+        sesionPlantaMochila = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Planta Medicinal").Count;
         ActualizarObjetosDisponibles();
     }
 
@@ -269,9 +278,25 @@ public class BattleManager : MonoBehaviour
 
     public void ActualizarObjetosDisponibles()
     {
-        if (botonPlanta != null) botonPlanta.SetActive(datosRyo.plantasMedicinales > 0);
-        if (botonColaDeConejo != null) botonColaDeConejo.SetActive(datosRyo.colaDeConejo > 0);
+        // Planta Medicinal: sistema antiguo + contador de sesión
+        bool tienePlanta = datosRyo.plantasMedicinales > 0 || sesionPlantaMochila > 0;
+        if (botonPlanta != null) botonPlanta.SetActive(tienePlanta);
+
+        // Cola de Conejo
+        bool tieneColaDeConejo = datosRyo.colaDeConejo > 0 ||
+                                 datosRyo.mochilaItems.Exists(i => i != null && i.nombre == "Cola de Conejo");
+        if (botonColaDeConejo != null) botonColaDeConejo.SetActive(tieneColaDeConejo);
+
+        // Éter
+        bool tieneEter = datosRyo.eter > 0 ||
+                         datosRyo.mochilaItems.Exists(i => i != null && i.nombre == "Éter");
+        if (botonEter != null) botonEter.SetActive(tieneEter);
+
+        // Mini Éter: usa contador de sesión
+        if (botonMiniEter != null) botonMiniEter.SetActive(sesionMiniEter > 0);
     }
+
+
 
     public void AccionUsarPlanta()
     {
@@ -293,6 +318,34 @@ public class BattleManager : MonoBehaviour
         CerrarMenus(); ActualizarInterfaz();
         StartCoroutine(TurnoPippin());
     }
+
+    public void AccionUsarEter()
+    {
+        if (!turnoActivo || datosRyo.eter <= 0) return;
+        datosRyo.eter--;
+        int restaurado = Mathf.Min(30, datosRyo.mpMax - mpSesion);
+        mpSesion = Mathf.Min(mpSesion + 30, datosRyo.mpMax);
+        ReproducirSonido(sonidoCuracionMagia);
+        textoMensajes.text = "¡" + datosRyo.nombre + " usa un Éter! +" + restaurado + " MP.";
+        CerrarMenus(); ActualizarInterfaz(); ActualizarObjetosDisponibles();
+        StartCoroutine(TurnoPippin());
+    }
+
+    public void AccionUsarMiniEter()
+    {
+        if (!turnoActivo || sesionMiniEter <= 0) return;
+        sesionMiniEter--;
+        var miniEterAsset = datosRyo.mochilaItems.Find(i => i != null && i.nombre == "Mini Éter");
+        int potencia = miniEterAsset != null && miniEterAsset.potencia > 0 ? miniEterAsset.potencia : 30;
+        int restaurado = Mathf.Min(potencia, datosRyo.mpMax - mpSesion);
+        mpSesion = Mathf.Min(mpSesion + potencia, datosRyo.mpMax);
+        ReproducirSonido(sonidoCuracionMagia);
+        textoMensajes.text = "¡" + datosRyo.nombre + " usa un Mini Éter! +" + restaurado + " MP.";
+        CerrarMenus(); ActualizarInterfaz(); ActualizarObjetosDisponibles();
+        StartCoroutine(TurnoPippin());
+    }
+
+
 
     public void AccionAtacar()
     {
@@ -575,6 +628,19 @@ public class BattleManager : MonoBehaviour
     {
         datosRyo.hpActual = hpSesion;
         datosRyo.mpActual = mpSesion;
+        // Descontar items consumidos durante el combate de mochilaItems
+        int miniEterUsados = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Mini Éter").Count - sesionMiniEter;
+        for (int i = 0; i < miniEterUsados; i++)
+        {
+            int idx = datosRyo.mochilaItems.FindIndex(x => x != null && x.nombre == "Mini Éter");
+            if (idx >= 0) datosRyo.mochilaItems.RemoveAt(idx);
+        }
+        int plantaUsadas = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Planta Medicinal").Count - sesionPlantaMochila;
+        for (int i = 0; i < plantaUsadas; i++)
+        {
+            int idx = datosRyo.mochilaItems.FindIndex(x => x != null && x.nombre == "Planta Medicinal");
+            if (idx >= 0) datosRyo.mochilaItems.RemoveAt(idx);
+        }
         if (pippinActivo && datosPippin != null)
         {
             datosPippin.hpActual = hpPippin;
