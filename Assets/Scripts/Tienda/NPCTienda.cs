@@ -30,6 +30,17 @@ public class NPCTienda : MonoBehaviour
     private bool tiendaAbierta = false;
     private bool conversacionIniciada = false;
 
+    bool HayDialogoActivo()
+    {
+        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return true;
+        if (DialogoManagerBoss.instancia != null && DialogoManagerBoss.instancia.EstaActivo()) return true;
+        if (DialogoManagerCompañero.instancia != null && DialogoManagerCompañero.instancia.EstaActivo()) return true;
+        if (DialogoManagerMadre.instancia != null && DialogoManagerMadre.instancia.EstaActivo()) return true;
+        if (DialogoManagerMonja.instancia != null && DialogoManagerMonja.instancia.EstaActivo()) return true;
+        if (DialogoManagerViejo.instancia != null && DialogoManagerViejo.instancia.EstaActivo()) return true;
+        return false;
+    }
+
     void Start()
     {
         GameObject obj = GameObject.FindGameObjectWithTag("Player");
@@ -44,7 +55,7 @@ public class NPCTienda : MonoBehaviour
 
         if (dist <= distancia && Input.GetKeyDown(KeyCode.X))
         {
-            if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return;
+            if (HayDialogoActivo()) return;
 
             if (tiendaAbierta)
             {

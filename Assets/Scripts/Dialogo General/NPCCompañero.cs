@@ -5,6 +5,12 @@ public class NPCCompañero : MonoBehaviour
     [Header("Distancia para interactuar")]
     public float distancia = 5f;
 
+    [Header("Datos del jugador")]
+    public DatosJugador datosJugador;
+
+    [Header("Recompensa de despedida")]
+    public int monedasDespedida = 10;
+
     public enum EstadoMision { EncuentroBosque, RobinOddDerrotado, YaEsCompañero, Despedida }
     public EstadoMision estadoActual = EstadoMision.EncuentroBosque;
 
@@ -42,7 +48,7 @@ public class NPCCompañero : MonoBehaviour
         "Pippin: Oye... tengo que decirte algo. Ha sido un honor luchar a tu lado, de verdad.",
         "Pippin: Pero mi lugar está aquí, con mi madre y con la gente de esta aldea.",
         "Pippin: Ellos me necesitan. Y tú... tú tienes un camino mucho más grande por delante, lo sé.",
-        "Pippin: Llévate esto contigo. — Te entrega unas monedas y una sonrisa. —",
+        "Pippin: Llévate esto contigo. Te entrega 10 monedas.",
         "Pippin: Si algún día vuelves por el bosque, ya sabes dónde encontrarme. ¡Hasta siempre, camarada!",
         "¡Pippin abandona el grupo!"
     };
@@ -85,7 +91,7 @@ public class NPCCompañero : MonoBehaviour
             return;
         }
 
-        // FIX: durante despedida solo bloqueamos — el cierre lo gestiona CorDespedida
+        // Durante despedida solo bloqueamos — el cierre lo gestiona CorDespedida
         if (esperandoDespedida) return;
 
         if (dist <= distancia && Input.GetKeyDown(KeyCode.X))
@@ -145,7 +151,18 @@ public class NPCCompañero : MonoBehaviour
         // Esperar a que el jugador cierre el diálogo completo
         yield return new WaitUntil(() => !DialogoManagerCompañero.instancia.EstaActivo());
 
-        // Limpieza final — todo desde aquí, sin depender del Update
+        // Entregar monedas al terminar el diálogo
+        if (datosJugador != null)
+        {
+            datosJugador.oro += monedasDespedida;
+            Debug.Log("[Pippin] Entregadas " + monedasDespedida + " monedas. Oro total: " + datosJugador.oro);
+        }
+        else
+        {
+            Debug.LogWarning("[Pippin] datosJugador es NULL — arrastra el ScriptableObject al Inspector de Pippin");
+        }
+
+        // Limpieza final
         esperandoDespedida = false;
         MovimientoMapa.pippinUnido = false;
         gameObject.SetActive(false);

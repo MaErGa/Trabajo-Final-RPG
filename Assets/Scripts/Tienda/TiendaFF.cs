@@ -163,6 +163,7 @@ public class TiendaFF : MonoBehaviour
 
     public void AbrirTienda() => StartCoroutine(CorAbrir());
     public void CerrarTienda() => StartCoroutine(CorCerrar());
+    public bool EstaAbierta() => _abierta || _iniciando;
 
     // ═════════════════════════════════════════════════════════════════════════
     // MODOS

@@ -131,6 +131,14 @@ public class MovimientoMapa : MonoBehaviour
         return grupo;
     }
 
+    bool HayDialogoActivo()
+    {
+        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return true;
+        if (DialogoManagerBoss.instancia != null && DialogoManagerBoss.instancia.EstaActivo()) return true;
+        if (DialogoManagerCompañero.instancia != null && DialogoManagerCompañero.instancia.EstaActivo()) return true;
+        return false;
+    }
+
     bool EstaEnPausa()
     {
         return MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo();
@@ -140,7 +148,7 @@ public class MovimientoMapa : MonoBehaviour
     {
         if (iniciandoCombate) return;
 
-        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo())
+        if (HayDialogoActivo())
         {
             moviX = 0; moviY = 0;
             if (animator != null) animator.SetBool("Moviéndose", false);
@@ -196,7 +204,7 @@ public class MovimientoMapa : MonoBehaviour
     void FixedUpdate()
     {
         if (iniciandoCombate) return;
-        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return;
+        if (HayDialogoActivo()) return;
         if (EstaEnPausa()) return;
 
         bool corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);

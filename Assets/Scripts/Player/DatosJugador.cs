@@ -13,7 +13,12 @@ public class DatosJugador : ScriptableObject
     public int fuerza = 8;
     public int agilidad = 6;
     public int defensa = 2;
-    public int oro;
+    [SerializeField] private int _oro;
+    public int oro
+    {
+        get => _oro;
+        set => _oro = Mathf.Clamp(value, 0, 99999);
+    }
     public int experiencia;
 
     [Header("Atributos Mágicos")]

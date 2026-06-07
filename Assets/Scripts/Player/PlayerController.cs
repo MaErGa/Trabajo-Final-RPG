@@ -33,6 +33,25 @@ public class PlayerController : MonoBehaviour
         Debug.Log("POSICION DESPUES DE APLICAR: " + transform.position);
     }
 
+    bool HayDialogoActivo()
+    {
+        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return true;
+        if (DialogoManagerBoss.instancia != null && DialogoManagerBoss.instancia.EstaActivo()) return true;
+        if (DialogoManagerCompañero.instancia != null && DialogoManagerCompañero.instancia.EstaActivo()) return true;
+        if (DialogoManagerMadre.instancia != null && DialogoManagerMadre.instancia.EstaActivo()) return true;
+        if (DialogoManagerMonja.instancia != null && DialogoManagerMonja.instancia.EstaActivo()) return true;
+        if (DialogoManagerViejo.instancia != null && DialogoManagerViejo.instancia.EstaActivo()) return true;
+        return false;
+    }
+
+    bool HayTiendaAbierta()
+    {
+        TiendaFF[] tiendas = FindObjectsOfType<TiendaFF>();
+        foreach (var t in tiendas)
+            if (t.EstaAbierta()) return true;
+        return false;
+    }
+
     bool EstaEnPausa()
     {
         return MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo();
@@ -41,7 +60,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // --- BLOQUEO DE DIÁLOGO ---
-        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo())
+        if (HayDialogoActivo() || HayTiendaAbierta())
         {
             moviX = 0;
             moviY = 0;
@@ -87,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (DialogoManager.instancia != null && DialogoManager.instancia.EstaActivo()) return;
+        if (HayDialogoActivo() || HayTiendaAbierta()) return;
         if (EstaEnPausa()) return;
 
         bool corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
