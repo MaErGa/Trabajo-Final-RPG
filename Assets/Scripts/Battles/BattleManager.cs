@@ -247,9 +247,9 @@ public class BattleManager : MonoBehaviour
     {
         return estado switch
         {
-            EstadoAlterado.Envenenado  => "☠ VENENO",
-            EstadoAlterado.Dormido     => "💤 DORMIDO (" + turnos + ")",
-            EstadoAlterado.Paralizado  => "⚡ PARALIZADO (" + turnos + ")",
+            EstadoAlterado.Envenenado  => "VENENO",
+            EstadoAlterado.Dormido     => "DORMIDO (" + turnos + ")",
+            EstadoAlterado.Paralizado  => "PARALIZADO (" + turnos + ")",
             _                          => ""
         };
     }
