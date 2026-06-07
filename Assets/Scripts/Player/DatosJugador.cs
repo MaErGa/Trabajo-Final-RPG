@@ -242,6 +242,38 @@ public class DatosJugador : ScriptableObject
         Debug.Log("Tabla EXP actualizada a 99 niveles.");
     }
 
+    /// <summary>
+    /// Elimina cualquier estado alterado activo. Llamado por BattleManager al ganar/morir.
+    /// </summary>
+    public void CurarEstado()
+    {
+        estadoCombate = EstadoAlterado.Normal;
+        turnosEstadoAlterado = 0;
+    }
+
+    /// <summary>
+    /// Alias de AplicarEstadoAlterado para compatibilidad con BattleManager.
+    /// </summary>
+    public void AplicarEstado(EstadoAlterado estado, int turnos)
+    {
+        AplicarEstadoAlterado(estado, turnos);
+    }
+
+    /// <summary>
+    /// Al recibir un golpe físico estando dormido, 50% de probabilidad de despertar.
+    /// Devuelve true si el jugador despertó.
+    /// </summary>
+    public bool IntentarDespetarPorGolpe()
+    {
+        if (estadoCombate != EstadoAlterado.Dormido) return false;
+        if (UnityEngine.Random.Range(0, 2) == 0)
+        {
+            CurarEstado();
+            return true;
+        }
+        return false;
+    }
+
     [ContextMenu("Limpiar Bonos Mágicos")]
     public void ResetearBonos()
     {

@@ -6709,10 +6709,10 @@ MonoBehaviour:
   botonPlanta: {fileID: 532423125}
   botonColaDeConejo: {fileID: 0}
   botonEter: {fileID: 0}
-  botonMiniEter: {fileID: 0}
-  botonAntidoto: {fileID: 0}
-  botonAntiparalisis: {fileID: 0}
-  botonDespertar: {fileID: 0}
+  botonMiniEter: {fileID: 75259986}
+  botonAntidoto: {fileID: 509047240}
+  botonAntiparalisis: {fileID: 43196724}
+  botonDespertar: {fileID: 464570455}
   panelTransicion: {fileID: 995644253}
   imagenFondo: {fileID: 1327812029}
   fondoUnderworld: {fileID: 21300000, guid: 0ae20973db810cd4b9a1b2875c1c66b2, type: 3}

@@ -433,8 +433,33 @@ public class MenuFF7 : MonoBehaviour
     {
         _itemSel = item; _equipoSel = null;
         if (_txtItemNombre) _txtItemNombre.text = item.nombre;
-        if (_txtItemDesc) _txtItemDesc.text = item.descripcion;
-        MostrarBtnAccion("Usar", UsarItemSeleccionado);
+
+        // Para objetos que curan estado: solo mostrar Usar si el jugador tiene ese estado
+        bool puedeUsar = true;
+        string msgExtra = "";
+
+        switch (item.queCura)
+        {
+            case ItemConsumible.TipoEfecto.Antidoto:
+                puedeUsar = datosJugador.estadoCombate == EstadoAlterado.Envenenado;
+                if (!puedeUsar) msgExtra = " (No estas envenenado)";
+                break;
+            case ItemConsumible.TipoEfecto.Antiparalisis:
+                puedeUsar = datosJugador.estadoCombate == EstadoAlterado.Paralizado;
+                if (!puedeUsar) msgExtra = " (No estas paralizado)";
+                break;
+            case ItemConsumible.TipoEfecto.Despertar:
+                puedeUsar = datosJugador.estadoCombate == EstadoAlterado.Dormido;
+                if (!puedeUsar) msgExtra = " (No estas dormido)";
+                break;
+        }
+
+        if (_txtItemDesc) _txtItemDesc.text = item.descripcion + msgExtra;
+
+        if (puedeUsar)
+            MostrarBtnAccion("Usar", UsarItemSeleccionado);
+        else
+            OcultarBtnAccion();
     }
 
     void SeleccionarEquipo(EquipoBase eq)
@@ -604,7 +629,15 @@ public class MenuFF7 : MonoBehaviour
 
     string EfectoTexto(ItemConsumible.TipoEfecto e)
     {
-        return e switch { ItemConsumible.TipoEfecto.Vida => "HP", ItemConsumible.TipoEfecto.Mana => "MP", ItemConsumible.TipoEfecto.Antidoto => "Antídoto", ItemConsumible.TipoEfecto.Antiparalisis => "Antiparálisis", ItemConsumible.TipoEfecto.Despertar => "Despierta", _ => "" };
+        return e switch
+        {
+            ItemConsumible.TipoEfecto.Vida          => "HP",
+            ItemConsumible.TipoEfecto.Mana          => "MP",
+            ItemConsumible.TipoEfecto.Antidoto      => "Antídoto",
+            ItemConsumible.TipoEfecto.Antiparalisis => "Antiparálisis",
+            ItemConsumible.TipoEfecto.Despertar     => "Despierta",
+            _                                       => ""
+        };
     }
 
     void CrearFilaInventario(string nombre, string detalle, UnityEngine.Events.UnityAction accion)

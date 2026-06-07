@@ -15,21 +15,21 @@ MonoBehaviour:
   nombre: Retro
   nivel: 99
   hpMax: 999
-  hpActual: 998
+  hpActual: 976
   mpMax: 500
   mpActual: 500
   fuerza: 255
   agilidad: 200
   defensa: 200
-  _oro: 572
+  _oro: 532
   experiencia: 4484733
   fuerzaMagica: 5
   terapeucidad: 4
+  estadoCombate: 0
+  turnosEstadoAlterado: 0
   bonoDefensaTemporal: 0
   bonoAtaqueTemporal: 0
   bonoAgilidadTemporal: 0
-  estadoAlterado: 0
-  turnosEstadoAlterado: 0
   armaEquipadaAsset: {fileID: 11400000, guid: 801787b50fdfde544a0fb4615531d305, type: 2}
   armaduraEquipadaAsset: {fileID: 11400000, guid: ec49effe2bd8a794ea21615f3ed873b3, type: 2}
   escudoEquipadoAsset: {fileID: 0}
@@ -55,8 +55,7 @@ MonoBehaviour:
   conjuroNivel10: {fileID: 11400000, guid: 50913cd5df0830048a7cacee19fb5fa8, type: 2}
   mochilaItems:
   - {fileID: 11400000, guid: 8e0aef50b4e32ed439d99bc77789ffea, type: 2}
-  - {fileID: 11400000, guid: fa49bd34d270cb7439060c1580e04112, type: 2}
-  - {fileID: 11400000, guid: 8e0aef50b4e32ed439d99bc77789ffea, type: 2}
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   armarioEquipo: []
   plantasMedicinales: 0
   colaDeConejo: 0
