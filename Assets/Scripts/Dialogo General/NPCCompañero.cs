@@ -55,7 +55,7 @@ public class NPCCompañero : MonoBehaviour
 
     void OnEnable()
     {
-        // Si ya está en modo despedida, lanzar el diálogo al activarse
+        // Si ya está en modo despedida, lanzar la corrutina
         if (estadoActual == EstadoMision.Despedida && esperandoDespedida)
         {
             StartCoroutine(CorDespedida());
@@ -85,17 +85,8 @@ public class NPCCompañero : MonoBehaviour
             return;
         }
 
-        // Espera a que termine el diálogo de despedida
-        if (esperandoDespedida)
-        {
-            if (DialogoManagerCompañero.instancia != null && !DialogoManagerCompañero.instancia.EstaActivo())
-            {
-                esperandoDespedida = false;
-                MovimientoMapa.pippinUnido = false; // Ya no acompaña al jugador
-                gameObject.SetActive(false);
-            }
-            return;
-        }
+        // FIX: durante despedida solo bloqueamos — el cierre lo gestiona CorDespedida
+        if (esperandoDespedida) return;
 
         if (dist <= distancia && Input.GetKeyDown(KeyCode.X))
         {
@@ -127,21 +118,37 @@ public class NPCCompañero : MonoBehaviour
     // Llamado desde NPCRobbinOdd después de su diálogo de derrota
     public void IniciarDespedida()
     {
-        // Establecer el estado ANTES de activar el GameObject
-        // para que OnEnable lo detecte correctamente
         estadoActual = EstadoMision.Despedida;
         esperandoDespedida = true;
-        // El boss ya hizo SetActive(true), OnEnable lanzará CorDespedida
+        // El boss hará SetActive(true) justo después, OnEnable lanzará CorDespedida
     }
 
     System.Collections.IEnumerator CorDespedida()
     {
+        // Esperar 2 frames para que el objeto esté completamente inicializado
         yield return null;
+        yield return null;
+
         Debug.Log("[Pippin] Mostrando diálogo de despedida");
-        if (DialogoManagerCompañero.instancia != null)
-            DialogoManagerCompañero.instancia.MostrarDialogo(dialogoDespedida);
-        else
+
+        if (DialogoManagerCompañero.instancia == null)
+        {
             Debug.LogError("[Pippin] DialogoManagerCompañero.instancia es NULL");
+            yield break;
+        }
+
+        DialogoManagerCompañero.instancia.MostrarDialogo(dialogoDespedida);
+
+        // Esperar un frame a que el diálogo arranque antes de comprobar si terminó
+        yield return null;
+
+        // Esperar a que el jugador cierre el diálogo completo
+        yield return new WaitUntil(() => !DialogoManagerCompañero.instancia.EstaActivo());
+
+        // Limpieza final — todo desde aquí, sin depender del Update
+        esperandoDespedida = false;
+        MovimientoMapa.pippinUnido = false;
+        gameObject.SetActive(false);
     }
 
     public void CambiarEstado(EstadoMision nuevoEstado)

@@ -50,7 +50,6 @@ public class NPCRobbinOdd : MonoBehaviour
 
         if (robbinDerrotado && !derrotado)
         {
-            // Volvemos del combate del boss — mostrar diálogo de derrota
             derrotado = true;
             StartCoroutine(MostrarDialogoDerrota_Coroutine());
         }
@@ -103,23 +102,30 @@ public class NPCRobbinOdd : MonoBehaviour
             yield break;
         }
 
-        bool dialogoTerminado = false;
-        DialogoManagerBoss.instancia.MostrarDialogo(dialogoDerrota, () => dialogoTerminado = true);
-        yield return new WaitUntil(() => dialogoTerminado);
-
-        // Ocultar sprite del boss
-        gameObject.SetActive(false);
-
         if (companero == null)
         {
-            Debug.LogError("[RobbinOdd] companero es NULL — arrastra compañero prota_0 al Inspector del boss");
+            Debug.LogError("[RobbinOdd] companero es NULL — arrastra el compañero al Inspector del boss");
             yield break;
         }
 
-        Debug.Log("[RobbinOdd] Activando y llamando IniciarDespedida en " + companero.gameObject.name);
-        // Poner los flags ANTES de activar para que OnEnable los detecte
-        companero.IniciarDespedida();
-        companero.gameObject.SetActive(true);
+        // Capturar referencias locales ANTES de desactivar este objeto,
+        // porque SetActive(false) mataría la corrutina si siguiéramos esperando aquí.
+        NPCCompañero companeroLocal = companero;
+        GameObject bossSelf = gameObject;
+
+        // El callback lo ejecuta DialogoManagerBoss (que sigue vivo),
+        // así que funciona aunque el boss se desactive dentro del propio callback.
+        DialogoManagerBoss.instancia.MostrarDialogo(dialogoDerrota, () =>
+        {
+            Debug.Log("[RobbinOdd] Diálogo terminado — activando Pippin y ocultando boss.");
+
+            // Primero activar a Pippin con los flags correctos
+            companeroLocal.IniciarDespedida();
+            companeroLocal.gameObject.SetActive(true);
+
+            // Ahora sí desactivar el sprite del boss
+            bossSelf.SetActive(false);
+        });
     }
 
     public void MostrarDialogoDerrota()
