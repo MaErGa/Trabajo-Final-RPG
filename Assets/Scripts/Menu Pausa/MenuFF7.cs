@@ -449,14 +449,31 @@ public class MenuFF7 : MonoBehaviour
     void UsarItemSeleccionado()
     {
         if (_itemSel == null || datosJugador == null) return;
+        bool usado = true;
         switch (_itemSel.queCura)
         {
             case ItemConsumible.TipoEfecto.Vida:
+                if (datosJugador.hpActual >= datosJugador.hpMax) { usado = false; break; }
                 datosJugador.hpActual = Mathf.Min(datosJugador.hpMax, datosJugador.hpActual + _itemSel.potencia);
                 break;
             case ItemConsumible.TipoEfecto.Mana:
+                if (datosJugador.mpActual >= datosJugador.mpMax) { usado = false; break; }
                 datosJugador.mpActual = Mathf.Min(datosJugador.mpMax, datosJugador.mpActual + _itemSel.potencia);
                 break;
+            case ItemConsumible.TipoEfecto.Antidoto:
+                usado = datosJugador.CurarEstadoEspecifico(EstadoAlterado.Envenenado);
+                break;
+            case ItemConsumible.TipoEfecto.Antiparalisis:
+                usado = datosJugador.CurarEstadoEspecifico(EstadoAlterado.Paralizado);
+                break;
+            case ItemConsumible.TipoEfecto.Despertar:
+                usado = datosJugador.CurarEstadoEspecifico(EstadoAlterado.Dormido);
+                break;
+        }
+        if (!usado)
+        {
+            if (_txtItemDesc) _txtItemDesc.text = "No tiene efecto ahora mismo.";
+            return;
         }
         datosJugador.mochilaItems.Remove(_itemSel);
         _itemSel = null;

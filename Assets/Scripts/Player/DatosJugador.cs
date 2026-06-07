@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// Enum global para que BattleManager, MenuFF7 y otros scripts lo usen sin prefijo
 [CreateAssetMenu(fileName = "NuevoJugador", menuName = "RPG/Jugador")]
 public class DatosJugador : ScriptableObject
 {
@@ -25,25 +26,68 @@ public class DatosJugador : ScriptableObject
     public int fuerzaMagica = 5;
     public int terapeucidad = 4;
 
+    [Header("Estados Alterados")]
+    public EstadoAlterado estadoCombate = EstadoAlterado.Normal;
+    // Alias para compatibilidad con MenuFF7 y BattleManager
+    public EstadoAlterado estadoAlterado
+    {
+        get => estadoCombate;
+        set => estadoCombate = value;
+    }
+    public int turnosEstadoAlterado = 0;
+
+    public bool CurarEstadoEspecifico(EstadoAlterado estado)
+    {
+        if (estadoCombate == estado)
+        {
+            estadoCombate = EstadoAlterado.Normal;
+            turnosEstadoAlterado = 0;
+            return true;
+        }
+        return false;
+    }
+
+    public void AplicarEstadoAlterado(EstadoAlterado estado, int turnos)
+    {
+        // No sobreescribir si ya tiene uno activo
+        if (estadoCombate != EstadoAlterado.Normal) return;
+        estadoCombate = estado;
+        turnosEstadoAlterado = turnos;
+    }
+
+    /// <summary>
+    /// Aplica daño de veneno al final del turno. Resta entre 5 y 8 HP.
+    /// Devuelve el daño aplicado.
+    /// </summary>
+    public int TickVeneno()
+    {
+        if (estadoCombate != EstadoAlterado.Envenenado) return 0;
+        int daño = UnityEngine.Random.Range(5, 9); // 5 a 8 inclusive
+        hpActual = Mathf.Max(0, hpActual - daño);
+        return daño;
+    }
+
+    /// <summary>
+    /// Descuenta un turno al estado Paralizado/Dormido.
+    /// Devuelve true si el estado ha terminado.
+    /// </summary>
+    public bool DescontarTurnoEstado()
+    {
+        if (estadoCombate == EstadoAlterado.Normal || estadoCombate == EstadoAlterado.Envenenado)
+            return false;
+        turnosEstadoAlterado = Mathf.Max(0, turnosEstadoAlterado - 1);
+        if (turnosEstadoAlterado <= 0)
+        {
+            estadoCombate = EstadoAlterado.Normal;
+            return true;
+        }
+        return false;
+    }
+
     [Header("Bonos Temporales (Combate)")]
     public int bonoDefensaTemporal;
     public int bonoAtaqueTemporal;
     public int bonoAgilidadTemporal;
-
-    // ── ESTADO ALTERADO ───────────────────────────────────────────────────────
-    [Header("Estado Alterado (Combate)")]
-    public EstadoAlterado estadoAlterado = EstadoAlterado.Normal;
-    /// <summary>Turnos restantes del estado alterado (-1 = persistente, como el veneno).</summary>
-    public int turnosEstadoAlterado = 0;
-
-    [ContextMenu("TEST - Aplicar Veneno")]
-    public void DEBUG_AplicarVeneno()       { estadoAlterado = EstadoAlterado.Envenenado;  turnosEstadoAlterado = -1; Debug.Log("Estado: Envenenado (persistente)"); }
-    [ContextMenu("TEST - Aplicar Parálisis (3 turnos)")]
-    public void DEBUG_AplicarParalisis()    { estadoAlterado = EstadoAlterado.Paralizado;  turnosEstadoAlterado = 3;  Debug.Log("Estado: Paralizado (3 turnos)"); }
-    [ContextMenu("TEST - Aplicar Sueño (3 turnos)")]
-    public void DEBUG_AplicarSueno()        { estadoAlterado = EstadoAlterado.Dormido;     turnosEstadoAlterado = 3;  Debug.Log("Estado: Dormido (3 turnos)"); }
-    [ContextMenu("TEST - Curar Estado")]
-    public void DEBUG_CurarEstado()         { CurarEstado(); Debug.Log("Estado curado."); }
 
     [Header("Equipación (Sistema de Assets)")]
     public EquipoBase armaEquipadaAsset;
@@ -85,7 +129,7 @@ public class DatosJugador : ScriptableObject
     public ConjuroBase conjuroNivel3;
     public ConjuroBase conjuroNivel5;
     public ConjuroBase conjuroNivel8;
-    public ConjuroBase conjuroNivel10;
+    public ConjuroBase conjuroNivel10; // ¡AÑADIDO! Ranura para Miniincendio
 
     [Header("Inventario Dinámico")]
     public List<ItemConsumible> mochilaItems = new List<ItemConsumible>();
@@ -97,7 +141,6 @@ public class DatosJugador : ScriptableObject
     public int eter;
 
     // --- PROPIEDADES CON CÁLCULO DE BONOS ---
-
     public int AtaqueTotal => fuerza + bonoAtaqueTemporal +
                                (armaEquipadaAsset != null ? armaEquipadaAsset.bonoAtaque : 0);
 
@@ -106,109 +149,31 @@ public class DatosJugador : ScriptableObject
                                (escudoEquipadoAsset != null ? escudoEquipadoAsset.bonoDefensa : 0) +
                                (cascoEquipadoAsset != null ? cascoEquipadoAsset.bonoDefensa : 0);
 
-    /// <summary>
-    /// Agilidad total. Si el jugador está Paralizado se reduce al 50%.
-    /// </summary>
     public int AgilidadTotal
     {
         get
         {
             int base_ = agilidad + bonoAgilidadTemporal +
                         (accesorioEquipadoAsset != null ? accesorioEquipadoAsset.bonoAgilidad : 0);
-            if (estadoAlterado == EstadoAlterado.Paralizado)
-                base_ = Mathf.Max(1, base_ / 2);
-            return base_;
+            // Parálisis reduce agilidad al 50%
+            return estadoCombate == EstadoAlterado.Paralizado ? Mathf.RoundToInt(base_ * 0.5f) : base_;
         }
     }
 
-    // --- SISTEMA DE ESTADOS ALTERADOS ---
-
-    /// <summary>
-    /// Aplica un estado alterado al jugador con una duración dada.
-    /// Si el estado es Envenenado, la duración se ignora (persistente).
-    /// </summary>
-    public void AplicarEstado(EstadoAlterado nuevoEstado, int turnos = 3)
-    {
-        if (estadoAlterado != EstadoAlterado.Normal) return; // ya tiene un estado
-        estadoAlterado = nuevoEstado;
-        turnosEstadoAlterado = (nuevoEstado == EstadoAlterado.Envenenado) ? -1 : turnos;
-    }
-
-    /// <summary>Elimina cualquier estado alterado activo.</summary>
-    public void CurarEstado()
-    {
-        estadoAlterado = EstadoAlterado.Normal;
-        turnosEstadoAlterado = 0;
-    }
-
-    /// <summary>
-    /// Cura solo el estado indicado. Devuelve true si se curó algo.
-    /// </summary>
-    public bool CurarEstadoEspecifico(EstadoAlterado estado)
-    {
-        if (estadoAlterado == estado)
-        {
-            CurarEstado();
-            return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Tick de veneno. Llama al final del turno del jugador si está envenenado.
-    /// Devuelve el daño aplicado (entre 5 y 8).
-    /// </summary>
-    public int TickVeneno()
-    {
-        if (estadoAlterado != EstadoAlterado.Envenenado) return 0;
-        int daño = UnityEngine.Random.Range(5, 9); // 5 a 8 inclusive
-        hpActual = Mathf.Max(0, hpActual - daño);
-        return daño;
-    }
-
-    /// <summary>
-    /// Descuenta un turno de Parálisis/Sueño. Devuelve true si el estado acaba de terminar.
-    /// El Veneno es persistente y no descuenta aquí.
-    /// </summary>
-    public bool DescontarTurnoEstado()
-    {
-        if (estadoAlterado == EstadoAlterado.Normal) return false;
-        if (turnosEstadoAlterado < 0) return false; // persistente (veneno)
-
-        turnosEstadoAlterado--;
-        if (turnosEstadoAlterado <= 0)
-        {
-            CurarEstado();
-            return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Intenta despertar al dormido cuando recibe un golpe físico (50% de probabilidad).
-    /// Devuelve true si despertó.
-    /// </summary>
-    public bool IntentarDespetarPorGolpe()
-    {
-        if (estadoAlterado != EstadoAlterado.Dormido) return false;
-        if (UnityEngine.Random.Range(0, 2) == 0)
-        {
-            CurarEstado();
-            return true;
-        }
-        return false;
-    }
-
+    
     // --- SISTEMA DE ESCALADO AUTOMÁTICO ---
     private void OnValidate()
     {
         ActualizarEstadisticasPorNivel();
     }
 
+    /// <summary>
+    /// Modifica los atributos BASE del jugador usando interpolación matemática lineal (Lerp)
+    /// </summary>
     public void ActualizarEstadisticasPorNivel()
     {
         nivel = Mathf.Clamp(nivel, 1, 99);
-        float t = (nivel - 1) / 98f;
+        float t = (nivel - 1) / 98f;   // 0 en nivel 1, 1 en nivel 99
 
         hpMax = Mathf.RoundToInt(Mathf.Lerp(20, 999, t));
         mpMax = Mathf.RoundToInt(Mathf.Lerp(5, 500, t));
@@ -243,6 +208,7 @@ public class DatosJugador : ScriptableObject
             conjurosAprendidos.Add(conjuroNivel8);
             mensaje += "\n¡Has aprendido " + conjuroNivel8.nombreConjuro + "!";
         }
+        // ¡AÑADIDO! Condición para aprender el conjuro de nivel 10
         if (nivel >= 10 && conjuroNivel10 != null && !conjurosAprendidos.Contains(conjuroNivel10))
         {
             conjurosAprendidos.Add(conjuroNivel10);
@@ -282,12 +248,13 @@ public class DatosJugador : ScriptableObject
         bonoDefensaTemporal = 0;
         bonoAtaqueTemporal = 0;
         bonoAgilidadTemporal = 0;
+        estadoCombate = EstadoAlterado.Normal;
+        turnosEstadoAlterado = 0;
     }
 
     private void OnEnable()
     {
         ResetearBonos();
-        // CurarEstado() eliminado para poder testear estados desde el Inspector
     }
 
     public void EquiparColaDeConejo()
@@ -340,9 +307,11 @@ public class DatosJugador : ScriptableObject
     [ContextMenu("DEBUG - Subir a Nivel 99")]
     public void SubirANivel99()
     {
-        nivel = 99; experiencia = 4463783;
+        nivel = 99;
+        experiencia = 4463783;
         ActualizarEstadisticasPorNivel();
-        hpActual = hpMax; mpActual = mpMax;
+        hpActual = hpMax;
+        mpActual = mpMax;
         #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
         #endif
@@ -352,9 +321,11 @@ public class DatosJugador : ScriptableObject
     [ContextMenu("DEBUG - Subir a Nivel 50")]
     public void SubirANivel50()
     {
-        nivel = 50; experiencia = 1252568;
+        nivel = 50;
+        experiencia = 1252568;
         ActualizarEstadisticasPorNivel();
-        hpActual = hpMax; mpActual = mpMax;
+        hpActual = hpMax;
+        mpActual = mpMax;
         #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
         #endif
@@ -364,9 +335,11 @@ public class DatosJugador : ScriptableObject
     [ContextMenu("DEBUG - Subir a Nivel 20")]
     public void SubirANivel20()
     {
-        nivel = 20; experiencia = 31258;
+        nivel = 20;
+        experiencia = 31258;
         ActualizarEstadisticasPorNivel();
-        hpActual = hpMax; mpActual = mpMax;
+        hpActual = hpMax;
+        mpActual = mpMax;
         #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
         #endif
@@ -383,7 +356,6 @@ public class DatosJugador : ScriptableObject
         fuerzaMagica = 5; terapeucidad = 4;
 
         ResetearBonos();
-        CurarEstado();
         conjurosAprendidos.Clear();
 
         plantasMedicinales = 0;

@@ -899,6 +899,24 @@ public class BattleManager : MonoBehaviour
                     int probDaño = Mathf.Max(0, PROB_RECIBIR_DAÑO_BASE - vecesInspirado * REDUCCION_POR_ACTIVACION);
                     if (probDaño > 0 && Random.Range(0, 100) < probDaño) ActivarInspiracion();
                 }
+
+                // ── Intentar aplicar estado alterado según el ataque del enemigo ──
+                var enemigoAtacante = MovimientoMapa.enemigoSeleccionado;
+                if (enemigoAtacante != null && datosRyo.estadoCombate == EstadoAlterado.Normal)
+                {
+                    AtaqueEspecial ataqueEsp = enemigoAtacante.ElegirAtaque();
+                    if (ataqueEsp != null && ataqueEsp.estadoQueAplica != EstadoAlterado.Normal
+                        && Random.Range(0, 100) < ataqueEsp.probabilidadEstado)
+                    {
+                        int turnos = ataqueEsp.estadoQueAplica == EstadoAlterado.Envenenado
+                            ? 999  // veneno es persistente, se cura con antídoto
+                            : ataqueEsp.duracionTurnos;
+                        datosRyo.AplicarEstadoAlterado(ataqueEsp.estadoQueAplica, turnos);
+                        textoMensajes.text += "\n¡" + datosRyo.nombre + " queda afectado por " + ataqueEsp.nombreAtaque + "!";
+                        ActualizarInterfaz();
+                        yield return new WaitForSeconds(0.6f);
+                    }
+                }
             }
             else
             {
@@ -934,6 +952,24 @@ public class BattleManager : MonoBehaviour
                 {
                     int probDaño = Mathf.Max(0, PROB_RECIBIR_DAÑO_BASE - vecesInspirado * REDUCCION_POR_ACTIVACION);
                     if (probDaño > 0 && Random.Range(0, 100) < probDaño) ActivarInspiracion();
+                }
+
+                // ── Intentar aplicar estado alterado según el ataque del enemigo ──
+                var enemigoAtacante = MovimientoMapa.enemigoSeleccionado;
+                if (enemigoAtacante != null && datosRyo.estadoCombate == EstadoAlterado.Normal)
+                {
+                    AtaqueEspecial ataqueEsp = enemigoAtacante.ElegirAtaque();
+                    if (ataqueEsp != null && ataqueEsp.estadoQueAplica != EstadoAlterado.Normal
+                        && Random.Range(0, 100) < ataqueEsp.probabilidadEstado)
+                    {
+                        int turnos = ataqueEsp.estadoQueAplica == EstadoAlterado.Envenenado
+                            ? 999  // veneno es persistente, se cura con antídoto
+                            : ataqueEsp.duracionTurnos;
+                        datosRyo.AplicarEstadoAlterado(ataqueEsp.estadoQueAplica, turnos);
+                        textoMensajes.text += "\n¡" + datosRyo.nombre + " queda afectado por " + ataqueEsp.nombreAtaque + "!";
+                        ActualizarInterfaz();
+                        yield return new WaitForSeconds(0.6f);
+                    }
                 }
             }
 
