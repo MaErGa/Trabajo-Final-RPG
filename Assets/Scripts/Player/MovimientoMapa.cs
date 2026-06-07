@@ -67,11 +67,25 @@ public class MovimientoMapa : MonoBehaviour
             }
         }
 
-        // Crear panel de transición si no está asignado
+        // Crear panel de transición si no está asignado.
+        // Si ya existe uno de una sesión anterior (DontDestroyOnLoad), reutilizarlo.
         if (panelTransicion == null)
-            panelTransicion = CrearPanelTransicion();
+        {
+            GameObject existing = GameObject.Find("CanvasTransicionAuto");
+            if (existing != null)
+            {
+                // Reutilizar el panel que sobrevivió al cambio de escena
+                Transform panel = existing.transform.Find("PanelTransicion");
+                if (panel != null)
+                    panelTransicion = panel.GetComponent<CanvasGroup>();
+            }
+            if (panelTransicion == null)
+                panelTransicion = CrearPanelTransicion();
+        }
 
-        panelTransicion.alpha = 0;
+        // Siempre resetear al volver al mapa
+        panelTransicion.alpha = 0f;
+        panelTransicion.blocksRaycasts = false;
 
         if (vieneDeCombate)
         {
