@@ -45,7 +45,18 @@ public class DatosJugador : ScriptableObject
 
     [Header("Sistema de Niveles")]
     public int expSiguienteNivel = 14;
-    public int[] tablaExpPilgrim = { 14, 42, 98, 182, 308, 497, 780, 1205, 1842, 2798 };
+    public int[] tablaExpPilgrim = {
+        11, 22, 44, 66, 99, 148, 222, 334, 501, 751,
+        1126, 1408, 1760, 2200, 2750, 3437, 4296, 5370, 6713, 7552,
+        8496, 9557, 10751, 12095, 13608, 15306, 17221, 19373, 21795, 24520,
+        27582, 31031, 34910, 39274, 43969, 48920, 54230, 59880, 65890, 65535,
+        65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+        65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+        65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+        65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+        65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+        65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535
+    };
 
     [Header("Conjuros Aprendidos (se actualiza automático)")]
     public List<ConjuroBase> conjurosAprendidos = new List<ConjuroBase>();
@@ -90,20 +101,18 @@ public class DatosJugador : ScriptableObject
     public void ActualizarEstadisticasPorNivel()
     {
         nivel = Mathf.Clamp(nivel, 1, 99);
-        float t = (nivel - 1) / 9f;
+        float t = (nivel - 1) / 98f;   // 0 en nivel 1, 1 en nivel 99
 
-        hpMax = Mathf.RoundToInt(Mathf.Lerp(20, 110, t));
-        mpMax = Mathf.RoundToInt(Mathf.Lerp(5, 50, t));
-        
-        fuerza = Mathf.RoundToInt(Mathf.Lerp(8, 35, t));
-        agilidad = Mathf.RoundToInt(Mathf.Lerp(6, 24, t)); 
-        defensa = Mathf.RoundToInt(Mathf.Lerp(2, 22, t));  
+        hpMax = Mathf.RoundToInt(Mathf.Lerp(20, 999, t));
+        mpMax = Mathf.RoundToInt(Mathf.Lerp(5, 500, t));
+
+        fuerza   = Mathf.RoundToInt(Mathf.Lerp(8,  255, t));
+        agilidad = Mathf.RoundToInt(Mathf.Lerp(6,  200, t));
+        defensa  = Mathf.RoundToInt(Mathf.Lerp(2,  200, t));
 
         if (tablaExpPilgrim != null && (nivel - 1) < tablaExpPilgrim.Length)
-        {
             expSiguienteNivel = tablaExpPilgrim[nivel - 1];
-        }
-        
+
         AprenderConjurosPorNivel();
     }
 
@@ -138,6 +147,28 @@ public class DatosJugador : ScriptableObject
     }
 
     // --- MÉTODOS DE CONTROL ---
+
+    [ContextMenu("Resetear Tabla EXP a valores correctos")]
+    public void ResetearTablaExp()
+    {
+        tablaExpPilgrim = new int[] {
+            11, 22, 44, 66, 99, 148, 222, 334, 501, 751,
+            1126, 1408, 1760, 2200, 2750, 3437, 4296, 5370, 6713, 7552,
+            8496, 9557, 10751, 12095, 13608, 15306, 17221, 19373, 21795, 24520,
+            27582, 31031, 34910, 39274, 43969, 48920, 54230, 59880, 65890, 65535,
+            65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+            65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+            65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+            65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+            65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535,
+            65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535
+        };
+        ActualizarEstadisticasPorNivel();
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+        Debug.Log("Tabla EXP actualizada a 99 niveles.");
+    }
 
     [ContextMenu("Limpiar Bonos Mágicos")]
     public void ResetearBonos()
@@ -187,17 +218,58 @@ public class DatosJugador : ScriptableObject
 
     public void SubirNivelYCurar()
     {
-        if (nivel < 10)
+        if (nivel < 99)
         {
             nivel++;
             ActualizarEstadisticasPorNivel();
             hpActual = hpMax;
             mpActual = mpMax;
-            
             #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
             #endif
         }
+    }
+
+    [ContextMenu("DEBUG - Subir a Nivel 99")]
+    public void SubirANivel99()
+    {
+        nivel = 99;
+        experiencia = 4463783;
+        ActualizarEstadisticasPorNivel();
+        hpActual = hpMax;
+        mpActual = mpMax;
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+        Debug.Log("¡Nivel 99 alcanzado!");
+    }
+
+    [ContextMenu("DEBUG - Subir a Nivel 50")]
+    public void SubirANivel50()
+    {
+        nivel = 50;
+        experiencia = 1252568;
+        ActualizarEstadisticasPorNivel();
+        hpActual = hpMax;
+        mpActual = mpMax;
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+        Debug.Log("¡Nivel 50 alcanzado!");
+    }
+
+    [ContextMenu("DEBUG - Subir a Nivel 20")]
+    public void SubirANivel20()
+    {
+        nivel = 20;
+        experiencia = 31258;
+        ActualizarEstadisticasPorNivel();
+        hpActual = hpMax;
+        mpActual = mpMax;
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+        Debug.Log("¡Nivel 20 alcanzado!");
     }
 
     [ContextMenu("Reiniciar a Nivel 1")]

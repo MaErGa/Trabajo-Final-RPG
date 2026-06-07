@@ -8,6 +8,9 @@ public class NPCRobbinOdd : MonoBehaviour
     [Header("Enemigo del combate")]
     public DatosEnemigo datosEnemigo;
 
+    [Header("Referencia directa al compañero")]
+    public NPCCompañero companero;
+
     private Transform jugador;
     private bool derrotado = false;
 
@@ -45,9 +48,14 @@ public class NPCRobbinOdd : MonoBehaviour
         GameObject obj = GameObject.FindGameObjectWithTag("Player");
         if (obj != null) jugador = obj.transform;
 
-        if (robbinDerrotado)
+        if (robbinDerrotado && !derrotado)
         {
+            // Volvemos del combate del boss — mostrar diálogo de derrota
             derrotado = true;
+            StartCoroutine(MostrarDialogoDerrota_Coroutine());
+        }
+        else if (robbinDerrotado && derrotado)
+        {
             gameObject.SetActive(false);
         }
     }
@@ -83,21 +91,45 @@ public class NPCRobbinOdd : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("Battle");
     }
 
-    public static void MarcarDerrotado()
+    System.Collections.IEnumerator MostrarDialogoDerrota_Coroutine()
     {
-        robbinDerrotado = true;
-        // Avisar a Pippin para que se despida
-        NPCCompañero pippin = FindObjectOfType<NPCCompañero>();
-        if (pippin != null) pippin.IniciarDespedida();
+        yield return null;
+
+        Debug.Log("[RobbinOdd] Iniciando diálogo de derrota...");
+
+        if (DialogoManagerBoss.instancia == null)
+        {
+            Debug.LogError("[RobbinOdd] DialogoManagerBoss.instancia es NULL");
+            yield break;
+        }
+
+        bool dialogoTerminado = false;
+        DialogoManagerBoss.instancia.MostrarDialogo(dialogoDerrota, () => dialogoTerminado = true);
+        yield return new WaitUntil(() => dialogoTerminado);
+
+        // Ocultar sprite del boss
+        gameObject.SetActive(false);
+
+        if (companero == null)
+        {
+            Debug.LogError("[RobbinOdd] companero es NULL — arrastra compañero prota_0 al Inspector del boss");
+            yield break;
+        }
+
+        Debug.Log("[RobbinOdd] Activando y llamando IniciarDespedida en " + companero.gameObject.name);
+        // Poner los flags ANTES de activar para que OnEnable los detecte
+        companero.IniciarDespedida();
+        companero.gameObject.SetActive(true);
     }
 
     public void MostrarDialogoDerrota()
     {
-        DialogoManagerBoss.instancia.MostrarDialogo(dialogoDerrota, () =>
-        {
-            derrotado = true;
-            gameObject.SetActive(false);
-        });
+        StartCoroutine(MostrarDialogoDerrota_Coroutine());
+    }
+
+    public static void MarcarDerrotado()
+    {
+        robbinDerrotado = true;
     }
 
     void OnDrawGizmosSelected()

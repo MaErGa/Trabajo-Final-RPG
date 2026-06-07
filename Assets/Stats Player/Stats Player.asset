@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Stats Player
   m_EditorClassIdentifier: 
   nombre: Retro
-  nivel: 25
-  hpMax: 110
-  hpActual: 110
-  mpMax: 50
-  mpActual: 48
-  fuerza: 35
-  agilidad: 24
-  defensa: 22
-  oro: 848
-  experiencia: 96281
+  nivel: 99
+  hpMax: 999
+  hpActual: 999
+  mpMax: 500
+  mpActual: 500
+  fuerza: 255
+  agilidad: 200
+  defensa: 200
+  oro: 2936
+  experiencia: 4476925
   fuerzaMagica: 5
   terapeucidad: 4
   bonoDefensaTemporal: 0
@@ -40,8 +40,8 @@ MonoBehaviour:
   escudoEquipado: Ninguno
   cascoEquipado: Ninguno
   accesorioEquipado: Ninguno
-  expSiguienteNivel: 144387
-  tablaExpPilgrim: 0600000013000000350000008f0000004c01000067020000d6030000a0050000c6070000620a00006f0d00001611000099150000251b0000f5210000b32c0000043b00000a5300001a7a000012a50000f2d30000ba0601006a3d010002780100
+  expSiguienteNivel: 65535
+  tablaExpPilgrim: 0b000000160000002c000000420000006300000094000000de0000004e010000f5010000ef0200006604000080050000e006000098080000be0a00006d0d0000c8100000fa140000391a0000801d00003021000055250000ff2900003f2f000028350000ca3b000045430000ad4b000023550000c85f0000be6b0000377900005e8800006a990000c1ab000018bf0000d6d30000e8e9000062010100ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000
   conjurosAprendidos:
   - {fileID: 11400000, guid: 08dce5b67f7c05646b520134aae1dd68, type: 2}
   - {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
@@ -51,8 +51,7 @@ MonoBehaviour:
   conjuroNivel5: {fileID: 11400000, guid: cb65bb2ff7372054baf4666761c2c627, type: 2}
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
   conjuroNivel10: {fileID: 11400000, guid: 50913cd5df0830048a7cacee19fb5fa8, type: 2}
-  mochilaItems:
-  - {fileID: 11400000, guid: 17a062088510feb4eb5cc8c3cb31063a, type: 2}
+  mochilaItems: []
   armarioEquipo: []
   plantasMedicinales: 0
   colaDeConejo: 0

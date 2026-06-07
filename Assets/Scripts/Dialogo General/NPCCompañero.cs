@@ -51,8 +51,17 @@ public class NPCCompañero : MonoBehaviour
     {
         GameObject obj = GameObject.FindGameObjectWithTag("Player");
         if (obj != null) jugador = obj.transform;
+    }
 
-        if (MovimientoMapa.pippinUnido)
+    void OnEnable()
+    {
+        // Si ya está en modo despedida, lanzar el diálogo al activarse
+        if (estadoActual == EstadoMision.Despedida && esperandoDespedida)
+        {
+            StartCoroutine(CorDespedida());
+        }
+        // Si Pippin ya está unido y no es despedida, desactivarse
+        else if (MovimientoMapa.pippinUnido && estadoActual != EstadoMision.Despedida)
         {
             gameObject.SetActive(false);
         }
@@ -115,15 +124,24 @@ public class NPCCompañero : MonoBehaviour
         }
     }
 
-    // Llamado desde NPCRobbinOdd.MarcarDerrotado()
+    // Llamado desde NPCRobbinOdd después de su diálogo de derrota
     public void IniciarDespedida()
     {
-        // Reactivar a Pippin en escena para que dé el diálogo
-        gameObject.SetActive(true);
+        // Establecer el estado ANTES de activar el GameObject
+        // para que OnEnable lo detecte correctamente
         estadoActual = EstadoMision.Despedida;
         esperandoDespedida = true;
+        // El boss ya hizo SetActive(true), OnEnable lanzará CorDespedida
+    }
+
+    System.Collections.IEnumerator CorDespedida()
+    {
+        yield return null;
+        Debug.Log("[Pippin] Mostrando diálogo de despedida");
         if (DialogoManagerCompañero.instancia != null)
             DialogoManagerCompañero.instancia.MostrarDialogo(dialogoDespedida);
+        else
+            Debug.LogError("[Pippin] DialogoManagerCompañero.instancia es NULL");
     }
 
     public void CambiarEstado(EstadoMision nuevoEstado)

@@ -590,7 +590,7 @@ public class BattleManager : MonoBehaviour
 
         string levelUpTexto = "";
         bool subioNivel = false;
-        while (datosRyo.experiencia >= datosRyo.expSiguienteNivel) { levelUpTexto += ComprobarLevelUp(); subioNivel = true; }
+        while (datosRyo.nivel < 99 && datosRyo.experiencia >= datosRyo.expSiguienteNivel) { levelUpTexto += ComprobarLevelUp(); subioNivel = true; }
         if (subioNivel) ReproducirSonido(sonidoLevelUp);
 
         ActualizarConjurosAprendidos();
@@ -598,10 +598,20 @@ public class BattleManager : MonoBehaviour
 
         if (MovimientoMapa.combateBoss)
         {
-            if (MovimientoMapa.combateSecuaz) NPCSecuaz.MarcarDerrotado();
-            else NPCRobbinOdd.MarcarDerrotado();
-            MovimientoMapa.combateBoss = false;
-            MovimientoMapa.combateSecuaz = false;
+            if (MovimientoMapa.combateSecuaz)
+            {
+                NPCSecuaz.MarcarDerrotado();
+                MovimientoMapa.combateBoss  = false;
+                MovimientoMapa.combateSecuaz = false;
+            }
+            else
+            {
+                // Para el boss principal: solo marcar la flag, el diálogo lo gestiona
+                // NPCRobbinOdd al volver al mapa en Start()
+                NPCRobbinOdd.robbinDerrotado = true;
+                MovimientoMapa.combateBoss   = false;
+                MovimientoMapa.combateSecuaz = false;
+            }
         }
 
         textoMensajes.text = mensajeVictoria + "\nRecibes " + expGanada + " EXP y " + oroGanado + " monedas." + mensajeItem + levelUpTexto;
@@ -611,16 +621,18 @@ public class BattleManager : MonoBehaviour
 
     string ComprobarLevelUp()
     {
+        if (datosRyo.nivel >= 99) 
+        {
+            // Ya está al máximo — evitar que siga subiendo
+            datosRyo.expSiguienteNivel = int.MaxValue;
+            return "";
+        }
+
         datosRyo.nivel++;
-        datosRyo.hpMax += 10;
-        datosRyo.mpMax += 5;
-        datosRyo.fuerza += 3;
+        datosRyo.ActualizarEstadisticasPorNivel();
         hpSesion = datosRyo.hpMax;
+
         string mensajeConjuro = datosRyo.AprenderConjurosPorNivel();
-        if (datosRyo.nivel - 1 < datosRyo.tablaExpPilgrim.Length)
-            datosRyo.expSiguienteNivel = datosRyo.tablaExpPilgrim[datosRyo.nivel - 1];
-        else
-            datosRyo.expSiguienteNivel = Mathf.RoundToInt(datosRyo.expSiguienteNivel * 1.5f);
         return "\n¡" + datosRyo.nombre + " sube al nivel " + datosRyo.nivel + "!" + mensajeConjuro;
     }
 
