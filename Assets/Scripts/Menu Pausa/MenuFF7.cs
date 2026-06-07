@@ -78,6 +78,7 @@ public class MenuFF7 : MonoBehaviour
 
     // HUD
     TextMeshProUGUI _txtOro, _txtTiempo;
+    TextMeshProUGUI _txtEstado;
 
     // Sidebar buttons
     Button _btnEstado, _btnItem, _btnEquipo, _btnSalir, _btnMagia, _btnConfig;
@@ -332,6 +333,25 @@ public class MenuFF7 : MonoBehaviour
         if (_txtAccesorio) _txtAccesorio.text = datosJugador.accesorioEquipadoAsset != null ? datosJugador.accesorioEquipadoAsset.nombre : "--";
 
         if (_txtOro) _txtOro.text = "Gil  " + datosJugador.oro;
+
+        if (_txtEstado)
+        {
+            switch (datosJugador.estadoAlterado)
+            {
+                case EstadoAlterado.Envenenado:
+                    _txtEstado.text = "<color=#AA00FF>ENVENENADO</color>";
+                    break;
+                case EstadoAlterado.Paralizado:
+                    _txtEstado.text = $"<color=#FFFF00>PARALIZADO ({datosJugador.turnosEstadoAlterado})</color>";
+                    break;
+                case EstadoAlterado.Dormido:
+                    _txtEstado.text = $"<color=#88CCFF>DORMIDO ({datosJugador.turnosEstadoAlterado})</color>";
+                    break;
+                default:
+                    _txtEstado.text = "<color=#00FF88>Normal</color>";
+                    break;
+            }
+        }
     }
 
     void RefrescarInventario()
@@ -431,10 +451,10 @@ public class MenuFF7 : MonoBehaviour
         if (_itemSel == null || datosJugador == null) return;
         switch (_itemSel.queCura)
         {
-            case TipoEfecto.Vida:
+            case ItemConsumible.TipoEfecto.Vida:
                 datosJugador.hpActual = Mathf.Min(datosJugador.hpMax, datosJugador.hpActual + _itemSel.potencia);
                 break;
-            case TipoEfecto.Mana:
+            case ItemConsumible.TipoEfecto.Mana:
                 datosJugador.mpActual = Mathf.Min(datosJugador.mpMax, datosJugador.mpActual + _itemSel.potencia);
                 break;
         }
@@ -565,9 +585,9 @@ public class MenuFF7 : MonoBehaviour
         go.AddComponent<Image>().color = C_BORDE;
     }
 
-    string EfectoTexto(TipoEfecto e)
+    string EfectoTexto(ItemConsumible.TipoEfecto e)
     {
-        return e switch { TipoEfecto.Vida => "HP", TipoEfecto.Mana => "MP", TipoEfecto.Antidoto => "Antídoto", _ => "" };
+        return e switch { ItemConsumible.TipoEfecto.Vida => "HP", ItemConsumible.TipoEfecto.Mana => "MP", ItemConsumible.TipoEfecto.Antidoto => "Antídoto", ItemConsumible.TipoEfecto.Antiparalisis => "Antiparálisis", ItemConsumible.TipoEfecto.Despertar => "Despierta", _ => "" };
     }
 
     void CrearFilaInventario(string nombre, string detalle, UnityEngine.Events.UnityAction accion)
@@ -753,6 +773,12 @@ public class MenuFF7 : MonoBehaviour
         _txtCasco = EquipoFila(stR, "Casco", "Casco", ref sy);
         _txtAccesorio = EquipoFila(stR, "Accesorio", "Accesorio", ref sy);
 
+        // Estado Alterado
+        sy -= 10f;
+        TMP_Anclado(stR, "LblEstado", "Estado", 12, C_CYAN,
+            new Vector2(0, 1), new Vector2(0, 1), new Vector2(20, sy), new Vector2(140, 20));
+        _txtEstado = TMP_Anclado(stR, "TxtEstado", "Normal", 12, C_BLANCO,
+            new Vector2(0, 1), new Vector2(0, 1), new Vector2(170, sy), new Vector2(300, 20));
         // ── PANEL INVENTARIO ──────────────────────────────────────────────────
         _panelInventario = PanelFF("PanelInventario", _raiz.transform, new Vector2(20, 20), new Vector2(1120, 690));
         _panelInventario.SetActive(false);

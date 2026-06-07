@@ -6,7 +6,6 @@ using UnityEngine.UI;
 // ─────────────────────────────────────────────────────────────────────────────
 //  InventoryManager.cs  –  Gestiona el inventario del jugador en la UI.
 //  Trabaja con tus ScriptableObjects: DatosJugador, EquipoBase, ItemConsumible.
-//  Adjunta este script al GameObject que contenga el panel de inventario.
 // ─────────────────────────────────────────────────────────────────────────────
 public class InventoryManager : MonoBehaviour
 {
@@ -17,21 +16,20 @@ public class InventoryManager : MonoBehaviour
     public GameObject prefabSlot;
 
     [Header("Contenedor donde se instancian las filas")]
-    public Transform contenedorPadre;           // Content del ScrollView
+    public Transform contenedorPadre;
 
     [Header("Panel de información del item seleccionado")]
     public TextMeshProUGUI textoNombre;
     public TextMeshProUGUI textoDescripcion;
 
     [Header("Botón Usar (se activa al seleccionar un consumible)")]
-    public Button botonUsar;                    // Botón "Usar"
-    public TextMeshProUGUI textoBotonUsar;      // Texto del botón (opcional)
+    public Button botonUsar;
+    public TextMeshProUGUI textoBotonUsar;
 
     // ── Estado interno ────────────────────────────────────────────────────────
     private ItemConsumible itemConsumibleSeleccionado;
     private EquipoBase     equipoSeleccionado;
 
-    // ─────────────────────────────────────────────────────────────────────────
     private void OnEnable()
     {
         ActualizarInventarioUI();
@@ -39,11 +37,8 @@ public class InventoryManager : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  DIBUJAR INVENTARIO
-    // ─────────────────────────────────────────────────────────────────────────
     public void ActualizarInventarioUI()
     {
-        // Limpiar filas anteriores
         foreach (Transform hijo in contenedorPadre)
             Destroy(hijo.gameObject);
 
@@ -54,13 +49,12 @@ public class InventoryManager : MonoBehaviour
         // ── Consumibles (mochilaItems) ────────────────────────────────────────
         foreach (ItemConsumible item in datosJugador.mochilaItems)
         {
-            ItemConsumible captura = item;  // necesario para la lambda
-
+            ItemConsumible captura = item;
             string descCorta = $"{ObtenerTextoEfecto(item.queCura)} +{item.potencia}";
             CrearFila(item.nombre, descCorta, () => SeleccionarConsumible(captura));
         }
 
-        // ── Plantas medicinales (sistema antiguo, curan 30 HP) ────────────────
+        // ── Plantas medicinales (sistema antiguo) ─────────────────────────────
         if (datosJugador.plantasMedicinales > 0)
         {
             CrearFila(
@@ -79,9 +73,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  CREAR FILA
-    // ─────────────────────────────────────────────────────────────────────────
     void CrearFila(string nombre, string desc, System.Action alHacerClick)
     {
         GameObject slot = Instantiate(prefabSlot, contenedorPadre);
@@ -90,26 +81,20 @@ public class InventoryManager : MonoBehaviour
         Button btn = slot.GetComponent<Button>();
         btn.onClick.AddListener(() =>
         {
-            // Mostrar info en el panel lateral
             if (textoNombre)      textoNombre.text      = nombre;
             if (textoDescripcion) textoDescripcion.text = desc;
             alHacerClick?.Invoke();
         });
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  SELECCIÓN
-    // ─────────────────────────────────────────────────────────────────────────
     void SeleccionarConsumible(ItemConsumible item)
     {
         itemConsumibleSeleccionado = item;
         equipoSeleccionado         = null;
 
-        // Mostrar descripción completa
         if (textoDescripcion)
             textoDescripcion.text = item.descripcion;
 
-        // Activar botón "Usar"
         if (botonUsar)
         {
             botonUsar.gameObject.SetActive(true);
@@ -127,7 +112,6 @@ public class InventoryManager : MonoBehaviour
         if (textoDescripcion)
             textoDescripcion.text = equipo.descripcion;
 
-        // Activar botón como "Equipar"
         if (botonUsar)
         {
             botonUsar.gameObject.SetActive(true);
@@ -137,20 +121,15 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  USAR / EQUIPAR
-    // ─────────────────────────────────────────────────────────────────────────
     public void UsarItemSeleccionado()
     {
         if (itemConsumibleSeleccionado == null) return;
 
         AplicarEfectoConsumible(itemConsumibleSeleccionado, datosJugador);
 
-        // Eliminar del inventario
         datosJugador.mochilaItems.Remove(itemConsumibleSeleccionado);
         itemConsumibleSeleccionado = null;
 
-        // Refrescar UI
         ActualizarInventarioUI();
 
         if (textoNombre)      textoNombre.text      = "";
@@ -160,10 +139,8 @@ public class InventoryManager : MonoBehaviour
     void UsarPlantaMedicinal()
     {
         if (datosJugador.plantasMedicinales <= 0) return;
-
         datosJugador.hpActual = Mathf.Min(datosJugador.hpMax, datosJugador.hpActual + 30);
         datosJugador.plantasMedicinales--;
-
         Debug.Log($"Planta usada. HP: {datosJugador.hpActual}/{datosJugador.hpMax}");
         ActualizarInventarioUI();
     }
@@ -171,62 +148,70 @@ public class InventoryManager : MonoBehaviour
     public void EquiparSeleccionado()
     {
         if (equipoSeleccionado == null) return;
-
         datosJugador.EquiparObjeto(equipoSeleccionado);
-
-        // Mover del armario al slot equipado (quitar del armario)
         datosJugador.armarioEquipo.Remove(equipoSeleccionado);
         equipoSeleccionado = null;
-
         ActualizarInventarioUI();
-
         if (textoNombre)      textoNombre.text      = "";
         if (textoDescripcion) textoDescripcion.text  = "";
-
         Debug.Log("Equipo cambiado.");
     }
 
     // ─────────────────────────────────────────────────────────────────────────
     //  LÓGICA DE EFECTO CONSUMIBLE
-    //  Añade aquí nuevos TipoEfecto cuando los necesites.
     // ─────────────────────────────────────────────────────────────────────────
     public static void AplicarEfectoConsumible(ItemConsumible item, DatosJugador jugador)
     {
         switch (item.queCura)
         {
-            case TipoEfecto.Vida:
+            case ItemConsumible.TipoEfecto.Vida:
                 jugador.hpActual = Mathf.Min(jugador.hpMax, jugador.hpActual + item.potencia);
                 Debug.Log($"HP restaurado: {jugador.hpActual}/{jugador.hpMax}");
                 break;
 
-            case TipoEfecto.Mana:
+            case ItemConsumible.TipoEfecto.Mana:
                 jugador.mpActual = Mathf.Min(jugador.mpMax, jugador.mpActual + item.potencia);
                 Debug.Log($"MP restaurado: {jugador.mpActual}/{jugador.mpMax}");
                 break;
 
-            case TipoEfecto.Antidoto:
-                // Aquí conectarías con tu sistema de estados alterados cuando lo tengas
-                Debug.Log("Veneno curado.");
+            case ItemConsumible.TipoEfecto.Antidoto:
+                if (jugador.CurarEstadoEspecifico(EstadoAlterado.Envenenado))
+                    Debug.Log("Veneno curado con Antídoto.");
+                else
+                    Debug.Log("El jugador no estaba envenenado.");
+                break;
+
+            case ItemConsumible.TipoEfecto.Antiparalisis:
+                if (jugador.CurarEstadoEspecifico(EstadoAlterado.Paralizado))
+                    Debug.Log("Parálisis curada con Antiparálisis.");
+                else
+                    Debug.Log("El jugador no estaba paralizado.");
+                break;
+
+            case ItemConsumible.TipoEfecto.Despertar:
+                if (jugador.CurarEstadoEspecifico(EstadoAlterado.Dormido))
+                    Debug.Log("Sueño curado con Despertador.");
+                else
+                    Debug.Log("El jugador no estaba dormido.");
                 break;
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  UTILIDADES
-    // ─────────────────────────────────────────────────────────────────────────
     void OcultarBotonUsar()
     {
         if (botonUsar) botonUsar.gameObject.SetActive(false);
     }
 
-    static string ObtenerTextoEfecto(TipoEfecto efecto)
+    static string ObtenerTextoEfecto(ItemConsumible.TipoEfecto efecto)
     {
         return efecto switch
         {
-            TipoEfecto.Vida    => "HP",
-            TipoEfecto.Mana    => "MP",
-            TipoEfecto.Antidoto => "Cura veneno",
-            _                  => "?"
+            ItemConsumible.TipoEfecto.Vida           => "HP",
+            ItemConsumible.TipoEfecto.Mana           => "MP",
+            ItemConsumible.TipoEfecto.Antidoto       => "Cura veneno",
+            ItemConsumible.TipoEfecto.Antiparalisis  => "Cura parálisis",
+            ItemConsumible.TipoEfecto.Despertar      => "Despierta",
+            _                         => "?"
         };
     }
 }

@@ -22,3 +22,10 @@ MonoBehaviour:
   oroAlMorir: 4
   tablaLoot: []
   tablaLootEquipo: []
+  ataquesEspeciales:
+  - nombreAtaque: Kasap
+    "da\xF1oBase": 15
+    estadoQueAplica: 1
+    probabilidadEstado: 50
+    duracionTurnos: 5
+    probabilidadUso: 25

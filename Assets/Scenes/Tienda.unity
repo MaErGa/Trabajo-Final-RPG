@@ -1990,6 +1990,9 @@ MonoBehaviour:
   itemsConsumiblesVenta:
   - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   - {fileID: 11400000, guid: 17a062088510feb4eb5cc8c3cb31063a, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 8e0aef50b4e32ed439d99bc77789ffea, type: 2}
   equipoEnVenta:
   - {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
   - {fileID: 11400000, guid: b8760bbcf149d844f9c3adc56f687d7a, type: 2}
@@ -3204,6 +3207,9 @@ MonoBehaviour:
   itemsConsumiblesVenta:
   - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   - {fileID: 11400000, guid: 17a062088510feb4eb5cc8c3cb31063a, type: 2}
+  - {fileID: 11400000, guid: fa49bd34d270cb7439060c1580e04112, type: 2}
+  - {fileID: 11400000, guid: d94667c1ac00b204d8042ec0d1ab18d1, type: 2}
+  - {fileID: 11400000, guid: 8e0aef50b4e32ed439d99bc77789ffea, type: 2}
   equipoEnVenta:
   - {fileID: 11400000, guid: 27bde6b56fab49744b05b46fca1de1f3, type: 2}
   - {fileID: 11400000, guid: 17f732891419bab489095c1f3a5e9270, type: 2}

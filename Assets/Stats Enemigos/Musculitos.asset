@@ -22,3 +22,10 @@ MonoBehaviour:
   oroAlMorir: 20
   tablaLoot: []
   tablaLootEquipo: []
+  ataquesEspeciales:
+  - nombreAtaque: Lenguetazo
+    "da\xF1oBase": 10
+    estadoQueAplica: 3
+    probabilidadEstado: 30
+    duracionTurnos: 3
+    probabilidadUso: 15

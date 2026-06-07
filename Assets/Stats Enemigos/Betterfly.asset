@@ -24,3 +24,10 @@ MonoBehaviour:
   tablaLootEquipo:
   - equipo: {fileID: 0}
     probabilidad: 0
+  ataquesEspeciales:
+  - nombreAtaque: "Sue\xF1o"
+    "da\xF1oBase": 0
+    estadoQueAplica: 2
+    probabilidadEstado: 35
+    duracionTurnos: 5
+    probabilidadUso: 25

@@ -8,20 +8,24 @@ public static class UsarItemConsumible
 
         switch (item.queCura)
         {
-            case TipoEfecto.Vida:
+            case ItemConsumible.TipoEfecto.Vida:
                 if (datos.hpActual >= datos.hpMax) return false;
                 datos.hpActual = Mathf.Min(datos.hpActual + item.potencia, datos.hpMax);
                 return true;
 
-            case TipoEfecto.Mana:
+            case ItemConsumible.TipoEfecto.Mana:
                 if (datos.mpActual >= datos.mpMax) return false;
                 datos.mpActual = Mathf.Min(datos.mpActual + item.potencia, datos.mpMax);
                 return true;
 
-            case TipoEfecto.Antidoto:
-                // Aquí puedes añadir lógica para curar veneno cuando lo implementes
-                // Por ahora devuelve true para que se consuma el item
-                return true;
+            case ItemConsumible.TipoEfecto.Antidoto:
+                return datos.CurarEstadoEspecifico(EstadoAlterado.Envenenado);
+
+            case ItemConsumible.TipoEfecto.Antiparalisis:
+                return datos.CurarEstadoEspecifico(EstadoAlterado.Paralizado);
+
+            case ItemConsumible.TipoEfecto.Despertar:
+                return datos.CurarEstadoEspecifico(EstadoAlterado.Dormido);
 
             default:
                 Debug.LogWarning("[UsarItemConsumible] TipoEfecto no reconocido: " + item.queCura);
