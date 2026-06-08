@@ -189,11 +189,11 @@ public class BattleManager : MonoBehaviour
         if (panelObjetos != null) panelObjetos.SetActive(false);
         ActualizarConjurosAprendidos();
 
-        sesionMiniEter       = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Mini Éter").Count;
-        sesionPlantaMochila  = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Planta Medicinal").Count;
-        sesionAntidoto       = datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antidoto).Count;
-        sesionAntiparalisis  = datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antiparalisis).Count;
-        sesionDespertar      = datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Despertar).Count;
+        sesionMiniEter = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Mini Éter").Count;
+        sesionPlantaMochila = datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Planta Medicinal").Count;
+        sesionAntidoto = datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antidoto).Count;
+        sesionAntiparalisis = datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antiparalisis).Count;
+        sesionDespertar = datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Despertar).Count;
         ActualizarObjetosDisponibles();
     }
 
@@ -247,10 +247,10 @@ public class BattleManager : MonoBehaviour
     {
         return estado switch
         {
-            EstadoAlterado.Envenenado  => "VENENO",
-            EstadoAlterado.Dormido     => "DORMIDO (" + turnos + ")",
-            EstadoAlterado.Paralizado  => "PARALIZADO (" + turnos + ")",
-            _                          => ""
+            EstadoAlterado.Envenenado => "VENENO",
+            EstadoAlterado.Dormido => "DORMIDO (" + turnos + ")",
+            EstadoAlterado.Paralizado => "PARALIZADO (" + turnos + ")",
+            _ => ""
         };
     }
 
@@ -258,10 +258,15 @@ public class BattleManager : MonoBehaviour
     public void AbrirMenuMagia()
     {
         if (!turnoActivo) return;
-        // Si está dormido, no puede actuar
+        // Si está dormido o paralizado, no puede actuar
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
-            textoMensajes.text = "¡" + datosRyo.nombre + " está dormido y no puede actuar!";
+            StartCoroutine(PasarTurnoPorEstado());
+            return;
+        }
+        if (datosRyo.estadoAlterado == EstadoAlterado.Paralizado && Random.Range(0, 100) < 25)
+        {
+            StartCoroutine(PasarTurnoPorEstado());
             return;
         }
         CerrarMenus();
@@ -273,7 +278,12 @@ public class BattleManager : MonoBehaviour
         if (!turnoActivo) return;
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
-            textoMensajes.text = "¡" + datosRyo.nombre + " está dormido y no puede actuar!";
+            StartCoroutine(PasarTurnoPorEstado());
+            return;
+        }
+        if (datosRyo.estadoAlterado == EstadoAlterado.Paralizado && Random.Range(0, 100) < 25)
+        {
+            StartCoroutine(PasarTurnoPorEstado());
             return;
         }
         CerrarMenus();
@@ -418,13 +428,17 @@ public class BattleManager : MonoBehaviour
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
 
-        // Verificar estado dormido
+        // Verificar estado dormido o paralizado
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
-            textoMensajes.text = "¡" + datosRyo.nombre + " está dormido y no puede actuar!";
+            StartCoroutine(PasarTurnoPorEstado());
             return;
         }
-
+        if (datosRyo.estadoAlterado == EstadoAlterado.Paralizado && Random.Range(0, 100) < 25)
+        {
+            StartCoroutine(PasarTurnoPorEstado());
+            return;
+        }
         ChequearInspiracioInicio();
         int dañoBase = Mathf.Max(1, datosRyo.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
         if (Random.Range(0, 100) < 5)
@@ -448,7 +462,12 @@ public class BattleManager : MonoBehaviour
         if (!turnoActivo || vidaEnemigo <= 0) return;
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
-            textoMensajes.text = "¡" + datosRyo.nombre + " está dormido y no puede actuar!";
+            StartCoroutine(PasarTurnoPorEstado());
+            return;
+        }
+        if (datosRyo.estadoAlterado == EstadoAlterado.Paralizado && Random.Range(0, 100) < 25)
+        {
+            StartCoroutine(PasarTurnoPorEstado());
             return;
         }
 
@@ -502,7 +521,12 @@ public class BattleManager : MonoBehaviour
         if (!turnoActivo || vidaEnemigo <= 0) return;
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
-            textoMensajes.text = "¡" + datosRyo.nombre + " está dormido y no puede actuar!";
+            StartCoroutine(PasarTurnoPorEstado());
+            return;
+        }
+        if (datosRyo.estadoAlterado == EstadoAlterado.Paralizado && Random.Range(0, 100) < 25)
+        {
+            StartCoroutine(PasarTurnoPorEstado());
             return;
         }
         ChequearInspiracioInicio();
@@ -518,6 +542,54 @@ public class BattleManager : MonoBehaviour
     {
         if (!turnoActivo) return;
         StartCoroutine(IntentarEscapar());
+    }
+
+    // ── Turno perdido por sueño o parálisis ──────────────────────────────────
+    IEnumerator PasarTurnoPorEstado()
+    {
+        turnoActivo = false;
+        CerrarMenus();
+
+        bool dormido = datosRyo.estadoAlterado == EstadoAlterado.Dormido;
+        bool paralizado = datosRyo.estadoAlterado == EstadoAlterado.Paralizado;
+
+        if (dormido)
+            textoMensajes.text = "¡" + datosRyo.nombre + " está dormido y pierde el turno!";
+        else if (paralizado)
+            textoMensajes.text = "¡" + datosRyo.nombre + " está paralizado y no puede moverse!";
+
+        ActualizarInterfaz();
+        yield return new WaitForSeconds(1.2f);
+
+        // Mostrar el ataque del enemigo con su daño antes de pasar el turno normal
+        var enemigo = MovimientoMapa.enemigoSeleccionado;
+        if (enemigo != null && vidaEnemigo > 0)
+        {
+            int defTotal = datosRyo.DefensaTotal;
+            // Parálisis baja la velocidad/reacción: el daño recibido sube un 20%
+            int daño = Mathf.Max(1, enemigo.dañoAtaque - defTotal);
+            if (paralizado) daño = Mathf.RoundToInt(daño * 1.20f);
+
+            hpSesion -= daño;
+            datosRyo.hpActual = hpSesion;
+            ReproducirSonido(sonidoAtaqueEnemigo);
+
+            string prefijo = dormido
+                ? "¡El " + enemigo.nombreEnemigo + " aprovecha el sueño y ataca! "
+                : "¡El " + enemigo.nombreEnemigo + " aprovecha la parálisis y ataca! ";
+            textoMensajes.text = prefijo + datosRyo.nombre + " recibe " + daño + " puntos de daño.";
+            ActualizarInterfaz();
+            yield return new WaitForSeconds(1.4f);
+
+            if (hpSesion <= 0)
+            {
+                yield return StartCoroutine(CorDerrota());
+                yield break;
+            }
+        }
+
+        // El turno del enemigo se ejecuta igualmente (aplica ticks, buffs, etc.)
+        StartCoroutine(TurnoDelEnemigo());
     }
 
     // ── IA de Pippin ──────────────────────────────────────────────────────────
@@ -688,13 +760,13 @@ public class BattleManager : MonoBehaviour
             if (MovimientoMapa.combateSecuaz)
             {
                 NPCSecuaz.MarcarDerrotado();
-                MovimientoMapa.combateBoss  = false;
+                MovimientoMapa.combateBoss = false;
                 MovimientoMapa.combateSecuaz = false;
             }
             else
             {
                 NPCRobbinOdd.robbinDerrotado = true;
-                MovimientoMapa.combateBoss   = false;
+                MovimientoMapa.combateBoss = false;
                 MovimientoMapa.combateSecuaz = false;
             }
         }
@@ -724,11 +796,11 @@ public class BattleManager : MonoBehaviour
         datosRyo.mpActual = mpSesion;
 
         // Descontar items de estado usados durante el combate
-        DescontarItemsSesion("Mini Éter",      datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Mini Éter").Count - sesionMiniEter);
+        DescontarItemsSesion("Mini Éter", datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Mini Éter").Count - sesionMiniEter);
         DescontarItemsSesion("Planta Medicinal", datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Planta Medicinal").Count - sesionPlantaMochila);
-        DescontarItemsPorEfecto(ItemConsumible.TipoEfecto.Antidoto,      datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antidoto).Count - sesionAntidoto);
+        DescontarItemsPorEfecto(ItemConsumible.TipoEfecto.Antidoto, datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antidoto).Count - sesionAntidoto);
         DescontarItemsPorEfecto(ItemConsumible.TipoEfecto.Antiparalisis, datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antiparalisis).Count - sesionAntiparalisis);
-        DescontarItemsPorEfecto(ItemConsumible.TipoEfecto.Despertar,     datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Despertar).Count - sesionDespertar);
+        DescontarItemsPorEfecto(ItemConsumible.TipoEfecto.Despertar, datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Despertar).Count - sesionDespertar);
 
         if (pippinActivo && datosPippin != null)
         {
@@ -772,7 +844,7 @@ public class BattleManager : MonoBehaviour
         {
             int dañoVeneno = datosRyo.TickVeneno();
             hpSesion = datosRyo.hpActual; // sincronizar sesión
-            textoMensajes.text = "☠ ¡El veneno daña a " + datosRyo.nombre + " en " + dañoVeneno + " HP!";
+            textoMensajes.text = "¡El veneno daña a " + datosRyo.nombre + " en " + dañoVeneno + " HP!";
             ActualizarInterfaz();
             yield return new WaitForSeconds(0.8f);
             if (hpSesion <= 0)
@@ -884,7 +956,10 @@ public class BattleManager : MonoBehaviour
                     {
                         int duracion = (atqEspecial.estadoQueAplica == EstadoAlterado.Envenenado)
                             ? -1
-                            : Random.Range(atqEspecial.duracionTurnos, atqEspecial.duracionTurnos + 3);
+                            : (atqEspecial.estadoQueAplica == EstadoAlterado.Dormido ||
+                               atqEspecial.estadoQueAplica == EstadoAlterado.Paralizado)
+                                ? Random.Range(3, 6)  // sueño/parálisis: 3-5 turnos
+                                : Random.Range(atqEspecial.duracionTurnos, atqEspecial.duracionTurnos + 3);
                         datosRyo.AplicarEstado(atqEspecial.estadoQueAplica, duracion);
                         ReproducirSonido(sonidoEstadoAlterado);
                         msgAtq += "\n¡" + datosRyo.nombre + " queda " + NombreEstado(atqEspecial.estadoQueAplica) + "!";
@@ -910,7 +985,10 @@ public class BattleManager : MonoBehaviour
                     {
                         int turnos = ataqueEsp.estadoQueAplica == EstadoAlterado.Envenenado
                             ? 999  // veneno es persistente, se cura con antídoto
-                            : ataqueEsp.duracionTurnos;
+                            : (ataqueEsp.estadoQueAplica == EstadoAlterado.Dormido ||
+                               ataqueEsp.estadoQueAplica == EstadoAlterado.Paralizado)
+                                ? Random.Range(3, 6)  // sueño/parálisis: 3-5 turnos
+                                : ataqueEsp.duracionTurnos;
                         datosRyo.AplicarEstadoAlterado(ataqueEsp.estadoQueAplica, turnos);
                         textoMensajes.text += "\n¡" + datosRyo.nombre + " queda afectado por " + ataqueEsp.nombreAtaque + "!";
                         ActualizarInterfaz();
@@ -964,7 +1042,10 @@ public class BattleManager : MonoBehaviour
                     {
                         int turnos = ataqueEsp.estadoQueAplica == EstadoAlterado.Envenenado
                             ? 999  // veneno es persistente, se cura con antídoto
-                            : ataqueEsp.duracionTurnos;
+                            : (ataqueEsp.estadoQueAplica == EstadoAlterado.Dormido ||
+                               ataqueEsp.estadoQueAplica == EstadoAlterado.Paralizado)
+                                ? Random.Range(3, 6)  // sueño/parálisis: 3-5 turnos
+                                : ataqueEsp.duracionTurnos;
                         datosRyo.AplicarEstadoAlterado(ataqueEsp.estadoQueAplica, turnos);
                         textoMensajes.text += "\n¡" + datosRyo.nombre + " queda afectado por " + ataqueEsp.nombreAtaque + "!";
                         ActualizarInterfaz();
@@ -1000,10 +1081,10 @@ public class BattleManager : MonoBehaviour
     {
         return estado switch
         {
-            EstadoAlterado.Envenenado  => "envenenado",
-            EstadoAlterado.Dormido     => "dormido",
-            EstadoAlterado.Paralizado  => "paralizado",
-            _                          => "afectado"
+            EstadoAlterado.Envenenado => "envenenado",
+            EstadoAlterado.Dormido => "dormido",
+            EstadoAlterado.Paralizado => "paralizado",
+            _ => "afectado"
         };
     }
 
