@@ -104,6 +104,14 @@ public class MenuFF7 : MonoBehaviour
     TextMeshProUGUI _txtXP;
 
     // ─────────────────────────────────────────────────────────────────────────
+    // INSTANCIA ESTÁTICA
+    // ─────────────────────────────────────────────────────────────────────────
+    public static MenuFF7 instancia;
+
+    /// <summary>Devuelve true si el menú FF7 está abierto.</summary>
+    public bool MenuActivo() => _abierto;
+
+    // ─────────────────────────────────────────────────────────────────────────
     // ESTADO
     // ─────────────────────────────────────────────────────────────────────────
     bool _abierto = false;
@@ -117,6 +125,7 @@ public class MenuFF7 : MonoBehaviour
     // ═════════════════════════════════════════════════════════════════════════
     void Awake()
     {
+        instancia = this;
         ConstruirUI();
         _raiz.SetActive(false);
     }
@@ -127,7 +136,16 @@ public class MenuFF7 : MonoBehaviour
         {
             _abierto = !_abierto;
             _raiz.SetActive(_abierto);
-            if (_abierto) { AbrirStats(); ActualizarBotonMagia(); }
+            if (_abierto)
+            {
+                AbrirStats();
+                ActualizarBotonMagia();
+                if (MenuPausaManager.instancia != null) MenuPausaManager.instancia.SetPausa(true);
+            }
+            else
+            {
+                if (MenuPausaManager.instancia != null) MenuPausaManager.instancia.SetPausa(false);
+            }
         }
 
         if (_abierto)
@@ -140,6 +158,13 @@ public class MenuFF7 : MonoBehaviour
     // ═════════════════════════════════════════════════════════════════════════
     // NAVEGACIÓN
     // ═════════════════════════════════════════════════════════════════════════
+    void CerrarMenu()
+    {
+        _abierto = false;
+        _raiz.SetActive(false);
+        if (MenuPausaManager.instancia != null) MenuPausaManager.instancia.SetPausa(false);
+    }
+
     void AbrirStats()
     {
         _panelStats.SetActive(true);
@@ -748,7 +773,7 @@ public class MenuFF7 : MonoBehaviour
         BotonSidebar("Titulo", sbR, 588, IrAlTitulo);
 
         // Salir siempre al final
-        _btnSalir = BotonSidebar("Salir", sbR, 640, () => _raiz.SetActive(false));
+        _btnSalir = BotonSidebar("Salir", sbR, 640, CerrarMenu);
 
         // ── PANEL STATS ───────────────────────────────────────────────────────
         _panelStats = PanelFF("PanelStats", _raiz.transform, new Vector2(20, 20), new Vector2(1120, 690));

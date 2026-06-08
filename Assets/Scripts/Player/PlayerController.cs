@@ -21,16 +21,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        // DEBUG TEMPORAL - borrar cuando se solucione
-        Debug.Log("ESCENA ACTUAL: " + SceneManager.GetActiveScene().name);
-        Debug.Log("POSICION ANTES DE APLICAR: " + transform.position);
-
-        // Aplicar posición guardada si existe
         if (SistemaGuardado.instancia != null && SistemaGuardado.instancia.hayPosicionGuardada)
             SistemaGuardado.instancia.AplicarPosicionJugador();
-
-        // DEBUG TEMPORAL - borrar cuando se solucione
-        Debug.Log("POSICION DESPUES DE APLICAR: " + transform.position);
     }
 
     bool HayDialogoActivo()
@@ -54,28 +46,20 @@ public class PlayerController : MonoBehaviour
 
     bool EstaEnPausa()
     {
-        return MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo();
+        if (MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo()) return true;
+        if (MenuFF7.instancia != null && MenuFF7.instancia.MenuActivo()) return true;
+        return false;
     }
 
     void Update()
     {
-        // --- BLOQUEO DE DIÁLOGO ---
-        if (HayDialogoActivo() || HayTiendaAbierta())
+        // ── BLOQUEO TOTAL si hay pausa, diálogo o tienda ──
+        if (EstaEnPausa() || HayDialogoActivo() || HayTiendaAbierta())
         {
             moviX = 0;
             moviY = 0;
-            animator.SetBool("Moviéndose", false);
-            rb.velocity = Vector2.zero;
-            return;
-        }
-
-        // --- BLOQUEO DE PAUSA ---
-        if (EstaEnPausa())
-        {
-            moviX = 0;
-            moviY = 0;
-            animator.SetBool("Moviéndose", false);
-            rb.velocity = Vector2.zero;
+            if (rb != null) rb.velocity = Vector2.zero;
+            if (animator != null) animator.SetBool("Moviéndose", false);
             return;
         }
 
@@ -106,8 +90,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (HayDialogoActivo() || HayTiendaAbierta()) return;
-        if (EstaEnPausa()) return;
+        if (EstaEnPausa() || HayDialogoActivo() || HayTiendaAbierta()) return;
 
         bool corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         float velocidad = corriendo ? velocidadCarrera : velocidadNormal;

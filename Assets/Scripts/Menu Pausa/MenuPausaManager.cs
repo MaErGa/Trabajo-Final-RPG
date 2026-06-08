@@ -65,13 +65,24 @@ public class MenuPausaManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.P))
             ToggleMenu();
     }
 
     public bool MenuActivo()
     {
         return objetoMenu != null && objetoMenu.activeSelf;
+    }
+
+    public void SetPausa(bool activa)
+    {
+        if (objetoMenu == null) return;
+        objetoMenu.SetActive(activa);
+        if (activa)
+        {
+            OcultarTodosLosPaneles();
+            ActualizarOro();
+        }
     }
 
     public void ToggleMenu()

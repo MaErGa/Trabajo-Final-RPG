@@ -21,7 +21,7 @@ MonoBehaviour:
   fuerza: 255
   agilidad: 200
   defensa: 200
-  _oro: 602
+  _oro: 592
   experiencia: 4485219
   fuerzaMagica: 5
   terapeucidad: 4
@@ -54,7 +54,7 @@ MonoBehaviour:
   conjuroNivel8: {fileID: 11400000, guid: f4b6f2e60aa30344ea5dcb7280b3ccc7, type: 2}
   conjuroNivel10: {fileID: 11400000, guid: 50913cd5df0830048a7cacee19fb5fa8, type: 2}
   mochilaItems:
-  - {fileID: 11400000, guid: 8e0aef50b4e32ed439d99bc77789ffea, type: 2}
+  - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   - {fileID: 11400000, guid: 84e55499685a12046b13d8bdb45e42c5, type: 2}
   armarioEquipo: []
   plantasMedicinales: 0

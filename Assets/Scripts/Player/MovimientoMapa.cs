@@ -17,14 +17,13 @@ public class MovimientoMapa : MonoBehaviour
     public float velocidadCarrera = 8f;
 
     [Header("Combate")]
-    public float probabilidadCombate = 0.05f; // Valor por defecto si la escena no está en la lista
-    public ProbabilidadPorEscena[] probabilidadesPorEscena; // Lista de probabilidades por escena
+    public float probabilidadCombate = 0.05f;
+    public ProbabilidadPorEscena[] probabilidadesPorEscena;
     public DatosEnemigo[] posiblesEnemigos;
 
     [Header("Transición")]
     public CanvasGroup panelTransicion;
 
-    // Statics compartidos
     public static DatosEnemigo enemigoSeleccionado;
     public static Vector3 posicionRetorno;
     public static bool vieneDeCombate = false;
@@ -33,17 +32,14 @@ public class MovimientoMapa : MonoBehaviour
     public static bool combateBoss = false;
     public static bool combateSecuaz = false;
 
-    // Componentes
     private Rigidbody2D rb;
     private Animator animator;
 
-    // Movimiento
     private float moviX;
     private float moviY;
     private float ultimoX = 0f;
     private float ultimoY = -1f;
 
-    // Combate
     private bool estaCaminando = false;
     private bool iniciandoCombate = false;
 
@@ -52,7 +48,6 @@ public class MovimientoMapa : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        // Ajustar probabilidad según la escena actual
         string escenaActual = SceneManager.GetActiveScene().name;
         if (probabilidadesPorEscena != null)
         {
@@ -61,20 +56,16 @@ public class MovimientoMapa : MonoBehaviour
                 if (p.nombreEscena == escenaActual)
                 {
                     probabilidadCombate = p.probabilidad;
-                    Debug.Log("[MovimientoMapa] Probabilidad ajustada para '" + escenaActual + "': " + probabilidadCombate);
                     break;
                 }
             }
         }
 
-        // Crear panel de transición si no está asignado.
-        // Si ya existe uno de una sesión anterior (DontDestroyOnLoad), reutilizarlo.
         if (panelTransicion == null)
         {
             GameObject existing = GameObject.Find("CanvasTransicionAuto");
             if (existing != null)
             {
-                // Reutilizar el panel que sobrevivió al cambio de escena
                 Transform panel = existing.transform.Find("PanelTransicion");
                 if (panel != null)
                     panelTransicion = panel.GetComponent<CanvasGroup>();
@@ -83,7 +74,6 @@ public class MovimientoMapa : MonoBehaviour
                 panelTransicion = CrearPanelTransicion();
         }
 
-        // Siempre resetear al volver al mapa
         panelTransicion.alpha = 0f;
         panelTransicion.blocksRaycasts = false;
 
@@ -141,7 +131,6 @@ public class MovimientoMapa : MonoBehaviour
         grupo.alpha = 0;
         grupo.blocksRaycasts = false;
 
-        Debug.Log("[MovimientoMapa] Panel de transición creado automáticamente.");
         return grupo;
     }
 
@@ -155,26 +144,27 @@ public class MovimientoMapa : MonoBehaviour
 
     bool EstaEnPausa()
     {
-        return MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo();
+        if (MenuPausaManager.instancia != null && MenuPausaManager.instancia.MenuActivo()) return true;
+        if (MenuFF7.instancia != null && MenuFF7.instancia.MenuActivo()) return true;
+        return false;
     }
 
     void Update()
     {
         if (iniciandoCombate) return;
 
-        if (HayDialogoActivo())
+        // ── BLOQUEO TOTAL si hay pausa o diálogo ──
+        if (EstaEnPausa() || HayDialogoActivo())
         {
-            moviX = 0; moviY = 0;
-            if (animator != null) animator.SetBool("Moviéndose", false);
+            moviX = 0;
+            moviY = 0;
             if (rb != null) rb.velocity = Vector2.zero;
-            return;
-        }
-
-        if (EstaEnPausa())
-        {
-            moviX = 0; moviY = 0;
+            if (estaCaminando)
+            {
+                estaCaminando = false;
+                CancelInvoke("ChequearCombate");
+            }
             if (animator != null) animator.SetBool("Moviéndose", false);
-            if (rb != null) rb.velocity = Vector2.zero;
             return;
         }
 
@@ -200,7 +190,6 @@ public class MovimientoMapa : MonoBehaviour
             if (!estaCaminando)
             {
                 estaCaminando = true;
-                Debug.Log("[MovimientoMapa] Empezando a caminar, iniciando ChequearCombate.");
                 InvokeRepeating("ChequearCombate", 0.5f, 0.5f);
             }
         }
@@ -209,7 +198,6 @@ public class MovimientoMapa : MonoBehaviour
             if (estaCaminando)
             {
                 estaCaminando = false;
-                Debug.Log("[MovimientoMapa] Parado, cancelando ChequearCombate.");
                 CancelInvoke("ChequearCombate");
             }
         }
@@ -218,8 +206,7 @@ public class MovimientoMapa : MonoBehaviour
     void FixedUpdate()
     {
         if (iniciandoCombate) return;
-        if (HayDialogoActivo()) return;
-        if (EstaEnPausa()) return;
+        if (EstaEnPausa() || HayDialogoActivo()) return;
 
         bool corriendo = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         float velocidad = corriendo ? velocidadCarrera : velocidadNormal;
@@ -233,11 +220,8 @@ public class MovimientoMapa : MonoBehaviour
         if (EstaEnPausa()) return;
 
         float tirada = Random.value;
-        Debug.Log("[ChequearCombate] Tirada: " + tirada.ToString("F3") + " | Necesario: < " + probabilidadCombate);
-
         if (tirada < probabilidadCombate && posiblesEnemigos.Length > 0)
         {
-            Debug.Log("[ChequearCombate] ¡COMBATE! Iniciando transición...");
             iniciandoCombate = true;
             CancelInvoke("ChequearCombate");
             int indice = Random.Range(0, posiblesEnemigos.Length);
@@ -251,7 +235,6 @@ public class MovimientoMapa : MonoBehaviour
 
     IEnumerator TransicionBatalla()
     {
-        Debug.Log("[TransicionBatalla] Iniciando fade...");
         panelTransicion.blocksRaycasts = true;
 
         while (panelTransicion.alpha < 1f)
@@ -260,7 +243,6 @@ public class MovimientoMapa : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("[TransicionBatalla] Cargando Battle...");
         SceneManager.LoadScene("Battle");
     }
 }
