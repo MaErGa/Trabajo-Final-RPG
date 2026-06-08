@@ -20,6 +20,9 @@ public class DialogoManager : MonoBehaviour
     private bool escribiendo = false;
     private bool dialogoActivo = false;
 
+    // ── NUEVO: callback opcional al cerrar ──
+    private System.Action onDialogoTerminado;
+
     void Awake()
     {
         instancia = this;
@@ -30,7 +33,6 @@ public class DialogoManager : MonoBehaviour
     {
         if (!dialogoActivo) return;
 
-        // X para aceptar/avanzar
         if (Input.GetKeyDown(KeyCode.X))
         {
             if (escribiendo)
@@ -46,18 +48,25 @@ public class DialogoManager : MonoBehaviour
             }
         }
 
-        // C para cancelar/cerrar
         if (Input.GetKeyDown(KeyCode.C))
         {
             CerrarDialogo();
         }
     }
 
+    // ── Método original intacto (NPC, tienda, etc. siguen funcionando) ──
     public void MostrarDialogo(string[] lineas)
+    {
+        MostrarDialogo(lineas, null);
+    }
+
+    // ── NUEVO: versión con callback ──
+    public void MostrarDialogo(string[] lineas, System.Action alTerminar)
     {
         lineasActuales = lineas;
         lineaActual = 0;
         dialogoActivo = true;
+        onDialogoTerminado = alTerminar;
         panelDialogo.SetActive(true);
         textoContinuar.gameObject.SetActive(false);
         StartCoroutine(EscribirTexto(lineasActuales[lineaActual]));
@@ -98,6 +107,11 @@ public class DialogoManager : MonoBehaviour
         dialogoActivo = false;
         panelDialogo.SetActive(false);
         textoDialogo.text = "";
+
+        // ── NUEVO: ejecuta el callback si existe y lo limpia ──
+        System.Action callback = onDialogoTerminado;
+        onDialogoTerminado = null;
+        callback?.Invoke();
     }
 
     public bool EstaActivo() => dialogoActivo;

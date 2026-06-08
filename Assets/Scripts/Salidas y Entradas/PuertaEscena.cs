@@ -1,25 +1,43 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PuertaEscena : MonoBehaviour
 {
-    [Header("Configuración de la Escena")]
-    public string nombreEscenaDestino = "Underworld"; // Nombre de tu escena
+    public string nombreEscenaDestino = "Underworld";
 
-    // Este método se activa cuando algo entra en el objeto (la puerta)
+    private string[] dialogoBloqueadoSinNada = {
+        "La barrera del Umbral permanece cerrada.",
+        "Debes leer la inscripción y buscar al guardián alado."
+    };
+
+    private string[] dialogoBloqueadoSinGuardian = {
+        "La barrera no cede.",
+        "El guardián alado aún no ha dado su veredicto."
+    };
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Comprobamos si lo que tocó la puerta es el jugador
-        if (collision.CompareTag("Player"))
-        {
-            // Opcional: Si queremos que al entrar por una puerta NO cuente como retorno de combate
-            MovimientoMapa.vieneDeCombate = false;
+        if (!collision.CompareTag("Player")) return;
 
-            SceneManager.LoadScene(nombreEscenaDestino);
+        if (!ControlAccesoUmbral.tablilaLeida)
+        {
+            if (!DialogoManager.instancia.EstaActivo())
+                DialogoManager.instancia.MostrarDialogo(dialogoBloqueadoSinNada);
+            return;
         }
 
+        if (!ControlAccesoUmbral.guardiánAprobado)
+        {
+            if (!DialogoManager.instancia.EstaActivo())
+                DialogoManager.instancia.MostrarDialogo(dialogoBloqueadoSinGuardian);
+            return;
+        }
+
+        // Ambas condiciones cumplidas → pasa
+        MovimientoMapa.vieneDeCombate = false;
+        SceneManager.LoadScene(nombreEscenaDestino);
     }
+
     public void MenuPrueba()
     {
         SceneManager.LoadScene("Titulo");
