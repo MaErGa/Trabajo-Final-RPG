@@ -266,6 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 12561715}
   - component: {fileID: 12561717}
+  - component: {fileID: 12561718}
   m_Layer: 0
   m_Name: Tablilla Script
   m_TagString: Untagged
@@ -296,15 +297,28 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 12561714}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 329b294f0b5edaf48926b52d64ba9e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lineas:
   - Ante ti se extiende un mundo sumido en el silencio y la espera.
-  - "Empu\xF1a tu acero con firmeza, pues los monstruos acechan tras la colina."
+  - "Empu\xF1a tu acero con firmeza, pues los monstruos acechan."
   - "Que la bendici\xF3n de la Diosa gu\xEDe tus pasos por estas tierras sagradas."
+  distancia: 3
+--- !u!114 &12561718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12561714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba370ca5dd4864a49ac0765d52551fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   distancia: 3
 --- !u!1 &19680279
 GameObject:
@@ -11075,6 +11089,7 @@ GameObject:
   - component: {fileID: 1343436887}
   - component: {fileID: 1343436889}
   - component: {fileID: 1343436890}
+  - component: {fileID: 1343436891}
   m_Layer: 0
   m_Name: NPC Dialogo
   m_TagString: Untagged
@@ -11201,7 +11216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1343436886}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 329b294f0b5edaf48926b52d64ba9e8d, type: 3}
   m_Name: 
@@ -11211,6 +11226,19 @@ MonoBehaviour:
   - Abajo, en el mundo de los humanos, una sombra antigua ha despertado.
   - "Desciende a la tierra y convi\xE9rtete en el escudo que la humanidad necesita."
   distancia: 2
+--- !u!114 &1343436891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343436886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 020ae660e7d8efc46981cdf49965b078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distancia: 3
 --- !u!1 &1354789641
 GameObject:
   m_ObjectHideFlags: 0
