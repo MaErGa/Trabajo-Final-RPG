@@ -8583,12 +8583,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1009896410}
   m_Layer: 0
-  m_Name: PanelOpciones
+  m_Name: Canvas Estatua
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1009896410
 Transform:
   m_ObjectHideFlags: 0
@@ -16100,7 +16100,7 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
-  m_sharedMaterial: {fileID: -4819660113561974880, guid: 82efd64735b12484993dafd2fe72105a, type: 2}
+  m_sharedMaterial: {fileID: 2673695547091453396, guid: a6aa39c9c3c5cad43a259585a2e2794f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
