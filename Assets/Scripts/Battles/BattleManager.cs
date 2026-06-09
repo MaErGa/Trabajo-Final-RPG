@@ -36,7 +36,6 @@ public class BattleManager : MonoBehaviour
     public GameObject botonColaDeConejo;
     public GameObject botonEter;
     public GameObject botonMiniEter;
-    // ── Objetos de curación de estado ──────────────────────────────────────
     public GameObject botonAntidoto;
     public GameObject botonAntiparalisis;
     public GameObject botonDespertar;
@@ -65,7 +64,7 @@ public class BattleManager : MonoBehaviour
     public AudioClip sonidoVictoria;
     public AudioClip sonidoLevelUp;
     public AudioClip sonidoMuerte;
-    public AudioClip sonidoEstadoAlterado;   // sonido al sufrir un estado alterado
+    public AudioClip sonidoEstadoAlterado;
 
     [Header("Música de Batalla")]
     public AudioClip musicaBatalla;
@@ -78,7 +77,6 @@ public class BattleManager : MonoBehaviour
     private bool turnoActivo = false;
     private bool estaDefendiendoManual = false;
 
-    // Contadores de items por sesión de combate
     private int sesionMiniEter = 0;
     private int sesionPlantaMochila = 0;
     private int sesionAntidoto = 0;
@@ -154,7 +152,7 @@ public class BattleManager : MonoBehaviour
             if (datosRyo.hpActual <= 0) datosRyo.hpActual = datosRyo.hpMax;
             hpSesion = datosRyo.hpActual;
             mpSesion = datosRyo.mpActual;
-            datosRyo.CurarEstado(); // estado limpio al inicio de combate
+            datosRyo.CurarEstado();
         }
 
         pippinActivo = MovimientoMapa.pippinUnido &&
@@ -258,7 +256,6 @@ public class BattleManager : MonoBehaviour
     public void AbrirMenuMagia()
     {
         if (!turnoActivo) return;
-        // Si está dormido o paralizado, no puede actuar
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
             StartCoroutine(PasarTurnoPorEstado());
@@ -323,7 +320,6 @@ public class BattleManager : MonoBehaviour
 
         if (botonMiniEter != null) botonMiniEter.SetActive(sesionMiniEter > 0);
 
-        // ── Objetos de curación de estado ──
         if (botonAntidoto != null)
             botonAntidoto.SetActive(sesionAntidoto > 0);
         if (botonAntiparalisis != null)
@@ -342,7 +338,7 @@ public class BattleManager : MonoBehaviour
         ReproducirSonido(sonidoCuracionObjeto);
         textoMensajes.text = "¡" + datosRyo.nombre + " usa una Planta Medicinal!";
         CerrarMenus(); ActualizarInterfaz(); ActualizarObjetosDisponibles();
-        StartCoroutine(TurnoPippin());
+        StartCoroutine(EfectoYTurnoPippin(EfectosBatalla.instancia?.EfectoCuracion()));
     }
 
     public void AccionEquiparCola()
@@ -380,8 +376,6 @@ public class BattleManager : MonoBehaviour
         CerrarMenus(); ActualizarInterfaz(); ActualizarObjetosDisponibles();
         StartCoroutine(TurnoPippin());
     }
-
-    // ── Nuevos objetos de estado alterado ─────────────────────────────────────
 
     public void AccionUsarAntidoto()
     {
@@ -428,7 +422,6 @@ public class BattleManager : MonoBehaviour
     {
         if (!turnoActivo || vidaEnemigo <= 0) return;
 
-        // Verificar estado dormido o paralizado
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
             StartCoroutine(PasarTurnoPorEstado());
@@ -457,61 +450,81 @@ public class BattleManager : MonoBehaviour
         else StartCoroutine(TurnoPippin());
     }
 
-    public void AccionMagia(string hechizo)
+    // ── AccionMagia convertida a corrutina para soportar efectos visuales ─────
+
+    public void BotonMiniincendio() => StartCoroutine(AccionMagia("Miniincendio"));
+    public void BotonMinihelada() => StartCoroutine(AccionMagia("Minihelada"));
+    public void BotonMinicuracion() => StartCoroutine(AccionMagia("Minicuracion"));
+    public void BotonFortalecimiento() => StartCoroutine(AccionMagia("Fortalecimiento"));
+
+    public IEnumerator AccionMagia(string hechizo)
     {
-        if (!turnoActivo || vidaEnemigo <= 0) return;
+        if (!turnoActivo || vidaEnemigo <= 0) yield break;
         if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
             StartCoroutine(PasarTurnoPorEstado());
-            return;
+            yield break;
         }
         if (datosRyo.estadoAlterado == EstadoAlterado.Paralizado && Random.Range(0, 100) < 25)
         {
             StartCoroutine(PasarTurnoPorEstado());
-            return;
+            yield break;
         }
 
         ChequearInspiracioInicio();
+
         if (hechizo == "Minicuracion")
         {
             ConjuroBase conjuro = datosRyo.conjuroNivel3;
-            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; yield break; }
             mpSesion -= conjuro.costeMP;
             hpSesion = Mathf.Min(hpSesion + conjuro.valorEfecto + datosRyo.terapeucidad, datosRyo.hpMax);
             ReproducirSonido(sonidoCuracionMagia);
             textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "!";
+            ActualizarInterfaz();
+            if (EfectosBatalla.instancia != null)
+                yield return StartCoroutine(EfectosBatalla.instancia.EfectoCuracion());
         }
         else if (hechizo == "Fortalecimiento")
         {
             ConjuroBase conjuro = datosRyo.conjuroNivel5;
-            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; yield break; }
             mpSesion -= conjuro.costeMP;
             datosRyo.bonoDefensaTemporal += conjuro.valorEfecto;
             turnosFortalecimiento = conjuro.duracionTurnos;
             ReproducirSonido(sonidoMagiaDefensa);
             textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Defensa +" + conjuro.valorEfecto + " por " + conjuro.duracionTurnos + " turnos.";
+            ActualizarInterfaz();
+            if (EfectosBatalla.instancia != null)
+                yield return StartCoroutine(EfectosBatalla.instancia.EfectoEscudo());
         }
         else if (hechizo == "Minihelada")
         {
             ConjuroBase conjuro = datosRyo.conjuroNivel8;
-            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
-            mpSesion -= conjuro.costeMP;
-            int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
-            vidaEnemigo -= dañoM;
-            ReproducirSonido(sonidoMagiaAtaque);
-            textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "!";
-        }
-        else if (hechizo == "Miniincendio")
-        {
-            ConjuroBase conjuro = datosRyo.conjuroNivel10;
-            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; return; }
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; yield break; }
             mpSesion -= conjuro.costeMP;
             int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
             vidaEnemigo -= dañoM;
             ReproducirSonido(sonidoMagiaAtaque);
             textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Daño: " + dañoM;
+            ActualizarInterfaz();
+            if (EfectosBatalla.instancia != null)
+                yield return StartCoroutine(EfectosBatalla.instancia.EfectoHielo());
         }
-        ActualizarInterfaz();
+        else if (hechizo == "Miniincendio")
+        {
+            ConjuroBase conjuro = datosRyo.conjuroNivel10;
+            if (conjuro == null || mpSesion < conjuro.costeMP) { textoMensajes.text = "¡No tienes PM!"; yield break; }
+            mpSesion -= conjuro.costeMP;
+            int dañoM = conjuro.valorEfecto + datosRyo.fuerzaMagica;
+            vidaEnemigo -= dañoM;
+            ReproducirSonido(sonidoMagiaAtaque);
+            textoMensajes.text = "¡" + datosRyo.nombre + " lanza " + conjuro.nombreConjuro + "! Daño: " + dañoM;
+            ActualizarInterfaz();
+            if (EfectosBatalla.instancia != null)
+                yield return StartCoroutine(EfectosBatalla.instancia.EfectoFuego());
+        }
+
         if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
         else StartCoroutine(TurnoPippin());
     }
@@ -544,6 +557,14 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(IntentarEscapar());
     }
 
+    // ── Helper: efecto visual + turno pippin ──────────────────────────────────
+    IEnumerator EfectoYTurnoPippin(IEnumerator efecto)
+    {
+        if (efecto != null && EfectosBatalla.instancia != null)
+            yield return StartCoroutine(efecto);
+        StartCoroutine(TurnoPippin());
+    }
+
     // ── Turno perdido por sueño o parálisis ──────────────────────────────────
     IEnumerator PasarTurnoPorEstado()
     {
@@ -561,12 +582,10 @@ public class BattleManager : MonoBehaviour
         ActualizarInterfaz();
         yield return new WaitForSeconds(1.2f);
 
-        // Mostrar el ataque del enemigo con su daño antes de pasar el turno normal
         var enemigo = MovimientoMapa.enemigoSeleccionado;
         if (enemigo != null && vidaEnemigo > 0)
         {
             int defTotal = datosRyo.DefensaTotal;
-            // Parálisis baja la velocidad/reacción: el daño recibido sube un 20%
             int daño = Mathf.Max(1, enemigo.dañoAtaque - defTotal);
             if (paralizado) daño = Mathf.RoundToInt(daño * 1.20f);
 
@@ -588,7 +607,6 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        // El turno del enemigo se ejecuta igualmente (aplica ticks, buffs, etc.)
         StartCoroutine(TurnoDelEnemigo());
     }
 
@@ -618,6 +636,8 @@ public class BattleManager : MonoBehaviour
                 ReproducirSonido(sonidoCuracionMagia);
                 textoMensajes.text = "¡Pippin lanza Minicuración sobre " + datosRyo.nombre + "! +" + curJ + " HP";
                 ActualizarInterfaz();
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoCuracion());
                 break;
 
             case "curar_pippin":
@@ -627,6 +647,8 @@ public class BattleManager : MonoBehaviour
                 hpPippin = Mathf.Min(hpPippin + curPP, datosPippin.hpMax);
                 ReproducirSonido(sonidoCuracionMagia);
                 textoMensajes.text = "¡Pippin se lanza Minicuración! +" + curPP + " HP";
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoCuracion());
                 break;
 
             case "fortalecer_jugador":
@@ -637,6 +659,8 @@ public class BattleManager : MonoBehaviour
                 ReproducirSonido(sonidoMagiaDefensa);
                 textoMensajes.text = "¡Pippin lanza Fortalecimiento sobre " + datosRyo.nombre + "! Defensa +" + fort.valorEfecto;
                 ActualizarInterfaz();
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoEscudo());
                 break;
 
             case "fortalecer_pippin":
@@ -646,6 +670,8 @@ public class BattleManager : MonoBehaviour
                 turnosFortalecimientoPippin = fortP.duracionTurnos;
                 ReproducirSonido(sonidoMagiaDefensa);
                 textoMensajes.text = "¡Pippin se lanza Fortalecimiento! Defensa +" + fortP.valorEfecto;
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoEscudo());
                 break;
 
             case "minihelada":
@@ -655,6 +681,8 @@ public class BattleManager : MonoBehaviour
                 vidaEnemigo -= dH;
                 ReproducirSonido(sonidoMagiaAtaque);
                 textoMensajes.text = "¡Pippin lanza Minihelada! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dH + " de daño.";
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoHielo());
                 break;
 
             case "miniincendio":
@@ -662,6 +690,8 @@ public class BattleManager : MonoBehaviour
                 vidaEnemigo -= dI;
                 ReproducirSonido(sonidoMagiaAtaque);
                 textoMensajes.text = "¡Pippin lanza Miniincendio! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dI + " de daño.";
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoFuego());
                 break;
 
             default:
@@ -702,7 +732,7 @@ public class BattleManager : MonoBehaviour
         turnoActivo = false;
         textoMensajes.text = datosRyo.nombre + " intenta huir...";
         yield return new WaitForSeconds(1.2f);
-        int agiJ = datosRyo.AgilidadTotal; // ya incluye penalización de parálisis
+        int agiJ = datosRyo.AgilidadTotal;
         int agiE = MovimientoMapa.enemigoSeleccionado.agilidad;
         int prob = Mathf.RoundToInt((float)agiJ / (agiJ + agiE) * 100);
         if (Random.Range(0, 100) < prob)
@@ -726,7 +756,7 @@ public class BattleManager : MonoBehaviour
     IEnumerator VictoriaAutomatica()
     {
         turnoActivo = false;
-        datosRyo.CurarEstado(); // los estados se curan al ganar
+        datosRyo.CurarEstado();
         objetoImagenEnemigo.SetActive(false);
         if (musicaSource != null) musicaSource.Stop();
         ReproducirSonido(sonidoVictoria);
@@ -767,7 +797,6 @@ public class BattleManager : MonoBehaviour
             {
                 NPCRobbinOdd.robbinDerrotado = true;
                 MovimientoMapa.combateBoss = false;
-                MovimientoMapa.combateSecuaz = false;
             }
         }
 
@@ -795,7 +824,6 @@ public class BattleManager : MonoBehaviour
         datosRyo.hpActual = hpSesion;
         datosRyo.mpActual = mpSesion;
 
-        // Descontar items de estado usados durante el combate
         DescontarItemsSesion("Mini Éter", datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Mini Éter").Count - sesionMiniEter);
         DescontarItemsSesion("Planta Medicinal", datosRyo.mochilaItems.FindAll(i => i != null && i.nombre == "Planta Medicinal").Count - sesionPlantaMochila);
         DescontarItemsPorEfecto(ItemConsumible.TipoEfecto.Antidoto, datosRyo.mochilaItems.FindAll(i => i != null && i.queCura == ItemConsumible.TipoEfecto.Antidoto).Count - sesionAntidoto);
@@ -839,11 +867,11 @@ public class BattleManager : MonoBehaviour
         turnoActivo = false;
         yield return new WaitForSeconds(1.2f);
 
-        // ── Tick de veneno al inicio del turno enemigo (antes de que ataque) ──
+        // ── Tick de veneno ──
         if (datosRyo.estadoAlterado == EstadoAlterado.Envenenado)
         {
             int dañoVeneno = datosRyo.TickVeneno();
-            hpSesion = datosRyo.hpActual; // sincronizar sesión
+            hpSesion = datosRyo.hpActual;
             textoMensajes.text = "¡El veneno daña a " + datosRyo.nombre + " en " + dañoVeneno + " HP!";
             ActualizarInterfaz();
             yield return new WaitForSeconds(0.8f);
@@ -854,7 +882,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        // ── Tick de duración de estados (Parálisis / Sueño) ──
+        // ── Tick de estados ──
         if (datosRyo.estadoAlterado == EstadoAlterado.Paralizado ||
             datosRyo.estadoAlterado == EstadoAlterado.Dormido)
         {
@@ -900,7 +928,6 @@ public class BattleManager : MonoBehaviour
 
         if (atacarPippin)
         {
-            // El enemigo ataca a Pippin (los ataques especiales solo afectan al jugador)
             int defP = datosPippin.DefensaTotal;
             int dañoP = Mathf.Max(1, enemigoActual.dañoAtaque - defP);
             if (Random.Range(0, 100) < 5)
@@ -911,6 +938,8 @@ public class BattleManager : MonoBehaviour
             }
             else
             {
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoSaltoEnemigo());
                 ReproducirSonido(sonidoAtaqueEnemigo);
                 textoMensajes.text = "¡El " + enemigoActual.nombreEnemigo + " ataca a Pippin! Recibe " + dañoP + " de daño.";
             }
@@ -924,31 +953,30 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            // ── El enemigo decide si usa ataque normal o especial ──
             AtaqueEspecial atqEspecial = enemigoActual.ElegirAtaque();
 
             if (atqEspecial != null)
             {
-                // Ataque especial con posible estado alterado
                 int dañoEsp = atqEspecial.dañoBase > 0
                     ? Mathf.Max(1, atqEspecial.dañoBase - datosRyo.DefensaTotal)
                     : Mathf.Max(1, enemigoActual.dañoAtaque - datosRyo.DefensaTotal);
 
-                // Sueño: despertar si recibe golpe físico
                 if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
                 {
                     bool despertó = datosRyo.IntentarDespetarPorGolpe();
                     if (despertó) { textoMensajes.text = "¡El golpe despertó a " + datosRyo.nombre + "!\n"; ActualizarInterfaz(); }
                 }
 
+                if (EfectosBatalla.instancia != null)
+                    yield return StartCoroutine(EfectosBatalla.instancia.EfectoSaltoEnemigo());
+
                 ReproducirSonido(sonidoAtaqueEnemigo);
                 hpSesion -= dañoEsp;
-                datosRyo.hpActual = hpSesion; // mantener sincronía para TickVeneno
+                datosRyo.hpActual = hpSesion;
 
                 string msgAtq = "¡El " + enemigoActual.nombreEnemigo + " usa " + atqEspecial.nombreAtaque + "! " +
                                 datosRyo.nombre + " recibe " + dañoEsp + " de daño.";
 
-                // Intentar aplicar estado alterado
                 if (atqEspecial.estadoQueAplica != EstadoAlterado.Normal &&
                     datosRyo.estadoAlterado == EstadoAlterado.Normal)
                 {
@@ -958,7 +986,7 @@ public class BattleManager : MonoBehaviour
                             ? -1
                             : (atqEspecial.estadoQueAplica == EstadoAlterado.Dormido ||
                                atqEspecial.estadoQueAplica == EstadoAlterado.Paralizado)
-                                ? Random.Range(3, 6)  // sueño/parálisis: 3-5 turnos
+                                ? Random.Range(3, 6)
                                 : Random.Range(atqEspecial.duracionTurnos, atqEspecial.duracionTurnos + 3);
                         datosRyo.AplicarEstado(atqEspecial.estadoQueAplica, duracion);
                         ReproducirSonido(sonidoEstadoAlterado);
@@ -975,7 +1003,6 @@ public class BattleManager : MonoBehaviour
                     if (probDaño > 0 && Random.Range(0, 100) < probDaño) ActivarInspiracion();
                 }
 
-                // ── Intentar aplicar estado alterado según el ataque del enemigo ──
                 var enemigoAtacante = MovimientoMapa.enemigoSeleccionado;
                 if (enemigoAtacante != null && datosRyo.estadoCombate == EstadoAlterado.Normal)
                 {
@@ -984,10 +1011,10 @@ public class BattleManager : MonoBehaviour
                         && Random.Range(0, 100) < ataqueEsp.probabilidadEstado)
                     {
                         int turnos = ataqueEsp.estadoQueAplica == EstadoAlterado.Envenenado
-                            ? 999  // veneno es persistente, se cura con antídoto
+                            ? 999
                             : (ataqueEsp.estadoQueAplica == EstadoAlterado.Dormido ||
                                ataqueEsp.estadoQueAplica == EstadoAlterado.Paralizado)
-                                ? Random.Range(3, 6)  // sueño/parálisis: 3-5 turnos
+                                ? Random.Range(3, 6)
                                 : ataqueEsp.duracionTurnos;
                         datosRyo.AplicarEstadoAlterado(ataqueEsp.estadoQueAplica, turnos);
                         textoMensajes.text += "\n¡" + datosRyo.nombre + " queda afectado por " + ataqueEsp.nombreAtaque + "!";
@@ -1002,7 +1029,6 @@ public class BattleManager : MonoBehaviour
                 int defTotal = datosRyo.DefensaTotal;
                 int daño = Mathf.Max(1, enemigoActual.dañoAtaque - defTotal);
 
-                // Sueño: despertar si recibe golpe físico
                 if (datosRyo.estadoAlterado == EstadoAlterado.Dormido)
                 {
                     bool despertó = datosRyo.IntentarDespetarPorGolpe();
@@ -1018,7 +1044,12 @@ public class BattleManager : MonoBehaviour
                 else
                 {
                     if (estaDefendiendoManual) { daño = 1; estaDefendiendoManual = false; ReproducirSonido(sonidoDefender); }
-                    else ReproducirSonido(sonidoAtaqueEnemigo);
+                    else
+                    {
+                        if (EfectosBatalla.instancia != null)
+                            yield return StartCoroutine(EfectosBatalla.instancia.EfectoSaltoEnemigo());
+                        ReproducirSonido(sonidoAtaqueEnemigo);
+                    }
                     textoMensajes.text = "¡El " + enemigoActual.nombreEnemigo + " ataca! ¡" + datosRyo.nombre + " recibe " + daño + " puntos de daño!";
                 }
 
@@ -1032,7 +1063,6 @@ public class BattleManager : MonoBehaviour
                     if (probDaño > 0 && Random.Range(0, 100) < probDaño) ActivarInspiracion();
                 }
 
-                // ── Intentar aplicar estado alterado según el ataque del enemigo ──
                 var enemigoAtacante = MovimientoMapa.enemigoSeleccionado;
                 if (enemigoAtacante != null && datosRyo.estadoCombate == EstadoAlterado.Normal)
                 {
@@ -1041,10 +1071,10 @@ public class BattleManager : MonoBehaviour
                         && Random.Range(0, 100) < ataqueEsp.probabilidadEstado)
                     {
                         int turnos = ataqueEsp.estadoQueAplica == EstadoAlterado.Envenenado
-                            ? 999  // veneno es persistente, se cura con antídoto
+                            ? 999
                             : (ataqueEsp.estadoQueAplica == EstadoAlterado.Dormido ||
                                ataqueEsp.estadoQueAplica == EstadoAlterado.Paralizado)
-                                ? Random.Range(3, 6)  // sueño/parálisis: 3-5 turnos
+                                ? Random.Range(3, 6)
                                 : ataqueEsp.duracionTurnos;
                         datosRyo.AplicarEstadoAlterado(ataqueEsp.estadoQueAplica, turnos);
                         textoMensajes.text += "\n¡" + datosRyo.nombre + " queda afectado por " + ataqueEsp.nombreAtaque + "!";
@@ -1120,12 +1150,7 @@ public class BattleManager : MonoBehaviour
                              (probDañoSiguiente > 0 ? "\n(Activación por daño: " + probDañoSiguiente + "%)" : "\n(No se activará más por daño)");
     }
 
-    // ── Wrappers para botones ─────────────────────────────────────────────────
-
-    public void BotonMiniincendio() => AccionMagia("Miniincendio");
-    public void BotonMinihelada() => AccionMagia("Minihelada");
-    public void BotonMinicuracion() => AccionMagia("Minicuracion");
-    public void BotonFortalecimiento() => AccionMagia("Fortalecimiento");
+    // ── Wrappers de objetos (llamados desde botones UI) ───────────────────────
 
     public void CerrarPanelObjetos()
     {
