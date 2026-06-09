@@ -56,23 +56,29 @@ public class EfectosBatalla : MonoBehaviour
         return go;
     }
 
-    // Crea un símbolo en el canvas raíz, posicionado en coordenadas de mundo del panelJugador.
-    // Así nunca queda cortado por el Rect del panel.
+    // Crea un símbolo en el canvas raíz, posicionado sobre el panelJugador sin clipping.
     GameObject CrearSimboloSobrePanel(string simbolo, int fontSize, Color color, Vector2 offsetLocal)
     {
         Transform padre = canvasRaiz != null ? canvasRaiz.transform : panelJugador;
 
-        // Convertir esquina del panelJugador a posición de pantalla, luego a canvas
-        Vector2 posPanel = panelJugador != null
-            ? (Vector2)panelJugador.position
-            : Vector2.zero;
-
         GameObject go = new GameObject("Efecto");
         go.transform.SetParent(padre, false);
+
         RectTransform rt = go.AddComponent<RectTransform>();
         rt.sizeDelta = new Vector2(80, 80);
-        rt.position = posPanel;
-        rt.anchoredPosition += offsetLocal;
+        rt.anchorMin = new Vector2(0.5f, 0.5f);
+        rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+
+        // Convertir la posición en pantalla del panelJugador a coordenadas locales del canvas
+        Vector2 posEnPantalla = RectTransformUtility.WorldToScreenPoint(null, panelJugador.position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRaiz.GetComponent<RectTransform>(),
+            posEnPantalla,
+            canvasRaiz.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            out Vector2 posLocal
+        );
+        rt.anchoredPosition = posLocal + offsetLocal;
 
         TextMeshProUGUI txt = go.AddComponent<TextMeshProUGUI>();
         txt.text = simbolo;
@@ -205,13 +211,14 @@ public class EfectosBatalla : MonoBehaviour
         if (panelJugador == null) yield break;
         if (sonidoCuracion != null) audioSource.PlayOneShot(sonidoCuracion);
 
+        AsegurarCanvasOverride(panelJugador);
+
         int cantidad = 6;
         GameObject[] cruces = new GameObject[cantidad];
-
         for (int i = 0; i < cantidad; i++)
         {
-            Vector2 offset = new Vector2(Random.Range(-50f, 50f), Random.Range(-20f, 40f));
-            cruces[i] = CrearSimboloSobrePanel("+", 40, new Color(0.2f, 0.9f, 0.3f, 1f), offset);
+            Vector2 pos = new Vector2(Random.Range(-60f, 60f), Random.Range(0f, 60f));
+            cruces[i] = CrearSimbolo(panelJugador, "+", 40, new Color(0.2f, 0.9f, 0.3f, 1f), pos);
         }
 
         float t = 0f;
@@ -226,7 +233,6 @@ public class EfectosBatalla : MonoBehaviour
             }
             yield return null;
         }
-
         foreach (var c in cruces) if (c != null) Destroy(c);
     }
 
@@ -237,13 +243,14 @@ public class EfectosBatalla : MonoBehaviour
         if (panelJugador == null) yield break;
         if (sonidoEscudo != null) audioSource.PlayOneShot(sonidoEscudo);
 
+        AsegurarCanvasOverride(panelJugador);
+
         int cantidad = 6;
         GameObject[] escudos = new GameObject[cantidad];
-
         for (int i = 0; i < cantidad; i++)
         {
-            Vector2 offset = new Vector2(Random.Range(-50f, 50f), Random.Range(-20f, 40f));
-            escudos[i] = CrearSimboloSobrePanel("[+]", 32, new Color(0.4f, 0.7f, 1f, 1f), offset);
+            Vector2 pos = new Vector2(Random.Range(-60f, 60f), Random.Range(0f, 60f));
+            escudos[i] = CrearSimbolo(panelJugador, "[+]", 32, new Color(0.4f, 0.7f, 1f, 1f), pos);
         }
 
         float t = 0f;
@@ -254,13 +261,25 @@ public class EfectosBatalla : MonoBehaviour
             {
                 if (escudos[i] == null) continue;
                 escudos[i].GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 2f);
-                escudos[i].GetComponent<TextMeshProUGUI>().color =
-                    new Color(0.4f, 0.7f, 1f, 1f - t);
+                escudos[i].GetComponent<TextMeshProUGUI>().color = new Color(0.4f, 0.7f, 1f, 1f - t);
             }
             yield return null;
         }
-
         foreach (var e in escudos) if (e != null) Destroy(e);
+    }
+
+    // Añade Canvas + GraphicRaycaster al panel para que renderice encima sin clipping
+    void AsegurarCanvasOverride(RectTransform panel)
+    {
+        Canvas c = panel.GetComponent<Canvas>();
+        if (c == null)
+        {
+            c = panel.gameObject.AddComponent<Canvas>();
+            c.overrideSorting = true;
+            c.sortingOrder = 50;
+            if (panel.GetComponent<UnityEngine.UI.GraphicRaycaster>() == null)
+                panel.gameObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+        }
     }
 
     // ── Efecto Slash estilo DQ3 SNES (sobre el enemigo) ──────────────────────
