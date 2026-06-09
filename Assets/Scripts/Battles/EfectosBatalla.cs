@@ -292,50 +292,45 @@ public class EfectosBatalla : MonoBehaviour
 
         Image imgEnemigo = imagenEnemigo.GetComponent<Image>();
 
-        // Tres oleadas de slash
-        for (int oleada = 0; oleada < 3; oleada++)
+        // Dos pasadas, la segunda ligeramente desplazada (como DQ3)
+        Vector2[] origenes = { new Vector2(-60f, -40f), new Vector2(-45f, -55f) };
+
+        for (int pasada = 0; pasada < 2; pasada++)
         {
-            int trazos = (oleada == 1) ? 3 : 2;
-            GameObject[] slashes = new GameObject[trazos];
+            // Una sola línea diagonal larga
+            GameObject linea = CrearSimbolo(imagenEnemigo, "—", 96,
+                new Color(1f, 1f, 0.9f, 1f), origenes[pasada]);
 
-            for (int i = 0; i < trazos; i++)
-            {
-                float offsetX = -40f + i * 30f + oleada * 10f;
-                float offsetY = 30f - i * 20f;
-                slashes[i] = CrearSimbolo(imagenEnemigo, "/",
-                    52, new Color(1f, 1f, 0.85f, 1f),
-                    new Vector2(offsetX, offsetY));
-
-                slashes[i].GetComponent<RectTransform>().localRotation =
-                    Quaternion.Euler(0f, 0f, -20f + i * 8f);
-            }
+            // Rotar 45 grados para que sea diagonal
+            linea.GetComponent<RectTransform>().localRotation =
+                Quaternion.Euler(0f, 0f, 45f);
+            // Alargar la línea horizontalmente
+            linea.GetComponent<RectTransform>().sizeDelta = new Vector2(200f, 100f);
 
             // Flash blanco al impactar
             if (imgEnemigo != null) imgEnemigo.color = Color.white;
 
+            // La línea cruza de abajo-izquierda a arriba-derecha rápido
             float t = 0f;
+            Vector2 inicio = origenes[pasada];
+            Vector2 fin = inicio + new Vector2(80f, 80f);
             while (t < 1f)
             {
-                t += Time.deltaTime / 0.12f;
-                for (int i = 0; i < trazos; i++)
-                {
-                    if (slashes[i] == null) continue;
-                    slashes[i].GetComponent<RectTransform>().anchoredPosition +=
-                        new Vector2(4f, 4f);
-                    slashes[i].GetComponent<TextMeshProUGUI>().color =
-                        new Color(1f, 1f, 0.85f, 1f - t);
-                }
+                t += Time.deltaTime / 0.10f;
+                RectTransform rt = linea.GetComponent<RectTransform>();
+                rt.anchoredPosition = Vector2.Lerp(inicio, fin, t);
+                linea.GetComponent<TextMeshProUGUI>().color =
+                    new Color(1f, 1f, 0.9f, 1f - t);
                 yield return null;
             }
 
             if (imgEnemigo != null) imgEnemigo.color = Color.white;
-            foreach (var s in slashes) if (s != null) Destroy(s);
+            Destroy(linea);
 
-            // Pausa breve entre oleadas (tintineo DQ3)
-            yield return new WaitForSeconds(0.07f);
+            yield return new WaitForSeconds(0.06f);
         }
 
-        // Flash rojo de daño recibido
+        // Flash rojo de daño
         if (imgEnemigo != null)
         {
             imgEnemigo.color = new Color(1f, 0.25f, 0.25f, 1f);
