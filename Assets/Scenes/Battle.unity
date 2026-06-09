@@ -6766,7 +6766,7 @@ MonoBehaviour:
   imagenEnemigo: {fileID: 1374808332}
   panelJugador: {fileID: 209475842}
   sonidoHielo: {fileID: 0}
-  sonidoFuego: {fileID: 0}
+  sonidoFuego: {fileID: 8300000, guid: bdbb8d08698107a43a217770b37d7c49, type: 3}
   sonidoCuracion: {fileID: 0}
   sonidoEscudo: {fileID: 0}
   sonidoSaltoEnemigo: {fileID: 0}

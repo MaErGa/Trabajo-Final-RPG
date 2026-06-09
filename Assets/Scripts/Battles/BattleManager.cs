@@ -432,7 +432,18 @@ public class BattleManager : MonoBehaviour
             StartCoroutine(PasarTurnoPorEstado());
             return;
         }
+        StartCoroutine(RealizarAtaque());
+    }
+
+    IEnumerator RealizarAtaque()
+    {
+        turnoActivo = false;
         ChequearInspiracioInicio();
+
+        // Efecto slash antes de calcular daño
+        if (EfectosBatalla.instancia != null)
+            yield return StartCoroutine(EfectosBatalla.instancia.EfectoSlash());
+
         int dañoBase = Mathf.Max(1, datosRyo.AtaqueTotal - MovimientoMapa.enemigoSeleccionado.defensa);
         if (Random.Range(0, 100) < 5)
         {
@@ -446,6 +457,7 @@ public class BattleManager : MonoBehaviour
             textoMensajes.text = "¡" + datosRyo.nombre + " ataca! El " + MovimientoMapa.enemigoSeleccionado.nombreEnemigo + " recibe " + dañoBase + " puntos de daño.";
         }
         vidaEnemigo -= dañoBase;
+        ActualizarInterfaz();
         if (vidaEnemigo <= 0) StartCoroutine(VictoriaAutomatica());
         else StartCoroutine(TurnoPippin());
     }
