@@ -5114,7 +5114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d42ad2e4a26fd642b01de49201099ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  escenaPueblo: Pueblo
+  escenaPueblo: Pueblo 1
   posicionAlSalir: {x: -3.24, y: 21.76}
 --- !u!1 &650301870
 GameObject:

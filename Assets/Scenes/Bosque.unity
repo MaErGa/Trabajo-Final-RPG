@@ -8529,7 +8529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002a093ac597c1e4495b0ca687d6b05e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  escenaDestino: UnderWorld
+  escenaDestino: UnderWorld 1
   panelTransicion: {fileID: 0}
   velocidadFade: 2
 --- !u!1 &738303128
