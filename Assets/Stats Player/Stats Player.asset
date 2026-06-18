@@ -21,8 +21,8 @@ MonoBehaviour:
   fuerza: 255
   agilidad: 200
   defensa: 200
-  _oro: 700
-  experiencia: 4485328
+  _oro: 1045
+  experiencia: 4487005
   fuerzaMagica: 5
   terapeucidad: 4
   estadoCombate: 0
